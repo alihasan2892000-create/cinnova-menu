@@ -1,0 +1,6 @@
+// Cloudflare Worker: serves only the built menu in public/
+{
+  "name": "cinnova-menu",
+  "compatibility_date": "2025-10-01",
+  "assets": { "directory": "./public" }
+}

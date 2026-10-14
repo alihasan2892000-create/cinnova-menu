@@ -28,8 +28,8 @@ assets/tile.webp      ← بلاطة باترن الخلفية
 brand/cinnova-card.pdf ← ملف الهوية الأصلي (الكرت)
 build.py             ← بيدمج كل الأصول بملف واحد → cinnova-menu.html
 cinnova-menu.html    ← الناتج النهائي (ملف واحد مستقل). لا تعدّله مباشرة
-index.html           ← نسخة مطابقة من الناتج، هي اللي بتنعرض على GitHub Pages. build.py بيكتبها تلقائياً
-.nojekyll            ← عشان GitHub Pages ينشر الملفات زي ما هي
+public/index.html    ← نسخة مطابقة من الناتج، هي الوحيدة اللي بتنشر على Cloudflare. build.py بيكتبها تلقائياً
+wrangler.jsonc       ← إعداد Cloudflare Worker: بينشر مجلد public/ بس
 tests/qa.py          ← فحص شامل (95 فحص)
 tests/slider.py      ← فحص سلايدر الأصناف المميزة (لمس + ماوس)
 ```
@@ -42,14 +42,15 @@ tests/slider.py      ← فحص سلايدر الأصناف المميزة (لم
 5. صوّر الصفحة على عرض 390px وراجعها بعينك قبل ما تسلّم.
 6. للنشر: `git add -A && git commit` ثم `git push origin main`. الموقع بيتحدّث خلال دقيقة أو دقيقتين.
 
-## النشر (GitHub Pages)
-- الـ repo: `alihasan2892000-create/cinnova-menu`، عام (public)، والفرع `main`.
-- الرابط: `https://alihasan2892000-create.github.io/cinnova-menu/`
-- مجلد `brand/` مستثنى من الـ repo بـ `.gitignore` لأن الـ repo عام. الملف الأصلي محفوظ عند حسن.
-- انتبه: الـ repo عام، فلا تحط فيه أي إشي خاص.
+## النشر (Cloudflare Workers)
+- الكود على GitHub: `alihasan2892000-create/cinnova-menu`، عام (public)، والفرع `main`.
+- Cloudflare مربوط بالـ repo: أي push على `main` بيعمل `npx wrangler deploy` تلقائياً، وبينشر `public/` بس.
+- اسم الـ Worker `cinnova-menu`، ولازم يطابق `name` بـ `wrangler.jsonc`.
+- الرابط: (بيستنى حسن يبعته، من Cloudflare → cinnova-menu → Domains).
+- ما استخدمنا GitHub Pages ولا Vercel المجاني، لأن شروطهم بتمنع المواقع التجارية.
+- مجلد `brand/` مستثنى من الـ repo بـ `.gitignore` لأن الـ repo عام. الملف الأصلي محفوظ عند حسن. لا تحط بالـ repo أي إشي خاص.
+- سيرفر Claude Code السحابي ما بيوصل لـ Cloudflare، فالنشر بيصير بس عن طريق push.
 - إذا فشل الفحص بسبب نسخة Playwright بسيرفر Claude Code السحابي: `pip install playwright==1.56.0` (متوافقة مع Chromium المثبّت هناك).
-
-متطلبات الفحص: `pip install playwright` ثم `playwright install chromium`.
 
 ## أين البيانات داخل `src/menu.html`
 كلها بأول الـ `<script>`:
@@ -104,7 +105,7 @@ tests/slider.py      ← فحص سلايدر الأصناف المميزة (لم
 - **أوصاف الأصناف:** أصناف الجلي والقهوة بدون أوصاف.
 - **"أصناف مميزة":** ما في جلي ولا قهوة فيه حالياً.
 - **روابط انستقرام وتيك توك** للمحل: غير متوفرة لحد الآن.
-- **الرفع:** تقرّر GitHub Pages (شوف قسم النشر). رابط المنيو بينحط بالـ QR وبالبايو.
+- **الرفع:** تقرّر Cloudflare Workers (شوف قسم النشر). رابط المنيو بينحط بالـ QR وبالبايو.
 
 ## ملاحظات تقنية مهمة
 - **`cart` و`unitPick` و`form` و`cake`** متغيرات عامة. `unitPick` معرّف كـ `const`، فلا تعيد تعيينه.

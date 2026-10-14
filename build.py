@@ -1,4 +1,4 @@
-"""Build the single-file menu: src/menu.html + assets/* -> cinnova-menu.html (+ index.html for GitHub Pages)
+"""Build the single-file menu: src/menu.html + assets/* -> cinnova-menu.html (+ public/index.html, deployed by Cloudflare)
 Usage:  python build.py
 """
 import base64, re, pathlib
@@ -19,5 +19,6 @@ html = (html.replace("__BADGE__", svguri("logo_badge.svg"))
             .replace("__HERO__",  (A / "hero.svg").read_text(encoding="utf-8")))
 out = ROOT / "cinnova-menu.html"
 out.write_text(html, encoding="utf-8")
-(ROOT / "index.html").write_text(html, encoding="utf-8")   # published copy (GitHub Pages)
+(ROOT / "public").mkdir(exist_ok=True)
+(ROOT / "public" / "index.html").write_text(html, encoding="utf-8")   # published copy (Cloudflare)
 print(f"built {out.name} ({len(html)//1024} KB)")
