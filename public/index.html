@@ -294,8 +294,15 @@ textarea.inp{min-height:80px;resize:vertical}
 .steps div{flex:1;text-align:center;font-size:11.5px;color:var(--muted)}
 .steps div::before{content:"";display:block;height:4px;border-radius:2px;background:var(--line-2);margin-bottom:6px;transition:background .4s}
 .steps div.on{color:var(--cream)}.steps div.on::before{background:var(--cream)}
-.cake-prev{position:sticky;top:0;z-index:2;margin:0 -20px 4px;padding:6px 20px 10px;background:linear-gradient(var(--bg) 80%,transparent);display:grid;place-items:center}
+.cake-prev{margin:0 0 4px;padding:6px 0 10px;display:grid;place-items:center}
 .cake-prev svg{width:220px;height:150px;overflow:visible}
+/* شريط صغير بيظهر فوق لما الزبون ينزل، بداله ما تضل الكيكة الكبيرة ثابتة وتغطي على الخيارات */
+.cake-bar{position:sticky;top:0;z-index:3;height:0;margin:0 -20px}
+.cake-bar>div{display:flex;align-items:center;gap:12px;padding:8px 20px;background:var(--bg);border-bottom:1px solid var(--line-2);box-shadow:0 12px 20px -14px rgba(0,0,0,.7);opacity:0;transform:translateY(-10px);pointer-events:none;transition:opacity .25s ease,transform .3s var(--ease)}
+.cake-bar.show>div{opacity:1;transform:none;pointer-events:auto}
+.cake-bar svg{flex:none;width:68px;height:52px;overflow:visible}
+.cake-bar p{margin:0;font-size:12.5px;line-height:1.55;color:var(--cream);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.cake-bar p i{font-style:normal;color:var(--muted)}
 .cake-prev .flame,.cake-banner .flame{transform-box:fill-box;transform-origin:50% 100%;animation:flick .9s ease-in-out infinite alternate}
 @keyframes flick{to{transform:scale(.85,1.15) rotate(4deg)}}
 .cake-prev .tier{transition:fill .4s,transform .5s var(--spring)}
@@ -802,7 +809,19 @@ function cakeSVG(st=cake, mini=false){
   else g+=`<g transform="translate(100 ${tTop-14})"><path d="M0-10l2.6 5.4 6 .8-4.3 4.2 1 6L0 3.6-5.3 6.4l1-6-4.3-4.2 6-.8z" fill="#F3D275"/></g>`;
   return `<svg viewBox="0 0 200 150" aria-hidden="true">${g}</svg>`;
 }
-function updatePrev(){ const p=$("#cake-prev"); if(p) p.innerHTML=cakeSVG(); }
+function cakeSummary(){
+  const parts=["occasion","size","shape","flavor","filling","deco","color"].filter(k=>cake[k]).map(k=> k==="shape"&&cake.shape==="num"&&cake.shapeText ? `${opt(k,cake[k]).name}: ${esc(cake.shapeText)}` : opt(k,cake[k]).name);
+  return parts.length ? parts.join(" · ") : `<i>لسا ما اخترت إشي — كيكتك بتتشكّل وانت بتختار</i>`;
+}
+function updatePrev(){
+  const p=$("#cake-prev"); if(p) p.innerHTML=cakeSVG();
+  const b=$("#cake-bar"); if(b){ const was=prevAnim; prevAnim=false; b.querySelector("span").innerHTML=cakeSVG(cake,true); prevAnim=was; b.querySelector("p").innerHTML=cakeSummary(); }
+}
+document.addEventListener("scroll",e=>{ if(e.target.classList&&e.target.classList.contains("sheet-body")) syncCakeBar(); },true);
+function syncCakeBar(){
+  const b=$("#cake-bar"), p=$("#cake-prev"), body=$("#sheet .sheet-body"); if(!b||!p||!body) return;
+  const r=p.getBoundingClientRect(); b.classList.toggle("show", r.bottom < body.getBoundingClientRect().top + r.height/2);
+}
 
 function cakeBanner(){
   const demo={size:"l",shape:"round",deco:"drip",color:"pink",occasion:"bday"};
@@ -822,7 +841,7 @@ function renderCake(p){
   const el=$("#sheet-inner");
   const steps=`<div class="steps">${["الشكل والحجم","النكهة والتزيين","الاستلام"].map((t,i)=>`<div class="${i<cakeStep?"on":""}">${t}</div>`).join("")}</div>`;
   const head=`<div class="sheet-head">${cakeStep>1?`<button class="icon-btn" data-a="cake-step" data-s="${cakeStep-1}" aria-label="رجوع">${UI.right}</button>`:""}<h2 style="flex:1;margin-inline-start:${cakeStep>1?12:0}px">كيكتك الخاصة</h2><button class="icon-btn" data-a="close" aria-label="إغلاق">${UI.close}</button></div>`+steps;
-  const prev=`<div class="cake-prev" id="cake-prev">${cakeSVG()}</div>`;
+  const prev=`<div class="cake-bar" id="cake-bar" aria-hidden="true"><div><span>${(()=>{const was=prevAnim; prevAnim=false; const m=cakeSVG(cake,true); prevAnim=was; return m;})()}</span><p>${cakeSummary()}</p></div></div><div class="cake-prev" id="cake-prev">${cakeSVG()}</div>`;
   let body="", foot="";
   if(cakeStep===1){
     body=prev+optGroup("occasion","المناسبة")+optGroup("size","الحجم")+optGroup("shape","الشكل",
