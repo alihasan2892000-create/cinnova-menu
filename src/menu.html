@@ -1,0 +1,1033 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#2C1711">
+<title>سينوفا | المنيو</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#2C1711; --bg-deep:#1E0F0B; --card:#3A2119; --card-2:#452A1F;
+  --line:rgba(243,210,117,.13); --line-2:rgba(243,210,117,.24);
+  --gold:#C29A54; --cream:#F3D275; --choc:#7B4003;
+  --text:#F6E9D2; --muted:#BFA37E; --danger:#E58B6D;
+  --r:20px; --ease:cubic-bezier(.22,1,.36,1); --spring:cubic-bezier(.34,1.56,.64,1);
+  --safe-b:env(safe-area-inset-bottom,0px);
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;background:var(--bg-deep);color:var(--text);font-family:"IBM Plex Sans Arabic",system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+body::before{content:"";position:fixed;inset:0;background:url(__TILE__) 0 0/310px auto repeat;opacity:.055;pointer-events:none;z-index:0}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer;padding:0}
+input,textarea{font:inherit}
+img{display:block;max-width:100%}
+.mono{font-family:"IBM Plex Mono",monospace;letter-spacing:.06em}
+.app{position:relative;z-index:1;max-width:480px;margin:0 auto;min-height:100vh;min-height:100dvh;background:linear-gradient(180deg,rgba(44,23,17,.94),rgba(44,23,17,.97));box-shadow:0 0 80px rgba(0,0,0,.5);overflow-x:clip}
+
+/* ---------- Splash ---------- */
+#splash{position:fixed;inset:0;z-index:100;display:grid;place-items:center;background:var(--bg);transition:transform .9s var(--ease),opacity .6s ease}
+#splash::before{content:"";position:absolute;inset:0;background:url(__TILE__) 0 0/310px auto repeat;opacity:.07;animation:drift 18s linear infinite}
+#splash.out{transform:translateY(-100%);opacity:.6}
+.splash-in{position:relative;display:flex;flex-direction:column;align-items:center;gap:22px}
+.splash-glow{position:absolute;width:300px;height:300px;top:-20px;border-radius:50%;background:radial-gradient(circle,rgba(243,210,117,.22),transparent 65%);animation:glow 2.4s ease-in-out infinite}
+.splash-logo{width:min(64vw,260px);opacity:0;transform:scale(.7) rotate(-8deg);filter:blur(8px);animation:logoIn 1.1s var(--ease) .15s forwards}
+.splash-tag{margin:0;font-size:14px;color:var(--muted);opacity:0;animation:fadeUp .7s var(--ease) .9s forwards}
+.dots{display:flex;gap:6px;opacity:0;animation:fadeUp .5s ease 1.1s forwards}
+.dots i{width:6px;height:6px;border-radius:50%;background:var(--gold);animation:dot 1s ease-in-out infinite}
+.dots i:nth-child(2){animation-delay:.15s}.dots i:nth-child(3){animation-delay:.3s}
+@keyframes logoIn{to{opacity:1;transform:none;filter:none}}
+@keyframes glow{50%{transform:scale(1.12);opacity:.7}}
+@keyframes dot{50%{transform:translateY(-6px);opacity:.5}}
+@keyframes drift{to{background-position:310px 164px}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+
+/* ---------- Top bar ---------- */
+.topbar{position:sticky;top:0;z-index:20;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 16px;background:rgba(44,23,17,.82);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid transparent;transition:border-color .3s}
+.topbar.scrolled{border-bottom-color:var(--line)}
+.topbar .mini-logo{height:42px;opacity:0;transform:translateY(6px);transition:.4s var(--ease)}
+.topbar.scrolled .mini-logo,.view-cat .topbar .mini-logo{opacity:1;transform:none}
+.icon-btn{position:relative;width:42px;height:42px;border-radius:14px;display:grid;place-items:center;background:var(--card);border:1px solid var(--line);color:var(--cream);transition:transform .2s var(--spring),background .2s}
+.icon-btn:active{transform:scale(.9)}
+.icon-btn svg{width:21px;height:21px}
+.badge{position:absolute;top:-6px;left:-6px;min-width:20px;height:20px;padding:0 5px;border-radius:10px;background:var(--cream);color:var(--bg);font-size:11px;font-weight:700;display:grid;place-items:center;transform:scale(0);transition:transform .3s var(--spring)}
+.badge.on{transform:scale(1)}
+.badge.bump{animation:bump .45s var(--spring)}
+@keyframes bump{40%{transform:scale(1.45)}}
+
+/* ---------- Views ---------- */
+.view{display:none;padding-bottom:calc(110px + var(--safe-b))}
+.view.active{display:block;animation:viewIn .5s var(--ease)}
+.view.active.back{animation:viewBack .5s var(--ease)}
+@keyframes viewIn{from{opacity:0;transform:translateX(-28px)}to{opacity:1;transform:none}}
+@keyframes viewBack{from{opacity:0;transform:translateX(28px)}to{opacity:1;transform:none}}
+
+/* ---------- Hero ---------- */
+.hero{padding:6px 20px 8px;text-align:center}
+.hero-logo{width:min(80%,310px);margin:0 auto;cursor:pointer;-webkit-user-select:none;user-select:none}
+.hero-logo svg{display:block;width:100%;height:auto;overflow:visible}
+/* animated wordmark */
+.lw path{transform-box:fill-box}
+.lw-l{transform-origin:50% 100%;animation:lwLetter .7s var(--spring) both}
+.lw-l:nth-child(1){animation-delay:.15s}.lw-l:nth-child(2){animation-delay:.23s}.lw-l:nth-child(3){animation-delay:.31s}.lw-l:nth-child(4){animation-delay:.39s}.lw-l:nth-child(5){animation-delay:.47s}.lw-l:nth-child(6){animation-delay:.55s}.lw-l:nth-child(7){animation-delay:.63s}
+@keyframes lwLetter{from{opacity:0;transform:translateY(5px) scale(.6) rotate(-8deg)}}
+.lw-s{animation:lwSweet .5s var(--ease) both}
+.lw-s:nth-child(1){animation-delay:.8s}.lw-s:nth-child(2){animation-delay:.86s}.lw-s:nth-child(3){animation-delay:.92s}.lw-s:nth-child(4){animation-delay:.98s}.lw-s:nth-child(5){animation-delay:1.04s}.lw-s:nth-child(6){animation-delay:1.1s}
+@keyframes lwSweet{from{opacity:0;transform:translateY(-3px)}}
+.lw-rollwrap{transform-box:fill-box;transform-origin:50% 100%;animation:lwDrop .95s var(--ease) 1.05s both}
+@keyframes lwDrop{0%{opacity:0;transform:translateY(-22px) rotate(-25deg)}55%{opacity:1;transform:translateY(0) rotate(4deg) scale(1.1,.86)}72%{transform:translateY(-3px) scale(.95,1.06)}86%{transform:translateY(0) scale(1.03,.97)}100%{transform:none}}
+.lw-roll{transform-box:fill-box;transform-origin:50% 100%;animation:lwIdle 3.2s ease-in-out 2s infinite}
+@keyframes lwIdle{0%,100%{transform:none}20%{transform:translateY(-1.8px) rotate(-6deg)}40%{transform:translateY(0) scale(1.05,.95)}60%{transform:translateY(-1.8px) rotate(6deg)}80%{transform:translateY(0) scale(1.03,.97)}}
+.lw-icing{transform-origin:50% 60%;animation:lwSpin 6s ease-in-out 2s infinite}
+@keyframes lwSpin{0%,100%{transform:none}50%{transform:scale(1.04)}}
+.lw-st{transform-origin:50% 100%;opacity:0;animation:lwSteam 2.6s ease-in-out infinite}
+.lw-st1{animation-delay:1.9s}.lw-st2{animation-delay:2.35s}.lw-st3{animation-delay:2.8s}
+@keyframes lwSteam{0%{opacity:0;transform:translateY(4px) scaleY(.6) skewX(0)}30%{opacity:1}65%{opacity:.85;transform:translateY(-2px) scaleY(1) skewX(-6deg)}100%{opacity:0;transform:translateY(-6px) scaleY(1.15) skewX(8deg)}}
+.lw.wait *,.lw.wait{animation-play-state:paused!important}
+.lw.played .lw-l,.lw.played .lw-s,.lw.played .lw-rollwrap{animation:none}
+.lw.hop .lw-rollwrap{animation:lwHop .9s var(--ease)}
+@keyframes lwHop{0%{transform:none}30%{transform:translateY(-16px) rotate(180deg) scale(1.1)}60%{transform:translateY(0) rotate(360deg) scale(1.08,.86)}80%{transform:translateY(-2px) rotate(360deg) scale(.96,1.04)}100%{transform:rotate(360deg)}}
+@media (prefers-reduced-motion:reduce){.lw *{animation:none!important;opacity:1!important}}
+.hero h1{margin:14px 0 4px;font-size:20px;font-weight:600}
+.hero p{margin:0;color:var(--muted);font-size:14px}
+.chips-info{display:flex;justify-content:center;gap:8px;margin-top:14px;flex-wrap:wrap}
+.chip-i{display:inline-flex;align-items:center;gap:6px;padding:7px 12px;border-radius:999px;border:1px solid var(--line-2);font-size:12.5px;color:var(--cream)}
+.chip-i svg{width:14px;height:14px}
+.reveal{opacity:0;animation:fadeUp .7s var(--ease) forwards;animation-delay:calc(var(--d,0) * 70ms)}
+
+/* ---------- Section head ---------- */
+.sec{padding:26px 0 0}
+.sec-head{display:flex;align-items:end;justify-content:space-between;padding:0 20px 12px}
+.sec-head .en{display:block;font-size:11px;color:var(--gold);text-transform:lowercase;margin-bottom:2px}
+.sec-head h2{margin:0;font-size:19px;font-weight:700}
+.link{font-size:13px;color:var(--cream);display:inline-flex;align-items:center;gap:4px;padding:6px 0}
+.link svg{width:14px;height:14px}
+
+/* ---------- Featured carousel ---------- */
+.rail{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;scroll-padding-inline:20px;overscroll-behavior-x:contain;-webkit-overflow-scrolling:touch;padding:2px 20px 6px;scrollbar-width:none}
+.feat:last-child{scroll-snap-align:end}
+.rail-dots{display:flex;justify-content:center;gap:6px;padding:10px 0 0}
+.rail-dots button{width:7px;height:7px;border-radius:4px;background:var(--line-2);transition:width .35s var(--ease),background .35s}
+.rail-dots button.on{width:20px;background:var(--cream)}
+.rail-nav{display:none;gap:6px}
+.rail-nav button{width:34px;height:34px;border-radius:11px;background:var(--card);border:1px solid var(--line);color:var(--cream);display:grid;place-items:center;transition:opacity .2s,transform .2s var(--spring)}
+.rail-nav button:active{transform:scale(.9)}
+.rail-nav button:disabled{opacity:.3;cursor:default}
+.rail-nav svg{width:16px;height:16px}
+@media (hover:hover) and (pointer:fine){
+  .rail-nav{display:flex}
+  .rail,.tabs{cursor:grab}
+  .rail.dragging,.tabs.dragging{cursor:grabbing;scroll-snap-type:none;-webkit-user-select:none;user-select:none}
+  .rail.dragging *,.tabs.dragging *{pointer-events:none}
+}
+.rail::-webkit-scrollbar{display:none}
+.feat{flex:0 0 68%;scroll-snap-align:start;scroll-snap-stop:always;background:var(--card);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;transition:transform .25s var(--spring)}
+.feat:active{transform:scale(.97)}
+.feat .thumb{aspect-ratio:4/3;border-radius:0}
+.feat .body{padding:12px 14px 14px;display:flex;align-items:end;justify-content:space-between;gap:8px}
+.feat h3{margin:0 0 4px;font-size:15.5px;font-weight:600}
+.feat .price{font-size:13px}
+
+/* ---------- Categories ---------- */
+.cats{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:0 20px}
+.cat{position:relative;display:flex;flex-direction:column;align-items:center;gap:10px;padding:20px 10px 16px;border-radius:var(--r);background:var(--card);border:1px solid var(--line);text-align:center;overflow:hidden;transition:transform .25s var(--spring),border-color .25s}
+.cat:active{transform:scale(.95)}
+.cat::after{content:"";position:absolute;inset:auto -30% -60% -30%;height:80%;background:radial-gradient(ellipse at center,rgba(194,154,84,.16),transparent 70%);pointer-events:none}
+.cat .ring{position:relative;width:78px;height:78px;display:grid;place-items:center;color:var(--cream)}
+.cat .ring svg.sc{position:absolute;inset:0;width:100%;height:100%;color:var(--gold);transition:transform .8s var(--ease)}
+.cat:hover .ring svg.sc{transform:rotate(30deg)}
+.cat .ring svg.ic{width:46px;height:46px;position:relative}
+.cats .cat:not(.wide):last-child:nth-child(even){grid-column:1/-1;flex-direction:row;justify-content:center;gap:16px;padding:14px}
+.cats .cat:not(.wide):last-child:nth-child(even) .ring{width:64px;height:64px}
+.cat h3{margin:0;font-size:15px;font-weight:600}
+.cat small{color:var(--muted);font-size:12px}
+.cat.wide{grid-column:1/-1;flex-direction:row;justify-content:flex-start;gap:16px;padding:16px 18px;text-align:right;background:linear-gradient(120deg,var(--gold),#D9B36A);color:var(--bg);border:0}
+.cat.wide .ring{color:var(--bg);width:66px;height:66px}
+.cat.wide .ring svg.sc{color:var(--bg);opacity:.5}
+.cat.wide small{color:rgba(44,23,17,.7)}
+.cat.wide .go{margin-inline-start:auto;width:36px;height:36px;border-radius:50%;background:var(--bg);color:var(--cream);display:grid;place-items:center}
+.cat.wide .go svg{width:16px;height:16px}
+
+/* ---------- Footer ---------- */
+.foot{margin:34px 20px 0;padding:20px;border-radius:var(--r);border:1px dashed var(--line-2);text-align:center}
+.foot p{margin:6px 0;color:var(--muted);font-size:13.5px;line-height:1.7}
+.foot a{color:var(--cream);text-decoration:none}
+.foot .row{display:flex;justify-content:center;gap:10px;margin-top:12px}
+
+/* ---------- Category page ---------- */
+.cat-hero{display:flex;align-items:center;gap:14px;padding:12px 20px 4px}
+.cat-hero .ring{position:relative;width:62px;height:62px;flex:none;display:grid;place-items:center;color:var(--cream)}
+.cat-hero .ring svg.sc{position:absolute;inset:0;color:var(--gold);animation:spinIn 1s var(--ease)}
+.cat-hero .ring svg.ic{width:32px;height:32px;position:relative}
+@keyframes spinIn{from{transform:rotate(-90deg) scale(.6);opacity:0}}
+.cat-hero h1{margin:0;font-size:22px;font-weight:700}
+.cat-hero p{margin:2px 0 0;color:var(--muted);font-size:13px}
+.tabs{display:flex;gap:8px;overflow-x:auto;padding:14px 20px 4px;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tab{flex:none;padding:8px 14px;border-radius:999px;border:1px solid var(--line-2);font-size:13px;color:var(--muted);white-space:nowrap;transition:.25s}
+.tab.on{background:var(--cream);color:var(--bg);border-color:var(--cream);font-weight:600}
+.list{display:flex;flex-direction:column;gap:12px;padding:14px 20px 0}
+
+/* ---------- Item card ---------- */
+.item{display:flex;gap:12px;padding:10px;border-radius:var(--r);background:var(--card);border:1px solid var(--line)}
+.item .thumb{flex:none;width:104px;height:116px;border-radius:14px}
+.item .info{flex:1;min-width:0;display:flex;flex-direction:column;padding:2px 2px 0}
+.item h3{margin:0;font-size:15.5px;font-weight:600;line-height:1.35}
+.item p{margin:3px 0 0;font-size:12.5px;color:var(--muted);line-height:1.5;display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical;overflow:hidden}
+.price{color:var(--cream);font-size:14px;margin-top:6px}
+.price b{font-size:17px;font-weight:700;font-family:"IBM Plex Sans Arabic",system-ui,sans-serif}
+.price span{color:var(--muted);font-size:12px}
+.item .row{margin-top:auto;padding-top:8px;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px}
+.thumb{position:relative;overflow:hidden;background:var(--card-2)}
+.thumb img{width:100%;height:100%;object-fit:cover}
+.tag{position:absolute;top:8px;right:8px;z-index:2;padding:3px 8px;border-radius:8px;background:var(--cream);color:var(--bg);font-size:10.5px;font-weight:700}
+
+/* placeholder art */
+.ph{position:absolute;inset:0;display:grid;place-items:center;background:radial-gradient(circle at 50% 42%,hsl(var(--h,25) 38% 30%),hsl(var(--h,25) 40% 15%) 78%)}
+.ph svg.sc{position:absolute;width:82%;max-width:150px;color:rgba(243,210,117,.16)}
+.ph svg.ic{position:relative;width:44%;max-width:84px;color:var(--cream);opacity:.9}
+.ph em{position:absolute;bottom:6px;left:0;right:0;text-align:center;font-style:normal;font-size:9.5px;color:rgba(243,210,117,.45)}
+
+/* segmented unit */
+.seg{display:flex;padding:3px;border-radius:12px;background:var(--bg);border:1px solid var(--line)}
+.seg button{padding:5px 10px;border-radius:9px;font-size:12px;color:var(--muted);transition:.25s var(--ease)}
+.seg button.on{background:var(--gold);color:var(--bg);font-weight:600}
+.unit-chip{font-size:12px;color:var(--muted)}
+
+/* add / stepper */
+.add{height:38px;padding:0 14px;border-radius:12px;background:var(--cream);color:var(--bg);font-weight:600;font-size:13.5px;display:inline-flex;align-items:center;gap:6px;transition:transform .2s var(--spring);white-space:nowrap}
+.add:active{transform:scale(.9)}
+.add svg{width:16px;height:16px}
+.add.round{width:38px;padding:0;justify-content:center}
+.step{height:38px;display:inline-flex;align-items:center;border-radius:12px;background:var(--bg);border:1px solid var(--line-2);animation:pop .35s var(--spring)}
+.step button{width:34px;height:36px;display:grid;place-items:center;color:var(--cream)}
+.step button svg{width:15px;height:15px}
+.step b{min-width:22px;text-align:center;font-size:15px}
+@keyframes pop{from{transform:scale(.7);opacity:0}}
+.fly{position:fixed;z-index:90;width:16px;height:16px;border-radius:50%;background:var(--cream);box-shadow:0 0 18px var(--cream);pointer-events:none}
+
+/* ---------- Cart bar ---------- */
+.cartbar{position:fixed;z-index:30;left:50%;bottom:calc(14px + var(--safe-b));width:min(448px,calc(100% - 32px));transform:translate(-50%,140%);transition:transform .5s var(--spring)}
+.cartbar.on{transform:translate(-50%,0)}
+.cartbar button{width:100%;display:flex;align-items:center;gap:12px;padding:10px 12px 10px 16px;border-radius:18px;background:var(--cream);color:var(--bg);box-shadow:0 14px 40px rgba(0,0,0,.45)}
+.cartbar .cnt{width:36px;height:36px;border-radius:12px;background:var(--bg);color:var(--cream);display:grid;place-items:center;font-weight:700}
+.cartbar .lbl{font-weight:700;font-size:15px}
+.cartbar .tot{margin-inline-start:auto;font-weight:700;font-size:16px}
+
+/* ---------- Sheet ---------- */
+.scrim{position:fixed;inset:0;z-index:60;background:rgba(10,4,2,.6);opacity:0;pointer-events:none;transition:opacity .35s}
+.scrim.on{opacity:1;pointer-events:auto}
+.sheet{position:fixed;z-index:61;left:50%;bottom:0;width:min(480px,100%);max-height:92dvh;display:flex;flex-direction:column;background:var(--bg);border:1px solid var(--line-2);border-bottom:0;border-radius:26px 26px 0 0;transform:translate(-50%,105%);transition:transform .5s var(--ease)}
+.sheet.on{transform:translate(-50%,0)}
+.grab{width:42px;height:5px;border-radius:3px;background:var(--line-2);margin:10px auto 2px}
+.sheet-head{display:flex;align-items:center;justify-content:space-between;padding:8px 20px 12px}
+.sheet-head h2{margin:0;font-size:19px}
+.sheet-body{overflow-y:auto;padding:0 20px 8px;overscroll-behavior:contain}
+.sheet-foot{padding:14px 20px calc(16px + var(--safe-b));border-top:1px solid var(--line)}
+.pane{animation:fadeUp .4s var(--ease)}
+
+.crow{display:flex;gap:12px;align-items:center;padding:12px 0;border-bottom:1px solid var(--line)}
+.crow .thumb{width:58px;height:58px;border-radius:12px;flex:none}
+.crow .ph svg.ic{width:60%}
+.crow .ph em{display:none}
+.crow .meta{flex:1;min-width:0}
+.crow h4{margin:0;font-size:14.5px;font-weight:600}
+.crow small{color:var(--muted);font-size:12px}
+.crow .lt{font-weight:700;color:var(--cream);font-size:14px;margin-top:2px}
+.crow .step{height:34px}.crow .step button{width:30px;height:32px}
+.sum{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;font-size:15px}
+.sum b{font-size:21px;color:var(--cream)}
+.btn{width:100%;height:52px;border-radius:16px;background:var(--cream);color:var(--bg);font-weight:700;font-size:16px;display:flex;align-items:center;justify-content:center;gap:8px;transition:transform .2s var(--spring)}
+.btn:active{transform:scale(.97)}
+.btn svg{width:20px;height:20px}
+.btn.ghost{background:transparent;color:var(--cream);border:1px solid var(--line-2);margin-top:10px}
+.empty{text-align:center;padding:30px 10px 40px;color:var(--muted)}
+.empty svg{width:84px;height:84px;color:var(--gold);opacity:.7}
+
+/* form */
+.field{margin:14px 0}
+.field label{display:block;font-size:13.5px;margin-bottom:7px;color:var(--cream);font-weight:500}
+.field label i{color:var(--muted);font-style:normal;font-weight:400}
+.inp{width:100%;padding:13px 14px;border-radius:14px;background:var(--card);border:1px solid var(--line-2);color:var(--text);outline:none;transition:border-color .2s,box-shadow .2s;color-scheme:dark}
+.inp:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(194,154,84,.18)}
+textarea.inp{min-height:80px;resize:vertical}
+.choice{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.choice button{padding:13px 10px;border-radius:14px;background:var(--card);border:1px solid var(--line-2);display:flex;flex-direction:column;align-items:center;gap:6px;font-size:14px;transition:.25s var(--ease)}
+.choice button svg{width:24px;height:24px;color:var(--gold)}
+.choice button.on{background:rgba(243,210,117,.12);border-color:var(--cream);color:var(--cream)}
+.err{display:none;color:var(--danger);font-size:12px;margin-top:6px}
+.field.bad .err{display:block}.field.bad .inp,.field.bad .choice button{border-color:var(--danger)}
+.collapse{display:grid;grid-template-rows:0fr;transition:grid-template-rows .4s var(--ease)}
+.collapse>div{overflow:hidden}
+.collapse.open{grid-template-rows:1fr}
+.success{text-align:center;padding:16px 4px 6px}
+.success .ok{width:84px;height:84px;margin:6px auto 12px;border-radius:50%;background:var(--cream);color:var(--bg);display:grid;place-items:center;animation:pop .6s var(--spring)}
+.success .ok svg{width:42px;height:42px;stroke-dasharray:40;stroke-dashoffset:40;animation:draw .6s .3s var(--ease) forwards}
+@keyframes draw{to{stroke-dashoffset:0}}
+.success h3{margin:0 0 6px;font-size:20px}
+.success p{margin:0;color:var(--muted);font-size:14px;line-height:1.7}
+
+.toast{position:fixed;z-index:95;left:50%;top:18px;transform:translate(-50%,calc(-100% - 40px));visibility:hidden;padding:10px 16px;border-radius:14px;background:var(--cream);color:var(--bg);font-weight:600;font-size:13.5px;box-shadow:0 10px 30px rgba(0,0,0,.4);transition:transform .45s var(--spring);white-space:nowrap}
+.toast.on{transform:translate(-50%,0);visibility:visible}
+
+/* ---------- Sub-sections ---------- */
+.subnav{display:flex;gap:8px;margin:2px 0 -2px}
+.subnav button{flex:1;padding:10px 6px;border-radius:13px;background:var(--card);border:1px solid var(--line-2);font-size:13px;color:var(--cream);font-weight:500;transition:transform .2s var(--spring)}
+.subnav button:active{transform:scale(.94)}
+.subhead{scroll-margin-top:84px;display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;padding:14px 2px 0;border-top:1px dashed var(--line-2);margin-top:8px}
+.subhead:first-of-type{border-top:0}
+.subhead .mono{width:100%;font-size:11px;color:var(--gold)}
+.subhead h2{margin:0;font-size:18px;font-weight:700}
+.subhead small{color:var(--muted);font-size:12px}
+/* ---------- Custom cake ---------- */
+.cake-banner{position:relative;display:flex;align-items:center;gap:14px;padding:16px;border-radius:var(--r);background:linear-gradient(125deg,#D9B36A,var(--gold) 55%,#A9803F);color:var(--bg);overflow:hidden;text-align:right;width:100%;animation:fadeUp .6s var(--ease)}
+.cake-banner::before{content:"";position:absolute;inset:0;background:linear-gradient(100deg,transparent 30%,rgba(255,255,255,.28) 50%,transparent 70%);transform:translateX(120%);animation:shine 3.2s ease-in-out 1s infinite}
+@keyframes shine{0%{transform:translateX(120%)}45%,100%{transform:translateX(-120%)}}
+.cake-banner .mini{flex:none;width:96px;height:80px;border-radius:14px;background:rgba(44,23,17,.92);display:grid;place-items:center}
+.cake-banner .mini svg{width:88px;height:70px}
+.cake-banner h3{margin:0;font-size:17px;font-weight:700}
+.cake-banner p{margin:3px 0 8px;font-size:12.5px;color:rgba(44,23,17,.75);line-height:1.5}
+.cake-banner .cta{display:inline-flex;align-items:center;gap:5px;padding:6px 12px;border-radius:10px;background:var(--bg);color:var(--cream);font-size:12.5px;font-weight:600}
+.cake-banner .cta svg{width:14px;height:14px}
+.steps{display:flex;gap:6px;padding:0 20px 12px}
+.steps div{flex:1;text-align:center;font-size:11.5px;color:var(--muted)}
+.steps div::before{content:"";display:block;height:4px;border-radius:2px;background:var(--line-2);margin-bottom:6px;transition:background .4s}
+.steps div.on{color:var(--cream)}.steps div.on::before{background:var(--cream)}
+.cake-prev{position:sticky;top:0;z-index:2;margin:0 -20px 4px;padding:6px 20px 10px;background:linear-gradient(var(--bg) 80%,transparent);display:grid;place-items:center}
+.cake-prev svg{width:220px;height:150px;overflow:visible}
+.cake-prev .flame,.cake-banner .flame{transform-box:fill-box;transform-origin:50% 100%;animation:flick .9s ease-in-out infinite alternate}
+@keyframes flick{to{transform:scale(.85,1.15) rotate(4deg)}}
+.cake-prev .tier{transition:fill .4s,transform .5s var(--spring)}
+.opts{display:grid;grid-template-columns:repeat(auto-fill,minmax(96px,1fr));gap:8px}
+.opt{padding:10px 8px;border-radius:13px;background:var(--card);border:1px solid var(--line-2);display:flex;flex-direction:column;align-items:center;gap:2px;font-size:13.5px;text-align:center;transition:.25s var(--ease)}
+.opt small{font-size:11px;color:var(--muted)}
+.opt.on{background:rgba(243,210,117,.12);border-color:var(--cream);color:var(--cream);transform:translateY(-2px)}
+.opt:active{transform:scale(.95)}
+.swatches{display:flex;flex-wrap:wrap;gap:8px}
+.sw{width:36px;height:36px;border-radius:50%;border:2px solid var(--line-2);position:relative;transition:transform .25s var(--spring)}
+.sw.on{transform:scale(1.12);border-color:var(--cream);box-shadow:0 0 0 3px rgba(243,210,117,.25)}
+.sw.on::after{content:"✓";position:absolute;inset:0;display:grid;place-items:center;font-weight:700;color:#2C1711;text-shadow:0 0 4px rgba(255,255,255,.7)}
+.sw-name{font-size:12px;color:var(--muted);margin-top:6px}
+.check{display:flex;align-items:center;gap:10px;padding:12px 14px;border-radius:14px;background:var(--card);border:1px solid var(--line-2);font-size:13.5px;width:100%;text-align:right}
+.check .box{width:22px;height:22px;flex:none;border-radius:7px;border:1.5px solid var(--gold);display:grid;place-items:center;transition:.2s}
+.check .box svg{width:14px;height:14px;opacity:0}
+.check.on .box{background:var(--cream);border-color:var(--cream);color:var(--bg)}.check.on .box svg{opacity:1}
+.hint{font-size:12px;color:var(--muted);margin-top:6px;line-height:1.6}
+.counter{float:left;font-size:11px;color:var(--muted)}
+.foot-row{display:flex;gap:10px}.foot-row .btn.ghost{margin-top:0;flex:0 0 34%}
+
+@media (max-width:374px){
+  .item{gap:10px}
+  .item .thumb{width:88px;height:108px}
+  .item .add{width:38px;padding:0;justify-content:center;font-size:0}
+  .item .add svg{width:18px;height:18px}
+  .item .seg button{padding:5px 9px}
+  .item .row{gap:6px}
+}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-delay:0ms!important;transition-duration:.01ms!important}}
+</style>
+</head>
+<body>
+
+<div id="splash" aria-hidden="true">
+  <div class="splash-in">
+    <div class="splash-glow"></div>
+    <img class="splash-logo" data-logo="badge" alt="سينوفا">
+    <p class="splash-tag">حلويات شرقية · كيك · قهوة</p>
+    <div class="dots"><i></i><i></i><i></i></div>
+  </div>
+</div>
+
+<div class="app" id="app">
+  <!-- HOME -->
+  <section class="view" id="view-home">
+    <header class="topbar" id="bar-home">
+      <a class="icon-btn" id="wa-top" aria-label="واتساب" target="_blank" rel="noopener"></a>
+      <img class="mini-logo" data-logo="word" alt="Cinnova sweets">
+      <button class="icon-btn js-cart" aria-label="السلة"><span class="ico-bag"></span><span class="badge"></span></button>
+    </header>
+    <div class="hero">
+      <div class="hero-logo" id="hero-logo" title="دوس على السينابون 😉">__HERO__</div>
+      <h1 class="reveal" style="--d:2">أهلاً فيك بسينوفا</h1>
+      <p class="reveal" style="--d:3">اختار اللي بتحبه، وابعتلنا طلبك على الواتساب</p>
+      <div class="chips-info reveal" style="--d:4">
+        <span class="chip-i"><span class="ico-pin"></span>دير البلح</span>
+        <span class="chip-i"><span class="ico-truck"></span>توصيل أو استلام</span>
+      </div>
+    </div>
+    <div class="sec reveal" style="--d:5">
+      <div class="sec-head">
+        <div><span class="en mono">— featured</span><h2>أصناف مميزة</h2></div>
+        <div style="display:flex;align-items:center;gap:12px"><div class="rail-nav"><button id="rail-prev" aria-label="السابق"><span class="ico-right"></span></button><button id="rail-next" aria-label="التالي"><span class="ico-left"></span></button></div><a class="link" role="button" data-a="go" data-c="featured">عرض الكل <span class="ico-left"></span></a></div>
+      </div>
+      <div class="rail" id="rail"></div>
+      <div class="rail-dots" id="rail-dots"></div>
+    </div>
+    <div class="sec">
+      <div class="sec-head"><div><span class="en mono">— menu</span><h2>الأقسام</h2></div></div>
+      <div class="cats" id="cats"></div>
+    </div>
+    <div class="foot">
+      <img data-logo="word" alt="" style="width:130px;margin:0 auto 8px;opacity:.9">
+      <p><span class="ico-pin" style="display:inline-block;width:14px;vertical-align:-2px"></span> دير البلح - شرق دوار البركة<br>بجانب أبو خضير للصرافة</p>
+      <div class="row">
+        <a class="icon-btn" id="call-btn" aria-label="اتصال"><span class="ico-phone"></span></a>
+        <a class="icon-btn" id="wa-foot" aria-label="واتساب" target="_blank" rel="noopener"></a>
+      </div>
+    </div>
+  </section>
+
+  <!-- CATEGORY -->
+  <section class="view view-cat" id="view-cat">
+    <header class="topbar scrolled">
+      <a class="icon-btn" role="button" data-a="home" aria-label="رجوع"><span class="ico-right"></span></a>
+      <img class="mini-logo" data-logo="word" alt="Cinnova sweets">
+      <button class="icon-btn js-cart" aria-label="السلة"><span class="ico-bag"></span><span class="badge"></span></button>
+    </header>
+    <div id="cat-head"></div>
+    <div class="tabs" id="tabs"></div>
+    <div class="list" id="list"></div>
+  </section>
+</div>
+
+<div class="cartbar" id="cartbar"><button class="js-cart"><span class="cnt" id="cb-n">0</span><span class="lbl">عرض السلة</span><span class="tot" id="cb-t">0 ₪</span></button></div>
+
+<div class="scrim" id="scrim"></div>
+<div class="sheet" id="sheet" role="dialog" aria-modal="true">
+  <div class="grab"></div>
+  <div id="sheet-inner" style="display:flex;flex-direction:column;min-height:0"></div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+/* =========================================================
+   إعدادات المحل — عدّل هون
+   ========================================================= */
+const SHOP = {
+  name: "سينوفا",
+  whatsapp: "972594870202",          // بدون + وبدون مسافات
+  phone: "+972594870202",
+  currency: "₪",
+  cakeLeadHours: 24                 // أقل مدة قبل موعد استلام الكيك الخاص (بالساعات)
+};
+
+const UNITS = { kg: "كيلو", uqiya: "وقية", piece: "قطعة" };
+const SIZES = { s: "صغير", l: "كبير" };
+
+/* الأقسام: type = weight (كيلو/وقية) أو piece (بالقطعة) */
+const CATS = [
+  { id:"featured", name:"أصناف مميزة",    en:"featured", icon:"star" },
+  { id:"sharqi",   name:"حلويات شرقية",   en:"oriental", icon:"baklava",  type:"weight" },
+  { id:"cake",     name:"كيك",            en:"cakes",    icon:"cake",     type:"piece",
+    subs:[ {id:"special",name:"كيك سبيشل",en:"special"}, {id:"regular",name:"كيك عادي",en:"classic"}, {id:"different",name:"كيك مختلف",en:"different"} ] },
+  { id:"petit",    name:"بيتفور",         en:"petit four",icon:"cookie",  type:"weight" },
+  { id:"jelly",    name:"جلي",            en:"jelly",    icon:"jelly",    type:"piece" },
+  { id:"nuts",     name:"مكسرات",         en:"nuts",     icon:"nuts",     type:"weight" },
+  { id:"party",    name:"أغراض عيد ميلاد", en:"party",    icon:"balloon",  type:"piece" },
+  { id:"coffee",   name:"قهوة مطحونة",    en:"coffee",   icon:"coffee",   type:"weight" }
+];
+
+/* الأصناف — كل الأسعار والأسماء والصور تجريبية
+   weight:  price:{kg:..., uqiya:...}
+   piece:   price: رقم
+   img: رابط الصورة (فاضي = صورة مؤقتة)                  */
+const ITEMS = [
+  // حلويات شرقية
+  { id:"s1", cat:"sharqi", name:"بقلاوة فستق حلبي", desc:"عجينة رقيقة محشية فستق حلبي فاخر", price:{kg:80, uqiya:20}, featured:true, img:"" },
+  { id:"s2", cat:"sharqi", name:"بقلاوة كاجو",      desc:"مقرمشة ومحلّاة بقطر خفيف",         price:{kg:60, uqiya:15}, img:"" },
+  { id:"s3", cat:"sharqi", name:"بلورية",           desc:"شعيرية ذهبية محشية فستق",           price:{kg:85, uqiya:22}, img:"" },
+  { id:"s4", cat:"sharqi", name:"وربات بالقشطة",    desc:"وربات طازة بقشطة بلدية",            price:{kg:50, uqiya:13}, img:"" },
+  { id:"s5", cat:"sharqi", name:"هريسة بالقشطة",    desc:"سميد وجوز الهند مع القشطة",         price:{kg:30, uqiya:8},  img:"" },
+  { id:"s6", cat:"sharqi", name:"معمول تمر",         desc:"معمول بيتي محشي عجوة",              price:{kg:40, uqiya:10}, img:"" },
+  // كيك
+  // كيك — sub: special / regular / different ، sizes: { s:صغير , l:كبير } لكل حجم عدد القطع والسعر
+  { id:"k3", cat:"cake", sub:"special",   name:"ريد فيلفت",        desc:"مع كريمة الجبنة",            sizes:{ s:{pieces:8, price:70},  l:{pieces:16, price:120} }, featured:true, img:"" },
+  { id:"k4", cat:"cake", sub:"special",   name:"كيكة لوتس",         desc:"بسكوت وصوص اللوتس",          sizes:{ s:{pieces:8, price:65},  l:{pieces:16, price:110} }, img:"" },
+  { id:"k6", cat:"cake", sub:"special",   name:"كيكة بستاشيو",      desc:"كريمة وصوص فستق",            sizes:{ s:{pieces:8, price:75},  l:{pieces:16, price:130} }, img:"" },
+  { id:"k2", cat:"cake", sub:"regular",   name:"كيكة شوكولاتة",     desc:"طبقات شوكولاتة",             sizes:{ s:{pieces:8, price:45},  l:{pieces:16, price:80} },  img:"" },
+  { id:"k7", cat:"cake", sub:"regular",   name:"كيكة فانيلا",       desc:"إسفنج فانيلا وكريمة",        sizes:{ s:{pieces:8, price:40},  l:{pieces:16, price:70} },  img:"" },
+  { id:"k5", cat:"cake", sub:"different", name:"تشيز كيك فراولة",  desc:"بارد بصوص الفراولة",          sizes:{ s:{pieces:6, price:50},  l:{pieces:12, price:90} },  img:"" },
+  { id:"k1", cat:"cake", sub:"different", name:"سينابون سينوفا",   desc:"لفّات القرفة مع الصوص",       sizes:{ s:{pieces:4, price:30},  l:{pieces:9,  price:60} },  featured:true, img:"" },
+  // بيتفور
+  { id:"p1", cat:"petit", name:"بيتفور مشكّل",     desc:"تشكيلة زبدة وشوكولاتة",              price:{kg:45, uqiya:12}, featured:true, img:"" },
+  { id:"p2", cat:"petit", name:"بيتفور بالمربى",   desc:"قلوب محشية مربى فراولة",             price:{kg:40, uqiya:10}, img:"" },
+  { id:"p3", cat:"petit", name:"غريبة",            desc:"تذوب بالتمّ",                        price:{kg:35, uqiya:9},  img:"" },
+  { id:"p4", cat:"petit", name:"بيتفور جوز الهند", desc:"مقرمش ومغطّس شوكولاتة",              price:{kg:42, uqiya:11}, img:"" },
+  // جلي
+  { id:"j1", cat:"jelly", name:"بكيت جلي مثلث",   desc:"", price:5,  img:"" },
+  { id:"j2", cat:"jelly", name:"كاسة جلي",          desc:"", price:7,  img:"" },
+  { id:"j3", cat:"jelly", name:"علبة جلي هدية",     desc:"", price:15, img:"" },
+  { id:"j4", cat:"jelly", name:"جلي بالوزن",        desc:"", price:{uqiya:8}, img:"" },
+  // مكسرات
+  { id:"n1", cat:"nuts", name:"كاجو محمّص",       desc:"محمّص طازة يومياً",                  price:{kg:90, uqiya:23}, img:"" },
+  { id:"n2", cat:"nuts", name:"فستق حلبي",         desc:"حبة كبيرة مملّحة",                   price:{kg:110,uqiya:28}, img:"" },
+  { id:"n3", cat:"nuts", name:"لوز محمّص",         desc:"مع ملح خفيف",                        price:{kg:70, uqiya:18}, img:"" },
+  { id:"n4", cat:"nuts", name:"مكسرات مشكّلة",     desc:"إكسترا — كاجو ولوز وبندق",           price:{kg:85, uqiya:22}, featured:true, img:"" },
+  { id:"n5", cat:"nuts", name:"بزر أبيض",          desc:"محمّص على الأصول",                   price:{kg:30, uqiya:8},  img:"" },
+  // عيد ميلاد
+  { id:"b1", cat:"party", name:"شمعة أرقام",       desc:"ذهبي — اختار الرقم بالملاحظات",      price:5,  img:"" },
+  { id:"b2", cat:"party", name:"بالونات ملوّنة",   desc:"كيس 20 بالون",                       price:10, img:"" },
+  { id:"b3", cat:"party", name:"قبعات حفلة",       desc:"باكيت 10 قبعات",                     price:12, img:"" },
+  { id:"b4", cat:"party", name:"لافتة عيد ميلاد",  desc:"Happy Birthday ذهبية",               price:15, img:"" },
+  { id:"b5", cat:"party", name:"شموع نافورة",      desc:"باكيت 4 شموع",                       price:8,  img:"" },
+  // قهوة
+  { id:"c1", cat:"coffee", name:"قهوة حب محمّصة", desc:"", price:{kg:48, uqiya:12}, img:"" },
+  { id:"c2", cat:"coffee", name:"قهوة مطحونة",    desc:"", price:{kg:45, uqiya:15}, img:"" }
+];
+
+
+/* =========================================================
+   الكيك الخاص — عدّل الخيارات من هون
+   ========================================================= */
+const CAKE = {
+  occasion: [{id:"bday",name:"عيد ميلاد"},{id:"engage",name:"خطوبة / زواج"},{id:"grad",name:"تخرّج"},{id:"baby",name:"مولود جديد"},{id:"other",name:"مناسبة ثانية"}],
+  size: [{id:"s",name:"صغيرة",sub:"6 - 8 أشخاص",tiers:1,w:.8},{id:"m",name:"وسط",sub:"10 - 12 شخص",tiers:1,w:1},{id:"l",name:"كبيرة",sub:"15 - 20 شخص",tiers:2,w:1},{id:"xl",name:"طبقات",sub:"25 شخص وأكثر",tiers:3,w:1.05}],
+  shape: [{id:"round",name:"دائري"},{id:"square",name:"مربع"},{id:"heart",name:"قلب"},{id:"num",name:"رقم أو حرف"}],
+  flavor: [{id:"vanilla",name:"فانيلا"},{id:"choco",name:"شوكولاتة"},{id:"red",name:"ريد فيلفت"},{id:"lotus",name:"لوتس"},{id:"carrot",name:"جزر وقرفة"}],
+  filling: [{id:"cream",name:"كريمة"},{id:"nutella",name:"نوتيلا"},{id:"fruit",name:"فواكه"},{id:"lotusf",name:"صوص لوتس"},{id:"pist",name:"فستق"}],
+  deco: [{id:"cream",name:"كريمة"},{id:"fondant",name:"فوندان"},{id:"drip",name:"درب شوكولاتة"},{id:"flowers",name:"ورد"}],
+  color: [{id:"white",name:"أبيض",c:"#F7EFE3"},{id:"pink",name:"وردي",c:"#F2B8C6"},{id:"blue",name:"أزرق فاتح",c:"#B9D7EE"},{id:"gold",name:"ذهبي",c:"#D9B36A"},{id:"lilac",name:"ليلكي",c:"#CDB8E6"},{id:"mint",name:"نعناعي",c:"#BFE3CF"},{id:"red",name:"أحمر",c:"#C8443F"},{id:"choc",name:"شوكولاتة",c:"#6B3A24"}],
+  textMax: 30
+};
+
+/* =========================================================
+   Icons
+   ========================================================= */
+const S = (p,vb="0 0 24 24",cls="") => `<svg class="${cls}" viewBox="${vb}" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${p}</svg>`;
+const UI = {
+  bag:   S('<path d="M5 8h14l-1.2 11.2a2 2 0 0 1-2 1.8H8.2a2 2 0 0 1-2-1.8z"/><path d="M9 8V6.5a3 3 0 0 1 6 0V8"/>'),
+  plus:  S('<path d="M12 5v14M5 12h14"/>'),
+  minus: S('<path d="M5 12h14"/>'),
+  trash: S('<path d="M4 7h16M9 7V4.8h6V7M6.5 7l1 13h9l1-13"/>'),
+  left:  S('<path d="M15 5l-7 7 7 7"/>'),
+  right: S('<path d="M9 5l7 7-7 7"/>'),
+  close: S('<path d="M6 6l12 12M18 6L6 18"/>'),
+  pin:   S('<path d="M12 21s7-6.2 7-11.5A7 7 0 0 0 5 9.5C5 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/>'),
+  truck: S('<path d="M3 6h11v10H3zM14 9h4l3 3.5V16h-7"/><circle cx="7" cy="17.5" r="1.8"/><circle cx="17" cy="17.5" r="1.8"/>'),
+  store: S('<path d="M4 10v10h16V10M3 6l2-3h14l2 3v2a3 3 0 0 1-6 0 3 3 0 0 1-6 0 3 3 0 0 1-6 0z"/><path d="M10 20v-5h4v5"/>'),
+  phone: S('<path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2z"/>'),
+  check: S('<path d="M5 12.5l4.5 4.5L19 7.5"/>'),
+  wa:    '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2.2A9.7 9.7 0 0 0 3.6 16.8L2.3 21.7l5-1.3A9.7 9.7 0 1 0 12 2.2zm0 17.7a8 8 0 0 1-4.1-1.1l-.3-.2-3 .8.8-2.9-.2-.3A8 8 0 1 1 12 19.9zm4.4-6c-.2-.1-1.4-.7-1.7-.8s-.4-.1-.6.1-.6.8-.8 1-.3.2-.5.1a6.6 6.6 0 0 1-3.3-2.9c-.2-.4.2-.4.7-1.3a.4.4 0 0 0 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.7 11.8 11.8 0 0 0 4.5 4c1.7.7 2.3.8 3.2.6a2.7 2.7 0 0 0 1.8-1.3 2.2 2.2 0 0 0 .2-1.3c-.1-.1-.3-.2-.5-.3z"/></svg>'
+};
+const ART = {
+  star:    '<path d="M32 10l6.4 13.2 14.6 2-10.6 10.2 2.6 14.4L32 43l-13 6.8 2.6-14.4L11 25.2l14.6-2z"/>',
+  baklava: '<path d="M8 42c6 6 42 6 48 0"/><path d="M12 36L20 26l8 10-8 9zM28 36l8-10 8 10-8 9zM44 36l6-7.5 6 7.5-6 7"/><circle cx="20" cy="35.5" r="1.6"/><circle cx="36" cy="35.5" r="1.6"/><circle cx="50" cy="35.5" r="1.4"/>',
+  cake:    '<path d="M12 52h40M15 52V36h34v16M15 43c4 3.5 8.5 3.5 12.5 0s8.5-3.5 12.5 0 6 3.5 9 1"/><path d="M20 36v-7h24v7M32 29v-8"/><path d="M32 12.5c-2.3 2.4-2.3 4.4 0 6 2.3-1.6 2.3-3.6 0-6z"/>',
+  cookie:  '<circle cx="23" cy="36" r="12"/><circle cx="23" cy="36" r="5"/><path d="M38 47h18c0-7-4-12-9-12s-9 5-9 12z"/><circle cx="47" cy="29.5" r="2.6"/><path d="M14 29l2 1M29 27l-1 2M31 43l-2-1M15 43l1-2"/>',
+  jelly:   '<path d="M17 27h30l-4.5 25h-21z"/><path d="M17 27c4-4 8 1.5 15-2s11 2 15 2"/><path d="M20 38h24"/><circle cx="39" cy="20" r="3.4"/><path d="M39 16.6c0-3 2-5 5-6"/>',
+  nuts:    '<path d="M9 34h46c0 10-10 17-23 17S9 44 9 34z"/><ellipse cx="22" cy="29" rx="6" ry="3.8" transform="rotate(-15 22 29)"/><ellipse cx="33" cy="26" rx="5.5" ry="3.6"/><ellipse cx="43.5" cy="29.5" rx="5" ry="3.3" transform="rotate(18 43.5 29.5)"/>',
+  balloon: '<path d="M24 10c-7.5 0-12 6-12 12.5C12 31 19.5 38 24 38s12-7 12-15.5C36 16 31.5 10 24 10z"/><path d="M24 38l-2.2 3.2h4.4zM24 41.2c-2.5 4 2.5 6.5 0 12"/><path d="M45 52V31h7v21M48.5 31v-4"/><path d="M48.5 20c-2 2.2-2 3.8 0 5 2-1.2 2-2.8 0-5z"/><path d="M19 17a6 6 0 0 1 4-2.5"/>',
+  coffee:  '<path d="M13 28h30v8c0 8.5-6.7 15-15 15S13 44.5 13 36z"/><path d="M43 31h3.5a5.5 5.5 0 0 1 0 11H42M10 55h36"/><path d="M23 22c-2.2-3 2.2-5 0-9M31 22c-2.2-3 2.2-5 0-9"/>',
+  roll:    '<path d="M32 33a2.5 2.5 0 1 0 5 0 7 7 0 1 0-14 0 11.5 11.5 0 1 0 23 0 16 16 0 1 0-32 0"/>'
+};
+const art = (k,cls="ic") => S(ART[k]||ART.star,"0 0 64 64",cls);
+
+/* Scalloped ring — same shape language as the logo frame */
+function scallop(n=12, R=44, A=4.2){
+  let d=""; const steps=360;
+  for(let i=0;i<=steps;i++){
+    const t=i/steps*Math.PI*2;
+    const r=R-A+A*2*Math.abs(Math.cos(n*t/2))**0.6;
+    const x=50+r*Math.cos(t), y=50+r*Math.sin(t);
+    d+=(i?"L":"M")+x.toFixed(2)+" "+y.toFixed(2);
+  }
+  return `<svg class="sc" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="${d}Z"/></svg>`;
+}
+const SC = scallop();
+
+/* =========================================================
+   State
+   ========================================================= */
+const $ = s => document.querySelector(s);
+const $$ = s => [...document.querySelectorAll(s)];
+const byId = Object.fromEntries(ITEMS.map(i=>[i.id,i]));
+const catOf = id => CATS.find(c=>c.id===id);
+const isWeight = it => !it.sizes && typeof it.price === "object";
+const pcs = n => (n>=3&&n<=10) ? `${n} قطع` : `${n} قطعة`;
+const unitPick = {};   // id -> selected unit
+let cart = load();      // key "id|unit" -> qty
+let lastOrder = null;
+
+function load(){ try{ return JSON.parse(localStorage.getItem("cinnova-cart")||"{}") }catch(e){ return {} } }
+function save(){ try{ localStorage.setItem("cinnova-cart",JSON.stringify(cart)) }catch(e){} }
+const fmt = n => (Math.round(n*100)/100).toString();
+const money = n => `${fmt(n)} ${SHOP.currency}`;
+const unitsOf = it => it.sizes ? Object.keys(it.sizes) : isWeight(it) ? ["kg","uqiya"].filter(u=>it.price[u]!=null) : ["piece"];
+const curUnit = it => { const us=unitsOf(it); return us.includes(unitPick[it.id]) ? unitPick[it.id] : us[0]; };
+const unitPrice = (it,u) => it.sizes ? it.sizes[u].price : isWeight(it) ? it.price[u] : it.price;
+const unitName = (it,u) => it.sizes ? (SIZES[u]||u) : UNITS[u];
+const unitLabel = (it,u) => it.sizes ? `${unitName(it,u)} · ${pcs(it.sizes[u].pieces)}` : UNITS[u];
+const itemsIn = cid => cid==="featured" ? ITEMS.filter(i=>i.featured) : ITEMS.filter(i=>i.cat===cid);
+function hueFor(it){ let h=0; for(const ch of it.id) h=(h*31+ch.charCodeAt(0))%360; return 14+(h%26); }
+
+/* =========================================================
+   Render pieces
+   ========================================================= */
+function thumb(it, tag=false){
+  const inner = it.img
+    ? `<img src="${it.img}" alt="${it.name}" loading="lazy">`
+    : `<div class="ph" style="--h:${hueFor(it)}">${SC}${art(it.id==="k1"?"roll":catOf(it.cat).icon)}<em class="mono">photo soon</em></div>`;
+  return `<div class="thumb">${tag&&it.featured?'<span class="tag">مميز</span>':""}${inner}</div>`;
+}
+function priceHTML(it){
+  const u=curUnit(it);
+  return `<div class="price"><b>${fmt(unitPrice(it,u))}</b> ${SHOP.currency} <span>/ ${unitLabel(it,u)}</span></div>`;
+}
+function actHTML(it, compact=false){
+  const u=curUnit(it), q=cart[it.id+"|"+u]||0;
+  if(q) return `<div class="step"><button data-a="inc" data-id="${it.id}" aria-label="زيادة">${UI.plus}</button><b>${q}</b><button data-a="dec" data-id="${it.id}" aria-label="تقليل">${q===1?UI.trash:UI.minus}</button></div>`;
+  return compact
+    ? `<button class="add round" data-a="add" data-id="${it.id}" aria-label="أضف للسلة">${UI.plus}</button>`
+    : `<button class="add" data-a="add" data-id="${it.id}">${UI.plus}أضف</button>`;
+}
+function itemCard(it,i){
+  const seg = unitsOf(it).length>1
+    ? `<div class="seg">${unitsOf(it).map(u=>`<button data-a="unit" data-u="${u}" data-id="${it.id}" class="${curUnit(it)===u?"on":""}">${unitName(it,u)}</button>`).join("")}</div>`
+    : (it.sizes ? `<span class="unit-chip">${unitLabel(it,curUnit(it))}</span>` : `<span class="unit-chip">بال${UNITS[curUnit(it)]}</span>`);
+  return `<article class="item reveal" style="--d:${i}" data-card="${it.id}">
+    ${thumb(it,true)}
+    <div class="info">
+      <h3>${it.name}</h3><p>${it.desc||""}</p>
+      <div data-price>${priceHTML(it)}</div>
+      <div class="row">${seg}<div data-act>${actHTML(it)}</div></div>
+    </div></article>`;
+}
+function featCard(it){
+  return `<div class="feat" data-card="${it.id}">
+    ${thumb(it)}
+    <div class="body"><div><h3>${it.name}</h3><div data-price>${priceHTML(it)}</div></div><div data-act>${actHTML(it,true)}</div></div>
+  </div>`;
+}
+
+function renderHome(){
+  $("#rail").innerHTML = itemsIn("featured").map(featCard).join("");
+  $("#rail-dots").innerHTML = itemsIn("featured").map((_,i)=>`<button data-i="${i}" aria-label="شريحة ${i+1}"></button>`).join("");
+  requestAnimationFrame(railSync);
+  $("#cats").innerHTML = CATS.map((c,i)=>{
+    const n=itemsIn(c.id).length;
+    if(c.id==="featured") return `<a class="cat wide reveal" style="--d:${i+6};text-decoration:none" role="button" data-a="go" data-c="${c.id}">
+        <div class="ring">${SC}${art(c.icon)}</div><div><h3>${c.name}</h3><small>${n} أصناف مختارة بعناية</small></div><span class="go">${UI.left}</span></a>`;
+    return `<a class="cat reveal" style="--d:${i+6};text-decoration:none;color:inherit" role="button" data-a="go" data-c="${c.id}">
+        <div class="ring">${SC}${art(c.icon)}</div><h3>${c.name}</h3><small>${n} أصناف</small></a>`;
+  }).join("");
+}
+
+function renderCat(cid){
+  const c=catOf(cid)||CATS[0]; const list=itemsIn(c.id);
+  const hint = c.id==="featured" ? "أكثر الأصناف طلباً عنّا" : list.some(i=>i.sizes) ? "الأسعار حسب الحجم" : (()=>{ const us=new Set(list.flatMap(unitsOf)); const w=us.has("kg")||us.has("uqiya"), pc=us.has("piece"); return w&&pc ? "الأسعار بالقطعة وبالوزن" : w ? "الأسعار بالكيلو والوقية" : "الأسعار بالقطعة"; })();
+  $("#cat-head").innerHTML = `<div class="cat-hero"><div class="ring">${SC}${art(c.icon)}</div>
+     <div><span class="mono" style="font-size:11px;color:var(--gold)">— ${c.en}</span><h1>${c.name}</h1><p>${hint} · ${list.length} أصناف</p></div></div>`;
+  $("#tabs").innerHTML = CATS.map(t=>`<a class="tab ${t.id===c.id?"on":""}" role="button" data-a="go" data-c="${t.id}" style="text-decoration:none">${t.name}</a>`).join("");
+  if(c.subs){
+    let n=0;
+    $("#list").innerHTML = (c.id==="cake"?cakeBanner():"")
+      + `<div class="subnav">${c.subs.map(s=>`<button data-a="sub" data-s="${s.id}">${s.name}</button>`).join("")}</div>`
+      + c.subs.map(s=>{ const its=list.filter(i=>i.sub===s.id); if(!its.length) return "";
+          return `<div class="subhead" id="sub-${s.id}"><span class="mono">— ${s.en}</span><h2>${s.name}</h2><small>${its.length} أصناف</small></div>` + its.map(i=>itemCard(i,n++)).join(""); }).join("");
+  } else {
+    $("#list").innerHTML = (c.id==="cake"?cakeBanner():"") + list.map(itemCard).join("");
+  }
+  requestAnimationFrame(()=>{ const on=$("#tabs .tab.on"); on && on.scrollIntoView({inline:"center",block:"nearest",behavior:"smooth"}); });
+}
+
+function refreshItem(id){
+  const it=byId[id];
+  $$(`[data-card="${id}"]`).forEach(card=>{
+    const compact=card.classList.contains("feat");
+    const a=card.querySelector("[data-act]"); if(a) a.innerHTML=actHTML(it,compact);
+    const p=card.querySelector("[data-price]"); if(p) p.innerHTML=priceHTML(it);
+    card.querySelectorAll(".seg button").forEach(b=>b.classList.toggle("on",b.dataset.u===curUnit(it)));
+  });
+}
+
+/* =========================================================
+   Cart
+   ========================================================= */
+const cartLines = () => Object.entries(cart).filter(([,q])=>q>0).map(([k,q])=>{ const [id,u]=k.split("|"); const it=byId[id]; return (it && unitsOf(it).includes(u))?{k,it,u,q,p:unitPrice(it,u)}:null }).filter(Boolean);
+const cartTotal = () => cartLines().reduce((s,l)=>s+l.p*l.q,0);
+const cartCount = () => cartLines().reduce((s,l)=>s+l.q,0);
+
+function updateCartUI(bump=false){
+  const n=cartCount(), t=cartTotal();
+  $$(".badge").forEach(b=>{ b.textContent=n; b.classList.toggle("on",n>0); if(bump&&n){ b.classList.remove("bump"); void b.offsetWidth; b.classList.add("bump"); } });
+  $("#cb-n").textContent=n; $("#cb-t").textContent=money(t);
+  $("#cartbar").classList.toggle("on", n>0 && !$("#sheet").classList.contains("on"));
+  save();
+}
+function setQty(key,q){ if(q<=0) delete cart[key]; else cart[key]=q; }
+
+function flyFrom(el){
+  const target=[...$$(".view.active .js-cart")][0]; if(!el||!target){ updateCartUI(true); return; }
+  const a=el.getBoundingClientRect(), b=target.getBoundingClientRect();
+  const dot=document.createElement("div"); dot.className="fly"; document.body.appendChild(dot);
+  const x0=a.left+a.width/2-8, y0=a.top+a.height/2-8, x1=b.left+b.width/2-8, y1=b.top+b.height/2-8;
+  const anim=dot.animate([
+    {transform:`translate(${x0}px,${y0}px) scale(1)`,opacity:1},
+    {transform:`translate(${(x0+x1)/2}px,${Math.min(y0,y1)-90}px) scale(1.2)`,opacity:1,offset:.45},
+    {transform:`translate(${x1}px,${y1}px) scale(.4)`,opacity:.3}
+  ],{duration:700,easing:"cubic-bezier(.5,0,.3,1)"});
+  anim.onfinish=()=>{ dot.remove(); updateCartUI(true); };
+}
+
+/* =========================================================
+   Sheet (cart → checkout → success)
+   ========================================================= */
+let form = { name:"", mode:"", time:"", address:"", notes:"" };
+
+function openSheet(pane="cart"){ renderPane(pane); $("#scrim").classList.add("on"); $("#sheet").classList.add("on"); $("#cartbar").classList.remove("on"); document.body.style.overflow="hidden"; }
+function closeSheet(){ $("#scrim").classList.remove("on"); $("#sheet").classList.remove("on"); document.body.style.overflow=""; updateCartUI(); }
+
+function renderPane(p){
+  if(p.startsWith("cake")) return renderCake(p);
+  const el=$("#sheet-inner");
+  const head=(t,back)=>`<div class="sheet-head">${back?`<button class="icon-btn" data-a="pane" data-p="${back}" aria-label="رجوع">${UI.right}</button>`:""}<h2 style="flex:1;margin-inline-start:${back?12:0}px">${t}</h2><button class="icon-btn" data-a="close" aria-label="إغلاق">${UI.close}</button></div>`;
+  if(p==="cart"){
+    const lines=cartLines();
+    if(!lines.length){
+      el.innerHTML=head("سلتك")+`<div class="sheet-body pane"><div class="empty">${art("roll","")}<p>السلة فاضية… لسا ما اخترت إشي حلو!</p></div></div>
+        <div class="sheet-foot"><button class="btn" data-a="close">تصفّح المنيو</button></div>`;
+      return;
+    }
+    el.innerHTML=head("سلتك")+`<div class="sheet-body pane">${lines.map(l=>`
+      <div class="crow">${thumb(l.it)}<div class="meta"><h4>${l.it.name}</h4><small>${money(l.p)} / ${unitLabel(l.it,l.u)}</small><div class="lt">${money(l.p*l.q)}</div></div>
+      <div class="step"><button data-a="cinc" data-k="${l.k}" aria-label="زيادة">${UI.plus}</button><b>${l.q}</b><button data-a="cdec" data-k="${l.k}" aria-label="تقليل">${l.q===1?UI.trash:UI.minus}</button></div></div>`).join("")}</div>
+      <div class="sheet-foot"><div class="sum"><span>المجموع</span><b>${money(cartTotal())}</b></div><button class="btn" data-a="pane" data-p="checkout">متابعة الحجز ${UI.left}</button></div>`;
+  }
+  if(p==="checkout"){
+    const now=new Date(Date.now()+60*60*1000); now.setSeconds(0,0);
+    const minV=new Date(now.getTime()-now.getTimezoneOffset()*60000).toISOString().slice(0,16);
+    el.innerHTML=head("بيانات الحجز","cart")+`<div class="sheet-body pane">
+      <div class="field" id="f-name"><label>الاسم</label><input class="inp" id="i-name" autocomplete="name" placeholder="اسمك الكريم" value="${esc(form.name)}"><div class="err">اكتب اسمك لو سمحت</div></div>
+      <div class="field" id="f-mode"><label>طريقة الاستلام</label><div class="choice">
+        <button type="button" data-a="mode" data-m="delivery" class="${form.mode==="delivery"?"on":""}">${UI.truck}توصيل</button>
+        <button type="button" data-a="mode" data-m="pickup" class="${form.mode==="pickup"?"on":""}">${UI.store}بستلم من المحل</button></div><div class="err">اختار طريقة الاستلام</div></div>
+      <div class="field" id="f-time"><label>وقت الاستلام</label><input class="inp" id="i-time" type="datetime-local" min="${minV}" value="${form.time}"><div class="err">حدّد الوقت اللي بناسبك</div></div>
+      <div class="collapse ${form.mode==="delivery"?"open":""}" id="addr-wrap"><div>
+        <div class="field" id="f-addr"><label>العنوان</label><input class="inp" id="i-addr" autocomplete="street-address" placeholder="المنطقة، الشارع، أقرب معلم" value="${esc(form.address)}"><div class="err">اكتب عنوان التوصيل</div></div>
+      </div></div>
+      <div class="field"><label>ملاحظات <i>(اختياري)</i></label><textarea class="inp" id="i-notes" placeholder="مثلاً: الكتابة على الكيكة، رقم الشمعة…">${esc(form.notes)}</textarea></div>
+    </div>
+    <div class="sheet-foot"><div class="sum"><span>المجموع</span><b>${money(cartTotal())}</b></div><button class="btn" data-a="send">${UI.wa}إرسال الحجز على واتساب</button></div>`;
+  }
+  if(p==="success"){
+    el.innerHTML=head("")+`<div class="sheet-body pane"><div class="success"><div class="ok">${UI.check}</div><h3>طلبك جاهز ينبعت!</h3>
+      <p>فتحنالك الواتساب والرسالة مكتوبة —<br>بس اضغط إرسال وبنرد عليك بأسرع وقت.</p></div></div>
+      <div class="sheet-foot"><button class="btn" data-a="close">رجوع للمنيو</button><button class="btn ghost" data-a="resend">${UI.wa}فتح الواتساب مرة ثانية</button></div>`;
+  }
+}
+function esc(s){ return String(s||"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c])); }
+function readForm(){
+  const v=id=>($(id)||{}).value||"";
+  form.name=v("#i-name").trim(); form.time=v("#i-time"); form.address=v("#i-addr").trim(); form.notes=v("#i-notes").trim();
+}
+function validate(){
+  let ok=true; const mark=(id,bad)=>{ $(id).classList.toggle("bad",bad); if(bad) ok=false; };
+  mark("#f-name",!form.name); mark("#f-mode",!form.mode); mark("#f-time",!form.time);
+  mark("#f-addr", form.mode==="delivery" && !form.address);
+  if(!ok){ const f=$(".field.bad"); f && f.scrollIntoView({behavior:"smooth",block:"center"}); }
+  return ok;
+}
+function timeText(v){
+  const d=new Date(v); if(isNaN(d)) return v;
+  return d.toLocaleDateString("ar-u-nu-latn",{weekday:"long",day:"numeric",month:"numeric"})+" — "+d.toLocaleTimeString("ar-u-nu-latn",{hour:"numeric",minute:"2-digit"});
+}
+function buildMessage(){
+  const lines=cartLines().map(l=> l.it.sizes ? `▫️ ${l.it.name} (${unitLabel(l.it,l.u)}) — ${l.q} × ${fmt(l.p)} = ${money(l.p*l.q)}` : `▫️ ${l.it.name} — ${l.q} ${UNITS[l.u]} × ${fmt(l.p)} = ${money(l.p*l.q)}`);
+  const msg=[
+    `مرحبا ${SHOP.name} 🤎 بدي أحجز الطلب التالي:`, "",
+    ...lines, "",
+    `💰 المجموع: ${money(cartTotal())}`, "",
+    `👤 الاسم: ${form.name}`,
+    `🚚 الاستلام: ${form.mode==="delivery"?"توصيل":"استلام من المحل"}`,
+    `🕒 الوقت: ${timeText(form.time)}`,
+    ...(form.mode==="delivery"?[`📍 العنوان: ${form.address}`]:[]),
+    ...(form.notes?[`📝 ملاحظات: ${form.notes}`]:[])
+  ];
+  return msg.join("\n");
+}
+const waLink = text => `https://wa.me/${SHOP.whatsapp}${text?`?text=${encodeURIComponent(text)}`:""}`;
+function openWA(text){ const a=document.createElement("a"); a.href=waLink(text); a.target="_blank"; a.rel="noopener"; document.body.appendChild(a); a.click(); a.remove(); }
+
+
+/* =========================================================
+   Custom cake builder
+   ========================================================= */
+let cake = { occasion:"", size:"", shape:"", shapeText:"", flavor:"", filling:"", deco:"", color:"", text:"", ref:false, name:"", mode:"", time:"", address:"", notes:"" };
+let cakeStep = 1, prevAnim = true;
+const opt = (k,id) => (CAKE[k].find(o=>o.id===id)||{});
+
+function cakeSVG(st=cake, mini=false){
+  const size=opt("size",st.size); const tiers=size.tiers||1, wf=size.w||1;
+  const col=(opt("color",st.color).c)||"#F3E3C8";
+  const dark="rgba(44,23,17,.35)";
+  const deco=st.deco, shape=st.shape||"round";
+  let g=`<ellipse cx="100" cy="136" rx="${78*Math.min(wf,1)+8}" ry="9" fill="rgba(243,210,117,.18)" stroke="#C29A54" stroke-width="1.5"/>`;
+  let y=132, w=128*wf, h=tiers>1?34:48; const layers=[];
+  for(let i=0;i<tiers;i++){ layers.push({y, w, h}); y-=h; w*=0.74; h*=0.92; }
+  layers.forEach((L,i)=>{
+    const x=100-L.w/2, top=L.y-L.h, ry=shape==="square"?0:Math.max(5,L.w*0.09);
+    g+=`<g class="tier" style="transform-origin:100px ${L.y}px;${prevAnim?`animation:pop .5s var(--spring) ${i*80}ms both`:""}">`;
+    g+=`<path d="M${x} ${top} V${L.y} ${ry?`A${L.w/2} ${ry} 0 0 0 ${x+L.w} ${L.y}`:`H${x+L.w}`} V${top}" fill="${col}" stroke="${dark}" stroke-width="1.2"/>`;
+    g+= ry? `<ellipse cx="100" cy="${top}" rx="${L.w/2}" ry="${ry}" fill="${col}" stroke="${dark}" stroke-width="1.2"/><ellipse cx="100" cy="${top}" rx="${L.w/2-3}" ry="${ry-2}" fill="rgba(255,255,255,.18)"/>`
+           : `<rect x="${x}" y="${top-6}" width="${L.w}" height="6" fill="${col}" stroke="${dark}" stroke-width="1.2"/><rect x="${x+2}" y="${top-5}" width="${L.w-4}" height="3" fill="rgba(255,255,255,.2)"/>`;
+    if(deco==="drip"){ let d=`M${x} ${top+2}`; const n=Math.round(L.w/12); for(let k=0;k<n;k++){ const sx=x+k*L.w/n, ex=x+(k+1)*L.w/n, len=6+((k*37)%11); d+=` L${sx+2} ${top+2} Q${sx+(ex-sx)/2} ${top+len+6} ${ex-1} ${top+2}`; } d+=` L${x+L.w} ${top-2} L${x} ${top-2}Z`; g+=`<path d="${d}" fill="#5A2E14"/>`; }
+    if(deco==="cream"){ const n=Math.round(L.w/11); for(let k=0;k<=n;k++) g+=`<circle cx="${x+k*L.w/n}" cy="${L.y-2}" r="3.6" fill="#FFF8EC" stroke="${dark}" stroke-width=".6"/>`; for(let k=0;k<=n;k++) g+=`<circle cx="${x+k*L.w/n}" cy="${top}" r="3" fill="#FFF8EC" stroke="${dark}" stroke-width=".6"/>`; }
+    if(deco==="fondant"){ g+=`<path d="M${x+4} ${top+L.h*.55} Q${x+L.w/4} ${top+L.h*.75} ${100} ${top+L.h*.55} T${x+L.w-4} ${top+L.h*.55}" fill="none" stroke="rgba(255,255,255,.55)" stroke-width="2.4" stroke-linecap="round"/>`; for(let k=1;k<5;k++) g+=`<circle cx="${x+k*L.w/5}" cy="${top+L.h*.3}" r="1.8" fill="rgba(255,255,255,.7)"/>`; }
+    if(deco==="flowers" && i===layers.length-1){ [[-.28,0],[0,-.04],[.28,0]].forEach(([fx,fy],j)=>{ const cx=100+fx*L.w, cy=top+fy*L.w-2; g+=`<g transform="translate(${cx} ${cy})">${[0,72,144,216,288].map(r=>`<ellipse rx="3.6" ry="6" cy="-5" fill="${["#E58BA0","#F6C3CF","#E58BA0"][j]}" transform="rotate(${r})"/>`).join("")}<circle r="2.6" fill="#F3D275"/></g>`; }); }
+    if(deco==="flowers" && i!==layers.length-1){ g+=`<circle cx="${x+10}" cy="${top+4}" r="4" fill="#E58BA0"/><circle cx="${x+L.w-10}" cy="${top+4}" r="4" fill="#F6C3CF"/>`; }
+    g+=`</g>`;
+  });
+  const T=layers[layers.length-1], tTop=T.y-T.h;
+  if(!mini && st.text){ const B=layers[0]; const t=esc(st.text).slice(0,24); g+=`<text x="100" y="${B.y-B.h*.32}" text-anchor="middle" font-size="${Math.max(7,Math.min(11,180/(t.length||1)))}" font-weight="700" fill="${st.color==="choc"||st.color==="red"?"#F3D275":"#5A2E14"}" font-family="IBM Plex Sans Arabic,system-ui">${t}</text>`; }
+  if(shape==="heart") g+=`<path transform="translate(100 ${tTop-24}) scale(1.1)" d="M0 14C-14 4-12-6-6-6c3 0 5 2 6 4 1-2 3-4 6-4 6 0 8 10-6 20z" fill="#C8443F" stroke="#F3D275" stroke-width="1"/><path d="M100 ${tTop-6}V${tTop}" stroke="#F3D275" stroke-width="1.5"/>`;
+  else if(shape==="num"){ const t=esc(st.shapeText||"1").slice(0,3); g+=`<text x="100" y="${tTop-6}" text-anchor="middle" font-size="30" font-weight="700" fill="#F3D275" stroke="#7B4003" stroke-width="1" font-family="IBM Plex Sans Arabic,system-ui">${t}</text>`; }
+  else if(st.occasion==="bday" || !st.occasion){ [-14,0,14].forEach((dx,j)=>{ const cx=100+dx, h2=j===1?22:17; g+=`<rect x="${cx-2}" y="${tTop-h2}" width="4" height="${h2}" rx="1.5" fill="${["#F2B8C6","#B9D7EE","#BFE3CF"][j]}"/><path class="flame" d="M${cx} ${tTop-h2-10}c-3 4-3 7 0 8 3-1 3-4 0-8z" fill="#F3D275"/>`; }); }
+  else g+=`<g transform="translate(100 ${tTop-14})"><path d="M0-10l2.6 5.4 6 .8-4.3 4.2 1 6L0 3.6-5.3 6.4l1-6-4.3-4.2 6-.8z" fill="#F3D275"/></g>`;
+  return `<svg viewBox="0 0 200 150" aria-hidden="true">${g}</svg>`;
+}
+function updatePrev(){ const p=$("#cake-prev"); if(p) p.innerHTML=cakeSVG(); }
+
+function cakeBanner(){
+  const demo={size:"l",shape:"round",deco:"drip",color:"pink",occasion:"bday"};
+  return `<button class="cake-banner" data-a="cake-open">
+    <span class="mini">${cakeSVG(demo,true)}</span>
+    <span><h3>صمّم كيكتك على ذوقك</h3><p>اختار الحجم والنكهة والتزيين والكتابة، وإحنا منعملها إلك</p><span class="cta">احجز كيكتك ${UI.left}</span></span>
+  </button>`;
+}
+
+function optGroup(k, label, extra=""){
+  return `<div class="field" id="f-${k}"><label>${label}</label><div class="opts">${CAKE[k].map(o=>`<button type="button" class="opt ${cake[k]===o.id?"on":""}" data-a="opt" data-k="${k}" data-v="${o.id}"><b style="font-weight:600">${o.name}</b>${o.sub?`<small>${o.sub}</small>`:""}</button>`).join("")}</div><div class="err">اختار ${label.replace(/<[^>]+>/g,"")}</div>${extra}</div>`;
+}
+function minCakeTime(){ const d=new Date(Date.now()+SHOP.cakeLeadHours*3600e3); d.setSeconds(0,0); d.setMinutes(Math.ceil(d.getMinutes()/15)*15); return new Date(d.getTime()-d.getTimezoneOffset()*60000).toISOString().slice(0,16); }
+
+function renderCake(p){
+  cakeStep=+p.slice(4);
+  const el=$("#sheet-inner");
+  const steps=`<div class="steps">${["الشكل والحجم","النكهة والتزيين","الاستلام"].map((t,i)=>`<div class="${i<cakeStep?"on":""}">${t}</div>`).join("")}</div>`;
+  const head=`<div class="sheet-head">${cakeStep>1?`<button class="icon-btn" data-a="cake-step" data-s="${cakeStep-1}" aria-label="رجوع">${UI.right}</button>`:""}<h2 style="flex:1;margin-inline-start:${cakeStep>1?12:0}px">كيكتك الخاصة</h2><button class="icon-btn" data-a="close" aria-label="إغلاق">${UI.close}</button></div>`+steps;
+  const prev=`<div class="cake-prev" id="cake-prev">${cakeSVG()}</div>`;
+  let body="", foot="";
+  if(cakeStep===1){
+    body=prev+optGroup("occasion","المناسبة")+optGroup("size","الحجم")+optGroup("shape","الشكل",
+      `<div class="collapse ${cake.shape==="num"?"open":""}" id="num-wrap"><div><div class="field" id="f-num" style="margin-bottom:0"><input class="inp" id="i-num" maxlength="3" placeholder="شو الرقم أو الحرف؟ مثلاً 18" value="${esc(cake.shapeText)}"><div class="err">اكتب الرقم أو الحرف</div></div></div></div>`);
+    foot=`<button class="btn" data-a="cake-step" data-s="2">التالي ${UI.left}</button>`;
+  }
+  if(cakeStep===2){
+    const cn=cake.color?opt("color",cake.color).name:"اختار لون";
+    body=prev+optGroup("flavor","نكهة الكيك")+optGroup("filling","الحشوة")+optGroup("deco","التزيين")+
+      `<div class="field" id="f-color"><label>اللون الأساسي</label><div class="swatches">${CAKE.color.map(c=>`<button type="button" class="sw ${cake.color===c.id?"on":""}" style="background:${c.c}" data-a="opt" data-k="color" data-v="${c.id}" aria-label="${c.name}"></button>`).join("")}</div><div class="sw-name" id="sw-name">${cn}</div><div class="err">اختار لون</div></div>
+      <div class="field"><label>الكتابة على الكيكة <i>(اختياري)</i><span class="counter" id="t-count">${cake.text.length}/${CAKE.textMax}</span></label><input class="inp" id="i-text" maxlength="${CAKE.textMax}" placeholder="مثلاً: كل عام وانتِ بخير يا سارة" value="${esc(cake.text)}"></div>
+      <div class="field"><button type="button" class="check ${cake.ref?"on":""}" data-a="cake-ref"><span class="box">${UI.check}</span>عندي صورة أو فكرة للتصميم، ببعتها على الواتساب</button></div>`;
+    foot=`<button class="btn" data-a="cake-step" data-s="3">التالي ${UI.left}</button>`;
+  }
+  if(cakeStep===3){
+    body=`<div class="field" id="f-name"><label>الاسم</label><input class="inp" id="i-name" autocomplete="name" placeholder="اسمك الكريم" value="${esc(cake.name)}"><div class="err">اكتب اسمك لو سمحت</div></div>
+      <div class="field" id="f-mode"><label>طريقة الاستلام</label><div class="choice">
+        <button type="button" data-a="cake-mode" data-m="delivery" class="${cake.mode==="delivery"?"on":""}">${UI.truck}توصيل</button>
+        <button type="button" data-a="cake-mode" data-m="pickup" class="${cake.mode==="pickup"?"on":""}">${UI.store}بستلم من المحل</button></div><div class="err">اختار طريقة الاستلام</div></div>
+      <div class="field" id="f-time"><label>موعد الاستلام</label><input class="inp" id="i-time" type="datetime-local" min="${minCakeTime()}" value="${cake.time}"><div class="hint">الكيك الخاص بنحتاج نعرف فيه قبل ${SHOP.cakeLeadHours} ساعة على الأقل.</div><div class="err">اختار موعد بعد ${SHOP.cakeLeadHours} ساعة على الأقل من هلأ</div></div>
+      <div class="collapse ${cake.mode==="delivery"?"open":""}" id="addr-wrap"><div>
+        <div class="field" id="f-addr"><label>العنوان</label><input class="inp" id="i-addr" autocomplete="street-address" placeholder="المنطقة، الشارع، أقرب معلم" value="${esc(cake.address)}"><div class="err">اكتب عنوان التوصيل</div></div></div></div>
+      <div class="field"><label>ملاحظات <i>(اختياري)</i></label><textarea class="inp" id="i-notes" placeholder="أي تفاصيل زيادة عن التصميم…">${esc(cake.notes)}</textarea></div>
+      <div class="hint" style="text-align:center;margin:4px 0 6px">السعر النهائي بنأكّده معك على الواتساب حسب الحجم والتصميم.</div>`;
+    foot=`<button class="btn" data-a="cake-send">${UI.wa}إرسال طلب الكيكة على واتساب</button>`;
+  }
+  el.innerHTML=head+`<div class="sheet-body pane">${body}</div><div class="sheet-foot">${foot}</div>`;
+  const ti=$("#i-text"); ti&&ti.addEventListener("input",()=>{ cake.text=ti.value; $("#t-count").textContent=`${ti.value.length}/${CAKE.textMax}`; prevAnim=false; updatePrev(); prevAnim=true; });
+  const ni=$("#i-num"); ni&&ni.addEventListener("input",()=>{ cake.shapeText=ni.value.trim(); prevAnim=false; updatePrev(); prevAnim=true; });
+}
+function readCake(){
+  const v=id=>{ const e=$(id); return e?e.value:null; };
+  const set=(k,id,trim=true)=>{ const x=v(id); if(x!==null) cake[k]=trim?x.trim():x; };
+  set("shapeText","#i-num"); set("text","#i-text"); set("name","#i-name"); set("time","#i-time"); set("address","#i-addr"); set("notes","#i-notes");
+}
+function validCake(step){
+  let ok=true; const mark=(id,bad)=>{ const e=$(id); if(!e) return; e.classList.toggle("bad",bad); if(bad) ok=false; };
+  if(step===1){ ["occasion","size","shape"].forEach(k=>mark("#f-"+k,!cake[k])); if(cake.shape==="num") mark("#f-num",!cake.shapeText); }
+  if(step===2){ ["flavor","filling","deco","color"].forEach(k=>mark("#f-"+k,!cake[k])); }
+  if(step===3){ mark("#f-name",!cake.name); mark("#f-mode",!cake.mode); mark("#f-time",!cake.time || new Date(cake.time).getTime() < Date.now()+SHOP.cakeLeadHours*3600e3-15*60e3); mark("#f-addr",cake.mode==="delivery"&&!cake.address); }
+  if(!ok){ const f=$(".field.bad"); f&&f.scrollIntoView({behavior:"smooth",block:"center"}); navigator.vibrate&&navigator.vibrate([10,40,10]); }
+  return ok;
+}
+function cakeMessage(){
+  const n=k=>opt(k,cake[k]).name; const sz=opt("size",cake.size);
+  return [
+    `مرحبا ${SHOP.name} 🤎 بدي أحجز كيكة خاصة:`, "",
+    `🎉 المناسبة: ${n("occasion")}`,
+    `📏 الحجم: ${sz.name} (${sz.sub})`,
+    `🔷 الشكل: ${n("shape")}${cake.shape==="num"?` — ${cake.shapeText}`:""}`,
+    `🍰 النكهة: ${n("flavor")}`,
+    `🍫 الحشوة: ${n("filling")}`,
+    `✨ التزيين: ${n("deco")}`,
+    `🎨 اللون: ${n("color")}`,
+    ...(cake.text?[`✍️ الكتابة: ${cake.text}`]:[]),
+    ...(cake.ref?["📷 عندي صورة للتصميم ببعتها هون"]:[]), "",
+    `👤 الاسم: ${cake.name}`,
+    `🚚 الاستلام: ${cake.mode==="delivery"?"توصيل":"استلام من المحل"}`,
+    `🕒 الموعد: ${timeText(cake.time)}`,
+    ...(cake.mode==="delivery"?[`📍 العنوان: ${cake.address}`]:[]),
+    ...(cake.notes?[`📝 ملاحظات: ${cake.notes}`]:[]), "",
+    "بستنى تأكيد السعر 🙏"
+  ].join("\n");
+}
+
+/* =========================================================
+   Events
+   ========================================================= */
+document.addEventListener("click",e=>{
+  const cartBtn=e.target.closest(".js-cart"); if(cartBtn){ openSheet("cart"); return; }
+  const b=e.target.closest("[data-a]"); if(!b) return;
+  const a=b.dataset.a, id=b.dataset.id;
+  if(a==="go"){ e.preventDefault(); go(b.dataset.c); return; }
+  if(a==="home"){ e.preventDefault(); goHome(); return; }
+  if(a==="sub"){ const t=$("#sub-"+b.dataset.s); t&&t.scrollIntoView({behavior:"smooth",block:"start"}); return; }
+  if(a==="unit"){ unitPick[id]=b.dataset.u; refreshItem(id); }
+  if(a==="add"){ const it=byId[id]; setQty(id+"|"+curUnit(it),1); save(); flyFrom(b); refreshItem(id); navigator.vibrate&&navigator.vibrate(12); toast(`انضاف ${it.name} للسلة`); }
+  if(a==="inc"||a==="dec"){ const it=byId[id], k=id+"|"+curUnit(it); setQty(k,(cart[k]||0)+(a==="inc"?1:-1)); refreshItem(id); updateCartUI(a==="inc"); }
+  if(a==="cinc"||a==="cdec"){ const k=b.dataset.k; setQty(k,(cart[k]||0)+(a==="cinc"?1:-1)); renderPane("cart"); refreshItem(k.split("|")[0]); updateCartUI(); }
+  if(a==="close") closeSheet();
+  if(a==="pane"){ if($("#i-name")) readForm(); renderPane(b.dataset.p); }
+  if(a==="mode"){ form.mode=b.dataset.m; $$(".choice button").forEach(x=>x.classList.toggle("on",x===b)); $("#addr-wrap").classList.toggle("open",form.mode==="delivery"); $("#f-mode").classList.remove("bad"); }
+  if(a==="send"){ readForm(); if(!validate()) return; lastOrder=buildMessage(); openWA(lastOrder); cart={}; updateCartUI(); $$("[data-card]").forEach(c=>refreshItem(c.dataset.card)); renderPane("success"); }
+  if(a==="resend"&&lastOrder) openWA(lastOrder);
+  if(a==="cake-open"){ if(!cake.name) cake.name=form.name; openSheet("cake1"); }
+  if(a==="cake-step"){ readCake(); const to=b.dataset.s; if(to>cakeStep && !validCake(cakeStep)) return; renderPane("cake"+to); $("#sheet .sheet-body").scrollTop=0; }
+  if(a==="opt"){ const k=b.dataset.k; cake[k]=b.dataset.v; b.parentElement.querySelectorAll("[data-a=opt]").forEach(x=>x.classList.toggle("on",x===b));
+    const f=b.closest(".field"); f&&f.classList.remove("bad");
+    if(k==="shape") $("#num-wrap").classList.toggle("open",cake.shape==="num");
+    if(k==="color"){ const n=$("#sw-name"); n&&(n.textContent=CAKE.color.find(c=>c.id===cake.color).name); }
+    updatePrev(); }
+  if(a==="cake-ref"){ cake.ref=!cake.ref; b.classList.toggle("on",cake.ref); }
+  if(a==="cake-mode"){ cake.mode=b.dataset.m; $$(".choice button").forEach(x=>x.classList.toggle("on",x===b)); $("#addr-wrap").classList.toggle("open",cake.mode==="delivery"); $("#f-mode").classList.remove("bad"); }
+  if(a==="cake-send"){ readCake(); if(!validCake(3)) return; lastOrder=cakeMessage(); openWA(lastOrder); form.name=cake.name; renderPane("success"); }
+});
+document.addEventListener("input",e=>{ const f=e.target.closest(".field"); f&&f.classList.remove("bad"); });
+$("#scrim").addEventListener("click",closeSheet);
+document.addEventListener("keydown",e=>{ if(e.key==="Escape") closeSheet(); });
+
+let toastT; function toast(t){ const el=$("#toast"); el.textContent=t; el.classList.add("on"); clearTimeout(toastT); toastT=setTimeout(()=>el.classList.remove("on"),1600); }
+
+/* swipe-down to close sheet */
+(()=>{ let y0=null; const sh=$("#sheet");
+  sh.addEventListener("touchstart",e=>{ const body=sh.querySelector(".sheet-body"); if(body&&body.scrollTop>0&&!e.target.closest(".grab,.sheet-head")) return; y0=e.touches[0].clientY; },{passive:true});
+  sh.addEventListener("touchmove",e=>{ if(y0===null) return; const dy=e.touches[0].clientY-y0; if(dy>0){ sh.style.transition="none"; sh.style.transform=`translate(-50%,${dy}px)`; } },{passive:true});
+  sh.addEventListener("touchend",e=>{ if(y0===null) return; const dy=e.changedTouches[0].clientY-y0; sh.style.transition=""; sh.style.transform=""; y0=null; if(dy>110) closeSheet(); });
+})();
+
+
+/* =========================================================
+   Horizontal sliders: mouse drag, arrows, dots
+   ========================================================= */
+const railCards = () => [...$("#rail").children];
+function railIndex(){
+  const r=$("#rail"), cs=railCards(); if(!cs.length) return 0;
+  if(Math.abs(r.scrollLeft) >= r.scrollWidth-r.clientWidth-4) return cs.length-1;
+  const edge=r.getBoundingClientRect().right-20; let best=0, bd=1e9;
+  cs.forEach((c,i)=>{ const d=Math.abs(c.getBoundingClientRect().right-edge); if(d<bd){bd=d;best=i;} });
+  return best;
+}
+function railGo(i){
+  const r=$("#rail"), cs=railCards(); i=Math.max(0,Math.min(cs.length-1,i)); const c=cs[i]; if(!c) return;
+  const delta=c.getBoundingClientRect().right-(r.getBoundingClientRect().right-20);
+  const max=r.scrollWidth-r.clientWidth; let to=r.scrollLeft+delta; to=Math.max(-max,Math.min(max,to));
+  r.style.scrollSnapType="none"; r.scrollTo({left:to,behavior:"smooth"});
+  clearTimeout(railGo.t); railGo.t=setTimeout(()=>{ r.style.scrollSnapType=""; railSync(); },650);
+}
+function railSync(){
+  const i=railIndex(), n=railCards().length;
+  $$("#rail-dots button").forEach((d,k)=>d.classList.toggle("on",k===i));
+  const pv=$("#rail-prev"), nx=$("#rail-next"); if(pv) pv.disabled=i<=0; if(nx) nx.disabled=i>=n-1;
+}
+function dragScroll(el){
+  let down=false, moved=false, x0=0, s0=0, lx=0, lt=0, v=0, i0=0;
+  el.addEventListener("pointerdown",e=>{ if(e.pointerType!=="mouse"||e.button!==0) return; down=true; moved=false; x0=lx=e.clientX; s0=el.scrollLeft; lt=performance.now(); v=0; if(el.id==="rail") i0=railIndex(); });
+  addEventListener("pointermove",e=>{ if(!down) return; const dx=e.clientX-x0;
+    if(!moved && Math.abs(dx)>5){ moved=true; el.classList.add("dragging"); }
+    if(moved){ el.scrollLeft=s0-dx; const t=performance.now(); v=(e.clientX-lx)/Math.max(1,t-lt); lx=e.clientX; lt=t; } });
+  addEventListener("pointerup",e=>{ if(!down) return; down=false; if(!moved) return;
+    el.classList.remove("dragging");
+    if(el.id==="rail"){ const dx=e.clientX-x0, c=railCards()[0], step=c?c.offsetWidth+12:300; let n=Math.round(Math.abs(dx)/step); if(!n && (Math.abs(dx)>40||Math.abs(v)>0.3)) n=1; railGo(i0+(dx>0?n:-n)); }
+    else el.scrollBy({left:-v*220,behavior:"smooth"});
+    setTimeout(()=>{ moved=false; },0); });
+  el.addEventListener("click",e=>{ if(moved){ e.preventDefault(); e.stopPropagation(); } },true);
+  el.addEventListener("dragstart",e=>e.preventDefault());
+}
+dragScroll($("#rail")); dragScroll($("#tabs"));
+let railT; $("#rail").addEventListener("scroll",()=>{ cancelAnimationFrame(railT); railT=requestAnimationFrame(railSync); },{passive:true});
+$("#rail-dots").addEventListener("click",e=>{ const d=e.target.closest("button"); if(d) railGo(+d.dataset.i); });
+$("#rail-prev").addEventListener("click",()=>railGo(railIndex()-1));
+$("#rail-next").addEventListener("click",()=>railGo(railIndex()+1));
+addEventListener("resize",railSync);
+
+/* =========================================================
+   Router
+   ========================================================= */
+let homeScroll=0, prevRoute="home";
+/* التنقل بيشتغل من الذاكرة، والرابط بيتحدّث إذا المتصفح بيسمح (عشان زر الرجوع بالجوال) */
+function show(cid){
+  const home=$("#view-home"), cat=$("#view-cat");
+  if(cid && catOf(cid)){
+    if(prevRoute==="home") homeScroll=scrollY;
+    renderCat(cid);
+    home.classList.remove("active"); cat.classList.remove("back","active"); void cat.offsetWidth; cat.classList.add("active");
+    scrollTo(0,0); prevRoute="cat";
+  } else {
+    const fromCat=prevRoute==="cat";
+    cat.classList.remove("active"); home.classList.remove("active","back"); void home.offsetWidth;
+    home.classList.add("active"); if(fromCat) home.classList.add("back");
+    renderHome(); refreshAll();
+    requestAnimationFrame(()=>scrollTo(0,fromCat?homeScroll:0)); prevRoute="home";
+  }
+}
+let pushed=false;   // هل دخلنا القسم من الرئيسية بخطوة وحدة بالتاريخ
+function go(cid){
+  try{
+    if(prevRoute==="cat") history.replaceState({c:cid},"","#/c/"+cid);
+    else { history.pushState({c:cid},"","#/c/"+cid); pushed=true; }
+  }catch(e){}
+  show(cid);
+}
+function goHome(){
+  if(pushed){ pushed=false; try{ history.back(); }catch(e){}
+    setTimeout(()=>{ if(prevRoute==="cat") show(null); },300);  // احتياط لو المتصفح منع الرجوع
+    return; }
+  try{ history.replaceState(null,"",location.pathname+location.search) }catch(e){}
+  show(null);
+}
+function refreshAll(){ $$("[data-card]").forEach(c=>refreshItem(c.dataset.card)); }
+addEventListener("popstate",e=>{ const c=e.state&&e.state.c||null; if(!c) pushed=false; show(c); });
+addEventListener("scroll",()=>{ $("#bar-home").classList.toggle("scrolled",scrollY>120); },{passive:true});
+
+/* =========================================================
+   Init
+   ========================================================= */
+const LOGOS={badge:"__BADGE__",word:"__WORD__"};
+$$("[data-logo]").forEach(i=>i.src=LOGOS[i.dataset.logo]);
+$$(".ico-bag").forEach(e=>e.outerHTML=UI.bag);
+$$(".ico-left").forEach(e=>e.outerHTML=UI.left);
+$$(".ico-right").forEach(e=>e.outerHTML=UI.right);
+$$(".ico-pin").forEach(e=>e.innerHTML=UI.pin);
+$$(".ico-truck").forEach(e=>e.outerHTML=UI.truck);
+$$(".ico-phone").forEach(e=>e.outerHTML=UI.phone);
+["#wa-top","#wa-foot"].forEach(s=>{ const a=$(s); a.innerHTML=UI.wa; a.href=waLink(""); });
+$("#call-btn").href="tel:"+SHOP.phone;
+(()=>{ let cid=null; try{ const m=location.hash.match(/^#\/c\/([\w-]+)/); cid=m&&m[1]; if(cid) history.replaceState({c:cid},"",location.hash); }catch(e){} show(cid); })();
+updateCartUI();
+
+
+/* hero logo: entrance once, tap the roll to make it hop */
+let startHero=()=>{};
+(()=>{ const hl=$("#hero-logo .lw"); if(!hl) return; hl.classList.add("wait");
+  let started=false; startHero=()=>{ if(started) return; started=true; hl.classList.remove("wait"); setTimeout(()=>hl.classList.add("played"),2400); };
+  $("#hero-logo").addEventListener("click",()=>{ hl.classList.add("played"); hl.classList.remove("hop"); void hl.getBoundingClientRect(); hl.classList.add("hop"); navigator.vibrate&&navigator.vibrate(15); });
+})();
+/* splash: once per session, tap to skip */
+(()=>{ const sp=$("#splash"); let seen=false; try{ seen=sessionStorage.getItem("cinnova-splash")==="1" }catch(e){}
+  const hide=()=>{ if(sp.classList.contains("out")) return; sp.classList.add("out"); setTimeout(startHero,350); setTimeout(()=>sp.remove(),900); try{ sessionStorage.setItem("cinnova-splash","1") }catch(e){} };
+  if(seen){ sp.remove(); startHero(); return; }
+  sp.addEventListener("click",hide); setTimeout(hide,2300);
+})();
+</script>
+</body>
+</html>
