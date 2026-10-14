@@ -46,7 +46,7 @@ tests/slider.py      ← فحص سلايدر الأصناف المميزة (لم
 - الكود على GitHub: `alihasan2892000-create/cinnova-menu`، عام (public)، والفرع `main`.
 - Cloudflare مربوط بالـ repo: أي push على `main` بيعمل `npx wrangler deploy` تلقائياً، وبينشر `public/` بس.
 - اسم الـ Worker `cinnova-menu`، ولازم يطابق `name` بـ `wrangler.jsonc`.
-- الرابط: (بيستنى حسن يبعته، من Cloudflare → cinnova-menu → Domains).
+- الرابط: https://cinnova-menu.alihasan2892000.workers.dev
 - ما استخدمنا GitHub Pages ولا Vercel المجاني، لأن شروطهم بتمنع المواقع التجارية.
 - مجلد `brand/` مستثنى من الـ repo بـ `.gitignore` لأن الـ repo عام. الملف الأصلي محفوظ عند حسن. لا تحط بالـ repo أي إشي خاص.
 - سيرفر Claude Code السحابي ما بيوصل لـ Cloudflare، فالنشر بيصير بس عن طريق push.
