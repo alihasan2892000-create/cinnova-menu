@@ -174,7 +174,7 @@ img{display:block;max-width:100%}
 .item .thumb{flex:none;width:104px;height:116px;border-radius:14px}
 .item .info{flex:1;min-width:0;display:flex;flex-direction:column;padding:2px 2px 0}
 .item h3{margin:0;font-size:15.5px;font-weight:600;line-height:1.35}
-.item p{margin:3px 0 0;font-size:12.5px;color:var(--muted);line-height:1.5;display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical;overflow:hidden}
+.item p{margin:3px 0 0;font-size:12.5px;color:var(--muted);line-height:1.5;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
 .price{color:var(--cream);font-size:14px;margin-top:6px}
 .price b{font-size:17px;font-weight:700;font-family:"IBM Plex Sans Arabic",system-ui,sans-serif}
 .price span{color:var(--muted);font-size:12px}
@@ -273,7 +273,7 @@ textarea.inp{min-height:80px;resize:vertical}
 
 /* ---------- Sub-sections ---------- */
 .subnav{display:flex;gap:8px;margin:2px 0 -2px}
-.subnav button{flex:1;padding:10px 6px;border-radius:13px;background:var(--card);border:1px solid var(--line-2);font-size:13px;color:var(--cream);font-weight:500;transition:transform .2s var(--spring)}
+.subnav button{flex:1;padding:10px 6px;border-radius:13px;background:var(--card);border:1px solid var(--line-2);font-size:13px;color:var(--cream);font-weight:500;white-space:nowrap;transition:transform .2s var(--spring)}
 .subnav button:active{transform:scale(.94)}
 .subhead{scroll-margin-top:84px;display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;padding:14px 2px 0;border-top:1px dashed var(--line-2);margin-top:8px}
 .subhead:first-of-type{border-top:0}
@@ -420,7 +420,7 @@ const CATS = [
   { id:"featured", name:"أصناف مميزة",    en:"featured", icon:"star" },
   { id:"sharqi",   name:"حلويات شرقية",   en:"oriental", icon:"baklava",  type:"weight" },
   { id:"cake",     name:"كيك",            en:"cakes",    icon:"cake",     type:"piece",
-    subs:[ {id:"special",name:"كيك سبيشل",en:"special"}, {id:"regular",name:"كيك عادي",en:"classic"}, {id:"different",name:"كيك مختلف",en:"different"} ] },
+    subs:[ {id:"super",name:"كيك سوبر سبيشل",short:"سوبر سبيشل",en:"super special"}, {id:"special",name:"كيك سبيشل",short:"سبيشل",en:"special"}, {id:"slab",name:"كيك بلاطات",short:"بلاطات",en:"sheet cakes"}, {id:"slice",name:"كيك قطع",short:"قطع",en:"slices"} ] },
   { id:"petit",    name:"بيتفور",         en:"petit four",icon:"cookie",  type:"weight" },
   { id:"jelly",    name:"جلي",            en:"jelly",    icon:"jelly",    type:"piece" },
   { id:"nuts",     name:"مكسرات",         en:"nuts",     icon:"nuts",     type:"weight" },
@@ -440,15 +440,28 @@ const ITEMS = [
   { id:"s4", cat:"sharqi", name:"وربات بالقشطة",    desc:"وربات طازة بقشطة بلدية",            price:{kg:50, uqiya:13}, img:"" },
   { id:"s5", cat:"sharqi", name:"هريسة بالقشطة",    desc:"سميد وجوز الهند مع القشطة",         price:{kg:30, uqiya:8},  img:"" },
   { id:"s6", cat:"sharqi", name:"معمول تمر",         desc:"معمول بيتي محشي عجوة",              price:{kg:40, uqiya:10}, img:"" },
-  // كيك
-  // كيك — sub: special / regular / different ، sizes: { s:صغير , l:كبير } لكل حجم عدد القطع والسعر
-  { id:"k3", cat:"cake", sub:"special",   name:"ريد فيلفت",        desc:"مع كريمة الجبنة",            sizes:{ s:{pieces:8, price:70},  l:{pieces:16, price:120} }, featured:true, img:"" },
-  { id:"k4", cat:"cake", sub:"special",   name:"كيكة لوتس",         desc:"بسكوت وصوص اللوتس",          sizes:{ s:{pieces:8, price:65},  l:{pieces:16, price:110} }, img:"" },
-  { id:"k6", cat:"cake", sub:"special",   name:"كيكة بستاشيو",      desc:"كريمة وصوص فستق",            sizes:{ s:{pieces:8, price:75},  l:{pieces:16, price:130} }, img:"" },
-  { id:"k2", cat:"cake", sub:"regular",   name:"كيكة شوكولاتة",     desc:"طبقات شوكولاتة",             sizes:{ s:{pieces:8, price:45},  l:{pieces:16, price:80} },  img:"" },
-  { id:"k7", cat:"cake", sub:"regular",   name:"كيكة فانيلا",       desc:"إسفنج فانيلا وكريمة",        sizes:{ s:{pieces:8, price:40},  l:{pieces:16, price:70} },  img:"" },
-  { id:"k5", cat:"cake", sub:"different", name:"تشيز كيك فراولة",  desc:"بارد بصوص الفراولة",          sizes:{ s:{pieces:6, price:50},  l:{pieces:12, price:90} },  img:"" },
-  { id:"k1", cat:"cake", sub:"different", name:"سينابون سينوفا",   desc:"لفّات القرفة مع الصوص",       sizes:{ s:{pieces:4, price:30},  l:{pieces:9,  price:60} },  featured:true, img:"" },
+  // كيك — sub: super / special / slab / slice
+  // sizes: { s:صغير , l:كبير } لكل حجم عدد القطع والسعر. name اختياري بيغيّر اسم الحجم. leadHours = لازم ينحجز قبلها بكم ساعة
+  // سوبر سبيشل: صغير 6 قطع 60 ₪ ، كبير 15 قطعة 120 ₪
+  { id:"ks1", cat:"cake", sub:"super", name:"كيك نوتيلا", desc:"", sizes:{ s:{pieces:6, price:60}, l:{pieces:15, price:120} }, img:"" },
+  { id:"ks2", cat:"cake", sub:"super", name:"كيك بيستاشيو", desc:"", sizes:{ s:{pieces:6, price:60}, l:{pieces:15, price:120} }, featured:true, img:"" },
+  { id:"ks3", cat:"cake", sub:"super", name:"كيك لوتس", desc:"", sizes:{ s:{pieces:6, price:60}, l:{pieces:15, price:120} }, img:"" },
+  { id:"ks4", cat:"cake", sub:"super", name:"كيك كيندر", desc:"", sizes:{ s:{pieces:6, price:60}, l:{pieces:15, price:120} }, img:"" },
+  { id:"ks5", cat:"cake", sub:"super", name:"كيك باونتي", desc:"", sizes:{ s:{pieces:6, price:60}, l:{pieces:15, price:120} }, img:"" },
+  { id:"ks6", cat:"cake", sub:"super", name:"مكس نوتيلا وبيستاشيو", desc:"", sizes:{ s:{pieces:6, price:60}, l:{pieces:15, price:120} }, featured:true, img:"" },
+  { id:"ks7", cat:"cake", sub:"super", name:"مكس لوتس وبيستاشيو", desc:"", sizes:{ s:{pieces:6, price:60}, l:{pieces:15, price:120} }, img:"" },
+  // سبيشل: صغير 6 قطع 45 ₪ ، كبير 15 قطعة 80 ₪
+  { id:"kp1", cat:"cake", sub:"special", name:"كيك بالشوكولاتة", desc:"", sizes:{ s:{pieces:6, price:45}, l:{pieces:15, price:80} }, img:"" },
+  { id:"kp2", cat:"cake", sub:"special", name:"كيك بالبلوبيري", desc:"", sizes:{ s:{pieces:6, price:45}, l:{pieces:15, price:80} }, img:"" },
+  { id:"kp3", cat:"cake", sub:"special", name:"كيك بالكراميل", desc:"", sizes:{ s:{pieces:6, price:45}, l:{pieces:15, price:80} }, img:"" },
+  { id:"kp4", cat:"cake", sub:"special", name:"كيك بالفانيلا", desc:"", sizes:{ s:{pieces:6, price:45}, l:{pieces:15, price:80} }, img:"" },
+  // بلاطات: بالحجز قبل بيوم
+  { id:"kb1", cat:"cake", sub:"slab", name:"بلاطة كيك", desc:"الطعم والشكل حسب طلبك · بالحجز قبل بيوم، مش فوري", sizes:{ s:{name:"نص بلاطة", pieces:"25 - 30", price:150}, l:{name:"بلاطة", pieces:"60 - 70", price:300} }, leadHours:24, img:"" },
+  // قطع
+  { id:"kc1", cat:"cake", sub:"slice", name:"قطعة كيك مربعة بالشوكولاتة", desc:"", price:5,  img:"" },
+  { id:"kc2", cat:"cake", sub:"slice", name:"مثلث كيك نوتيلا", desc:"", price:10, img:"" },
+  { id:"kc3", cat:"cake", sub:"slice", name:"مثلث كيك بيستاشيو", desc:"", price:10, img:"" },
+  { id:"kc4", cat:"cake", sub:"slice", name:"مثلث كيك لوتس", desc:"", price:10, img:"" },
   // بيتفور
   { id:"p1", cat:"petit", name:"بيتفور مشكّل",     desc:"تشكيلة زبدة وشوكولاتة",              price:{kg:45, uqiya:12}, featured:true, img:"" },
   { id:"p2", cat:"petit", name:"بيتفور بالمربى",   desc:"قلوب محشية مربى فراولة",             price:{kg:40, uqiya:10}, img:"" },
@@ -544,7 +557,7 @@ const $$ = s => [...document.querySelectorAll(s)];
 const byId = Object.fromEntries(ITEMS.map(i=>[i.id,i]));
 const catOf = id => CATS.find(c=>c.id===id);
 const isWeight = it => !it.sizes && typeof it.price === "object";
-const pcs = n => (n>=3&&n<=10) ? `${n} قطع` : `${n} قطعة`;
+const pcs = n => typeof n==="string" ? `${n} قطعة` : (n>=3&&n<=10) ? `${n} قطع` : `${n} قطعة`;
 const unitPick = {};   // id -> selected unit
 let cart = load();      // key "id|unit" -> qty
 let lastOrder = null;
@@ -556,7 +569,7 @@ const money = n => `${fmt(n)} ${SHOP.currency}`;
 const unitsOf = it => it.sizes ? Object.keys(it.sizes) : isWeight(it) ? ["kg","uqiya"].filter(u=>it.price[u]!=null) : ["piece"];
 const curUnit = it => { const us=unitsOf(it); return us.includes(unitPick[it.id]) ? unitPick[it.id] : us[0]; };
 const unitPrice = (it,u) => it.sizes ? it.sizes[u].price : isWeight(it) ? it.price[u] : it.price;
-const unitName = (it,u) => it.sizes ? (SIZES[u]||u) : UNITS[u];
+const unitName = (it,u) => it.sizes ? (it.sizes[u].name||SIZES[u]||u) : UNITS[u];
 const unitLabel = (it,u) => it.sizes ? `${unitName(it,u)} · ${pcs(it.sizes[u].pieces)}` : UNITS[u];
 const itemsIn = cid => cid==="featured" ? ITEMS.filter(i=>i.featured) : ITEMS.filter(i=>i.cat===cid);
 function hueFor(it){ let h=0; for(const ch of it.id) h=(h*31+ch.charCodeAt(0))%360; return 14+(h%26); }
@@ -567,7 +580,7 @@ function hueFor(it){ let h=0; for(const ch of it.id) h=(h*31+ch.charCodeAt(0))%3
 function thumb(it, tag=false){
   const inner = it.img
     ? `<img src="${it.img}" alt="${it.name}" loading="lazy">`
-    : `<div class="ph" style="--h:${hueFor(it)}">${SC}${art(it.id==="k1"?"roll":catOf(it.cat).icon)}<em class="mono">photo soon</em></div>`;
+    : `<div class="ph" style="--h:${hueFor(it)}">${SC}${art(catOf(it.cat).icon)}<em class="mono">photo soon</em></div>`;
   return `<div class="thumb">${tag&&it.featured?'<span class="tag">مميز</span>':""}${inner}</div>`;
 }
 function priceHTML(it){
@@ -622,7 +635,7 @@ function renderCat(cid){
   if(c.subs){
     let n=0;
     $("#list").innerHTML = (c.id==="cake"?cakeBanner():"")
-      + `<div class="subnav">${c.subs.map(s=>`<button data-a="sub" data-s="${s.id}">${s.name}</button>`).join("")}</div>`
+      + `<div class="subnav">${c.subs.map(s=>`<button data-a="sub" data-s="${s.id}">${s.short||s.name}</button>`).join("")}</div>`
       + c.subs.map(s=>{ const its=list.filter(i=>i.sub===s.id); if(!its.length) return "";
           return `<div class="subhead" id="sub-${s.id}"><span class="mono">— ${s.en}</span><h2>${s.name}</h2><small>${its.length} أصناف</small></div>` + its.map(i=>itemCard(i,n++)).join(""); }).join("");
   } else {
@@ -695,18 +708,19 @@ function renderPane(p){
       <div class="sheet-foot"><div class="sum"><span>المجموع</span><b>${money(cartTotal())}</b></div><button class="btn" data-a="pane" data-p="checkout">متابعة الحجز ${UI.left}</button></div>`;
   }
   if(p==="checkout"){
-    const now=new Date(Date.now()+60*60*1000); now.setSeconds(0,0);
+    const lead=cartLead();
+    const now=new Date(Date.now()+Math.max(1,lead)*60*60*1000); now.setSeconds(0,0);
     const minV=new Date(now.getTime()-now.getTimezoneOffset()*60000).toISOString().slice(0,16);
     el.innerHTML=head("بيانات الحجز","cart")+`<div class="sheet-body pane">
       <div class="field" id="f-name"><label>الاسم</label><input class="inp" id="i-name" autocomplete="name" placeholder="اسمك الكريم" value="${esc(form.name)}"><div class="err">اكتب اسمك لو سمحت</div></div>
       <div class="field" id="f-mode"><label>طريقة الاستلام</label><div class="choice">
         <button type="button" data-a="mode" data-m="delivery" class="${form.mode==="delivery"?"on":""}">${UI.truck}توصيل</button>
         <button type="button" data-a="mode" data-m="pickup" class="${form.mode==="pickup"?"on":""}">${UI.store}بستلم من المحل</button></div><div class="err">اختار طريقة الاستلام</div></div>
-      <div class="field" id="f-time"><label>وقت الاستلام</label><input class="inp" id="i-time" type="datetime-local" min="${minV}" value="${form.time}"><div class="err">حدّد الوقت اللي بناسبك</div></div>
+      <div class="field" id="f-time"><label>وقت الاستلام</label><input class="inp" id="i-time" type="datetime-local" min="${minV}" value="${form.time}">${lead?`<div class="hint">طلبك فيه ${leadNames()}، بنحتاج نعرف قبل ${lead} ساعة على الأقل.</div>`:""}<div class="err">${lead?`اختار موعد بعد ${lead} ساعة على الأقل من هلأ`:"حدّد الوقت اللي بناسبك"}</div></div>
       <div class="collapse ${form.mode==="delivery"?"open":""}" id="addr-wrap"><div>
         <div class="field" id="f-addr"><label>العنوان</label><input class="inp" id="i-addr" autocomplete="street-address" placeholder="المنطقة، الشارع، أقرب معلم" value="${esc(form.address)}"><div class="err">اكتب عنوان التوصيل</div></div>
       </div></div>
-      <div class="field"><label>ملاحظات <i>(اختياري)</i></label><textarea class="inp" id="i-notes" placeholder="مثلاً: الكتابة على الكيكة، رقم الشمعة…">${esc(form.notes)}</textarea></div>
+      <div class="field"><label>ملاحظات <i>(اختياري)</i></label><textarea class="inp" id="i-notes" placeholder="${lead?"مثلاً: طعم وشكل البلاطة، الكتابة عليها…":"مثلاً: الكتابة على الكيكة، رقم الشمعة…"}">${esc(form.notes)}</textarea></div>
     </div>
     <div class="sheet-foot"><div class="sum"><span>المجموع</span><b>${money(cartTotal())}</b></div><button class="btn" data-a="send">${UI.wa}إرسال الحجز على واتساب</button></div>`;
   }
@@ -717,13 +731,15 @@ function renderPane(p){
   }
 }
 function esc(s){ return String(s||"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c])); }
+const cartLead = () => Math.max(0,...cartLines().map(l=>l.it.leadHours||0));
+const leadNames = () => [...new Set(cartLines().filter(l=>l.it.leadHours).map(l=>l.it.name))].join("، ");
 function readForm(){
   const v=id=>($(id)||{}).value||"";
   form.name=v("#i-name").trim(); form.time=v("#i-time"); form.address=v("#i-addr").trim(); form.notes=v("#i-notes").trim();
 }
 function validate(){
   let ok=true; const mark=(id,bad)=>{ $(id).classList.toggle("bad",bad); if(bad) ok=false; };
-  mark("#f-name",!form.name); mark("#f-mode",!form.mode); mark("#f-time",!form.time);
+  mark("#f-name",!form.name); mark("#f-mode",!form.mode); mark("#f-time",!form.time || (cartLead()>0 && new Date(form.time).getTime() < Date.now()+cartLead()*3600e3-15*60e3));
   mark("#f-addr", form.mode==="delivery" && !form.address);
   if(!ok){ const f=$(".field.bad"); f && f.scrollIntoView({behavior:"smooth",block:"center"}); }
   return ok;

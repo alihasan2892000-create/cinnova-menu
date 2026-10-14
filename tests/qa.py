@@ -98,7 +98,7 @@ with sync_playwright() as p:
     chk('sheet closes', not pg.evaluate('document.querySelector("#sheet").classList.contains("on")'))
     chk('body scroll unlocked', pg.evaluate('document.body.style.overflow')=='')
     # checkout validation
-    pg.evaluate('cart={"s1|uqiya":2,"k3|l":1,"j4|uqiya":3};updateCartUI();openSheet("checkout")'); pg.wait_for_timeout(500)
+    pg.evaluate('cart={"s1|uqiya":2,"ks1|l":1,"j4|uqiya":3};updateCartUI();openSheet("checkout")'); pg.wait_for_timeout(500)
     pg.locator('[data-a="send"]').click(); pg.wait_for_timeout(300)
     bads=pg.evaluate('[...document.querySelectorAll(".field.bad")].map(e=>e.id)')
     chk('checkout blocks empty form (name, mode, time)', set(['f-name','f-mode','f-time'])<=set(bads) and len(urls)==0, str(bads))
@@ -111,7 +111,7 @@ with sync_playwright() as p:
     chk('WhatsApp opens on valid order', len(urls)==1)
     msg=urls[-1] if urls else ''
     chk('WA number correct', msg.startswith('https://wa.me/972594870202?text='))
-    for s in ['بقلاوة فستق حلبي — 2 وقية × 20 = 40 ₪','ريد فيلفت (كبير · 16 قطعة) — 1 × 120 = 120 ₪','جلي بالوزن — 3 وقية × 8 = 24 ₪','المجموع: 184 ₪','الاسم: تجربة','توصيل','العنوان: دير البلح','ملاحظات: بدون مكسرات']:
+    for s in ['بقلاوة فستق حلبي — 2 وقية × 20 = 40 ₪','كيك نوتيلا (كبير · 15 قطعة) — 1 × 120 = 120 ₪','جلي بالوزن — 3 وقية × 8 = 24 ₪','المجموع: 184 ₪','الاسم: تجربة','توصيل','العنوان: دير البلح','ملاحظات: بدون مكسرات']:
         chk(f'WA msg contains "{s}"', s in msg)
     chk('success screen', pg.locator('.success').count()==1)
     chk('cart cleared after send', pg.evaluate('cartCount()')==0)
@@ -123,10 +123,24 @@ with sync_playwright() as p:
     pg.fill('#i-name','ب'); pg.locator('[data-m="pickup"]').click(); pg.fill('#i-time','2026-10-20T16:00'); pg.locator('[data-a="send"]').click(); pg.wait_for_timeout(800)
     chk('pickup order: no address line', 'العنوان' not in urls[-1] and 'استلام من المحل' in urls[-1])
     pg.locator('#sheet [data-a="close"]').first.click(); pg.wait_for_timeout(400)
+    # slab cake needs booking a day ahead
+    lt='h=>{const d=new Date(Date.now()+h*3600e3);return new Date(d.getTime()-d.getTimezoneOffset()*60000).toISOString().slice(0,16)}'
+    pg.evaluate('cart={"kb1|s":1};updateCartUI();form={name:"",mode:"",time:"",address:"",notes:""};openSheet("checkout")'); pg.wait_for_timeout(400)
+    chk('slab: 24h hint shown', 'قبل 24 ساعة' in pg.locator('#f-time').inner_text())
+    pg.fill('#i-name','ب'); pg.locator('[data-m="pickup"]').click(); pg.fill('#i-time',pg.evaluate(f'({lt})(3)'))
+    n0=len(urls); pg.locator('[data-a="send"]').click(); pg.wait_for_timeout(300)
+    chk('slab: rejects time < 24h', len(urls)==n0 and pg.locator('#f-time.bad').count()==1)
+    pg.fill('#i-time',pg.evaluate(f'({lt})(30)')); pg.locator('[data-a="send"]').click(); pg.wait_for_timeout(800)
+    chk('slab: order sent after 24h', len(urls)==n0+1 and 'بلاطة كيك (نص بلاطة · 25 - 30 قطعة) — 1 × 150 = 150 ₪' in urls[-1])
+    pg.locator('#sheet [data-a="close"]').first.click(); pg.wait_for_timeout(400)
     # cake builder
     pg.evaluate('go("cake")'); pg.wait_for_timeout(500)
-    chk('cake subnav 3 buttons', pg.locator('.subnav button').count()==3)
-    chk('cake sub headers', pg.locator('.subhead').count()==3)
+    chk('cake subnav 4 buttons', pg.locator('.subnav button').count()==4)
+    chk('slab size labels', pg.locator('[data-card="kb1"] .seg button').all_inner_texts()==['نص بلاطة','بلاطة'])
+    pg.locator('[data-card="kb1"] [data-u="l"]').click(); pg.wait_for_timeout(150)
+    chk('slab large price/pieces', '300' in pg.locator('#view-cat [data-card="kb1"] [data-price]').inner_text() and '60 - 70 قطعة' in pg.locator('#view-cat [data-card="kb1"] [data-price]').inner_text())
+    chk('cake slices sold by piece', pg.locator('[data-card="kc2"] .unit-chip').inner_text()=='بالقطعة')
+    chk('cake sub headers', pg.locator('.subhead').count()==4)
     pg.locator('.cake-banner').click(); pg.wait_for_timeout(500)
     pg.locator('[data-a="cake-step"][data-s="2"]').click(); pg.wait_for_timeout(200)
     chk('cake step1 validation', pg.locator('.field.bad').count()>=3)
