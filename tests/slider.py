@@ -24,7 +24,8 @@ with sync_playwright() as p:
     for i in range(6): swipe(cdp,90,cy,330,cy); pg.wait_for_timeout(900); print(' swipe->',st())
     for i in range(2): swipe(cdp,40,cy,370,cy,fast=True); pg.wait_for_timeout(1100); print(' fling->',st())
     for i in range(5): swipe(cdp,330,cy,90,cy); pg.wait_for_timeout(900); print(' swipe<-',st())
-    for k in [3,1,4,0]:
+    nd=pg.locator('#rail-dots button').count()
+    for k in [nd-1,1,nd-2,0]:
         pg.locator('#rail-dots button').nth(k).click(); pg.wait_for_timeout(1000); print(f' dot {k} ->',st())
     swipe(cdp,90,cy,330,cy); pg.wait_for_timeout(900); print(' swipe after dots ->',st())
     pg.screenshot(path=S+'/shots/rail_touch.png', clip={'x':0,'y':box['y']-60,'width':390,'height':box['height']+100})
@@ -50,7 +51,7 @@ with sync_playwright() as p:
     pg.mouse.move(bb['x']+10,bb['y']+10); pg.mouse.down(); pg.mouse.move(bb['x']+250,bb['y']+10,steps=10); pg.mouse.up(); pg.wait_for_timeout(800)
     print(' cart after drag starting on + :', pg.evaluate('cartCount()'))
     pg.locator('#rail .feat').nth(railIndex:=0).locator('[data-a="add"]').click() if False else None
-    vis=pg.evaluate('railIndex()'); pg.locator('#rail .feat').nth(vis).locator('[data-a="add"]').click(); pg.wait_for_timeout(900)
+    pg.locator('#rail [data-a="add"]').first.click(); pg.wait_for_timeout(900)   # flavored items use "pick" instead of add
     print(' cart after normal click on + :', pg.evaluate('cartCount()'))
     # tabs drag on desktop
     pg.evaluate('go("sharqi")'); pg.wait_for_timeout(500)

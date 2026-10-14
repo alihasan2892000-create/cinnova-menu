@@ -194,6 +194,16 @@ img{display:block;max-width:100%}
 .seg button{padding:5px 10px;border-radius:9px;font-size:12px;color:var(--muted);transition:.25s var(--ease)}
 .seg button.on{background:var(--gold);color:var(--bg);font-weight:600}
 .unit-chip{font-size:12px;color:var(--muted)}
+.flv{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.flv button{padding:4px 10px;border-radius:999px;font-size:12px;color:var(--muted);border:1px solid var(--line-2);transition:.25s var(--ease)}
+.flv button.on{color:var(--cream);border-color:var(--cream);background:rgba(243,210,117,.12)}
+.item.flash{animation:flash 1.2s var(--ease)}
+@keyframes flash{0%,100%{box-shadow:0 0 0 0 transparent}25%{box-shadow:0 0 0 3px var(--cream)}}
+.note-card{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:16px;border-radius:var(--r);border:1px dashed var(--gold);background:rgba(194,154,84,.08);color:var(--cream);text-decoration:none}
+.note-card h3{margin:0 0 3px;font-size:16px}
+.note-card p{margin:0;font-size:12.5px;line-height:1.6;color:var(--muted)}
+.note-card .go{flex:none;display:grid;place-items:center;width:42px;height:42px;border-radius:50%;background:var(--gold);color:var(--bg)}
+.note-card .go svg{width:22px;height:22px}
 
 /* add / stepper */
 .add{height:38px;padding:0 14px;border-radius:12px;background:var(--cream);color:var(--bg);font-weight:600;font-size:13.5px;display:inline-flex;align-items:center;gap:6px;transition:transform .2s var(--spring);white-space:nowrap}
@@ -440,8 +450,12 @@ const CATS = [
    piece:   price: رقم
    img: رابط الصورة (فاضي = صورة مؤقتة)                  */
 const ITEMS = [
+  // أصناف مميزة — cat:"featured". flavors = نكهات بيختار منها الزبون بنفس السعر
+  { id:"f1", cat:"featured", featured:true, name:"مكس سينوفا", desc:"", flavors:["بيستاشيو","لوتس"], sizes:{ t:{name:"مثلث", price:15}, s:{name:"صغير", price:20}, m:{name:"وسط", price:25}, l:{name:"كبير", price:30} }, img:"" },
+  { id:"f2", cat:"featured", featured:true, name:"شوكولاتة بلجيكية", desc:"", sizes:{ s:{name:"علبة صغيرة", price:30}, l:{name:"علبة كبيرة", price:50} }, img:"" },
+  { id:"f3", cat:"featured", featured:true, name:"تشيز كيك", desc:"", flavors:["بلوبيري","لوتس","نوتيلا","بيستاشيو","مانجو"], price:10, img:"" },
   // حلويات شرقية
-  { id:"s1", cat:"sharqi", name:"بقلاوة فستق حلبي", desc:"عجينة رقيقة محشوة بالفستق الحلبي الفاخر", price:{kg:80, uqiya:20}, featured:true, img:"" },
+  { id:"s1", cat:"sharqi", name:"بقلاوة فستق حلبي", desc:"عجينة رقيقة محشوة بالفستق الحلبي الفاخر", price:{kg:80, uqiya:20}, img:"" },
   { id:"s2", cat:"sharqi", name:"بقلاوة كاجو",      desc:"مقرمشة ومحلّاة بقطر خفيف",         price:{kg:60, uqiya:15}, img:"" },
   { id:"s3", cat:"sharqi", name:"بلورية",           desc:"شعيرية ذهبية محشوة بالفستق",           price:{kg:85, uqiya:22}, img:"" },
   { id:"s4", cat:"sharqi", name:"وربات بالقشطة",    desc:"وربات طازجة بقشطة بلدية",            price:{kg:50, uqiya:13}, img:"" },
@@ -451,11 +465,11 @@ const ITEMS = [
   // sizes: { s:صغير , l:كبير } لكل حجم عدد القطع والسعر. name اختياري بيغيّر اسم الحجم. leadHours = لازم ينحجز قبلها بكم ساعة
   // سوبر سبيشل: صغير 6 قطع 60 ₪ ، كبير 15 قطعة 120 ₪
   { id:"ks1", cat:"cake", sub:"super", name:"كيك نوتيلا", desc:"", sizes:{ s:{pieces:6, price:60}, l:{pieces:15, price:120} }, img:"" },
-  { id:"ks2", cat:"cake", sub:"super", name:"كيك بيستاشيو", desc:"", sizes:{ s:{pieces:6, price:60}, l:{pieces:15, price:120} }, featured:true, img:"" },
+  { id:"ks2", cat:"cake", sub:"super", name:"كيك بيستاشيو", desc:"", sizes:{ s:{pieces:6, price:60}, l:{pieces:15, price:120} }, img:"" },
   { id:"ks3", cat:"cake", sub:"super", name:"كيك لوتس", desc:"", sizes:{ s:{pieces:6, price:60}, l:{pieces:15, price:120} }, img:"" },
   { id:"ks4", cat:"cake", sub:"super", name:"كيك كيندر", desc:"", sizes:{ s:{pieces:6, price:60}, l:{pieces:15, price:120} }, img:"" },
   { id:"ks5", cat:"cake", sub:"super", name:"كيك باونتي", desc:"", sizes:{ s:{pieces:6, price:60}, l:{pieces:15, price:120} }, img:"" },
-  { id:"ks6", cat:"cake", sub:"super", name:"مكس نوتيلا وبيستاشيو", desc:"", sizes:{ s:{pieces:6, price:60}, l:{pieces:15, price:120} }, featured:true, img:"" },
+  { id:"ks6", cat:"cake", sub:"super", name:"مكس نوتيلا وبيستاشيو", desc:"", sizes:{ s:{pieces:6, price:60}, l:{pieces:15, price:120} }, img:"" },
   { id:"ks7", cat:"cake", sub:"super", name:"مكس لوتس وبيستاشيو", desc:"", sizes:{ s:{pieces:6, price:60}, l:{pieces:15, price:120} }, img:"" },
   // سبيشل: صغير 6 قطع 45 ₪ ، كبير 15 قطعة 80 ₪
   { id:"kp1", cat:"cake", sub:"special", name:"كيك بالشوكولاتة", desc:"", sizes:{ s:{pieces:6, price:45}, l:{pieces:15, price:80} }, img:"" },
@@ -469,33 +483,39 @@ const ITEMS = [
   { id:"kc2", cat:"cake", sub:"slice", name:"مثلث كيك نوتيلا", desc:"", price:10, img:"" },
   { id:"kc3", cat:"cake", sub:"slice", name:"مثلث كيك بيستاشيو", desc:"", price:10, img:"" },
   { id:"kc4", cat:"cake", sub:"slice", name:"مثلث كيك لوتس", desc:"", price:10, img:"" },
-  // بيتفور
-  { id:"p1", cat:"petit", name:"بيتفور مشكّل",     desc:"تشكيلة زبدة وشوكولاتة",              price:{kg:45, uqiya:12}, featured:true, img:"" },
-  { id:"p2", cat:"petit", name:"بيتفور بالمربى",   desc:"قلوب محشوة بمربى الفراولة",             price:{kg:40, uqiya:10}, img:"" },
-  { id:"p3", cat:"petit", name:"غريبة",            desc:"تذوب في الفم",                        price:{kg:35, uqiya:9},  img:"" },
-  { id:"p4", cat:"petit", name:"بيتفور جوز الهند", desc:"مقرمش ومغطّى بالشوكولاتة",              price:{kg:42, uqiya:11}, img:"" },
+  // بيتفور — الوقية = سعر الكيلو ÷ 4
+  { id:"p1", cat:"petit", name:"بيتفور بالشوكولاتة", desc:"", price:{kg:40, uqiya:10},   img:"" },
+  { id:"p2", cat:"petit", name:"بيتفور بالعجوة",     desc:"", price:{kg:30, uqiya:7.5},  img:"" },
+  { id:"p3", cat:"petit", name:"بيتفور جوز الهند",   desc:"", price:{kg:35, uqiya:8.75}, img:"" },
+  { id:"p4", cat:"petit", name:"بيتفور بالحلقوم",    desc:"", price:{kg:35, uqiya:8.75}, img:"" },
+  { id:"p5", cat:"petit", name:"مكس بيتفور",         desc:"تشكيلة تُحضَّر حسب طلبك", price:{kg:35, uqiya:8.75}, img:"" },
   // جلي
   { id:"j1", cat:"jelly", name:"بكيت جلي مثلث",   desc:"", price:5,  img:"" },
   { id:"j2", cat:"jelly", name:"كاسة جلي",          desc:"", price:7,  img:"" },
   { id:"j3", cat:"jelly", name:"علبة جلي هدية",     desc:"", price:15, img:"" },
   { id:"j4", cat:"jelly", name:"جلي بالوزن",        desc:"", price:{uqiya:8}, img:"" },
   // مكسرات
-  { id:"n1", cat:"nuts", name:"كاجو محمّص",       desc:"يُحمَّص طازجاً يومياً",                  price:{kg:90, uqiya:23}, img:"" },
-  { id:"n2", cat:"nuts", name:"فستق حلبي",         desc:"حبة كبيرة مملّحة",                   price:{kg:110,uqiya:28}, img:"" },
-  { id:"n3", cat:"nuts", name:"لوز محمّص",         desc:"مع ملح خفيف",                        price:{kg:70, uqiya:18}, img:"" },
-  { id:"n4", cat:"nuts", name:"مكسرات مشكّلة",     desc:"تشكيلة فاخرة من الكاجو واللوز والبندق",           price:{kg:85, uqiya:22}, featured:true, img:"" },
-  { id:"n5", cat:"nuts", name:"بزر أبيض",          desc:"محمّص بالطريقة التقليدية",                   price:{kg:30, uqiya:8},  img:"" },
+  { id:"n1", cat:"nuts", name:"مكسرات فاخرة مشكّلة",      desc:"", price:{uqiya:15}, img:"" },
+  { id:"n2", cat:"nuts", name:"بزر بطيخ",                desc:"", price:{uqiya:13}, img:"" },
+  { id:"n3", cat:"nuts", name:"بزر شمس",                 desc:"", price:{uqiya:13}, img:"" },
+  { id:"n4", cat:"nuts", name:"ماكاديميا",               desc:"", price:{uqiya:15}, img:"" },
+  { id:"n5", cat:"nuts", name:"علبة مكسرات مشكّلة هدية", desc:"", price:15, img:"" },
   // عيد ميلاد
   { id:"b1", cat:"party", name:"شمعة أرقام",       desc:"ذهبية — يُرجى تحديد الرقم في الملاحظات",      price:5,  img:"" },
   { id:"b2", cat:"party", name:"بالونات ملوّنة",   desc:"كيس يحتوي على 20 بالوناً",                       price:10, img:"" },
   { id:"b3", cat:"party", name:"قبعات حفلة",       desc:"عبوة من 10 قبعات",                     price:12, img:"" },
   { id:"b4", cat:"party", name:"لافتة عيد ميلاد",  desc:"Happy Birthday ذهبية",               price:15, img:"" },
   { id:"b5", cat:"party", name:"شموع نافورة",      desc:"عبوة من 4 شموع",                       price:8,  img:"" },
-  // قهوة
+  // قهوة — الوقية = سعر الكيلو ÷ 4
   { id:"c1", cat:"coffee", name:"قهوة حب محمّصة", desc:"", price:{kg:48, uqiya:12}, img:"" },
-  { id:"c2", cat:"coffee", name:"قهوة مطحونة",    desc:"", price:{kg:45, uqiya:15}, img:"" }
+  { id:"c2", cat:"coffee", name:"قهوة مطحونة",    desc:"", price:{kg:45, uqiya:11.25}, img:"" }
 ];
 
+
+/* ملاحظة بتظهر آخر صفحة القسم، وفيها زر واتساب برسالة جاهزة */
+const NOTES = {
+  featured: { title:"كريب سبيشل", text:"يتوفّر حسب الطلب. تواصل معنا عبر واتساب لمعرفة التفاصيل.", wa:"أودّ الاستفسار عن طلب كريب سبيشل." }
+};
 
 /* =========================================================
    الكيك الخاص — عدّل الخيارات من هون
@@ -566,6 +586,7 @@ const catOf = id => CATS.find(c=>c.id===id);
 const isWeight = it => !it.sizes && typeof it.price === "object";
 const pcs = n => typeof n==="string" ? `${n} قطعة` : (n>=3&&n<=10) ? `${n} قطع` : `${n} قطعة`;
 const unitPick = {};   // id -> selected unit
+const flavorPick = {}; // id -> selected flavor
 let cart = load();      // key "id|unit" -> qty
 let lastOrder = null;
 
@@ -577,7 +598,10 @@ const unitsOf = it => it.sizes ? Object.keys(it.sizes) : isWeight(it) ? ["kg","u
 const curUnit = it => { const us=unitsOf(it); return us.includes(unitPick[it.id]) ? unitPick[it.id] : us[0]; };
 const unitPrice = (it,u) => it.sizes ? it.sizes[u].price : isWeight(it) ? it.price[u] : it.price;
 const unitName = (it,u) => it.sizes ? (it.sizes[u].name||SIZES[u]||u) : UNITS[u];
-const unitLabel = (it,u) => it.sizes ? `${unitName(it,u)} · ${pcs(it.sizes[u].pieces)}` : UNITS[u];
+const unitLabel = (it,u) => it.sizes ? (it.sizes[u].pieces!=null ? `${unitName(it,u)} · ${pcs(it.sizes[u].pieces)}` : unitName(it,u)) : UNITS[u];
+const curFlavor = it => !it.flavors ? "" : it.flavors.includes(flavorPick[it.id]) ? flavorPick[it.id] : it.flavors[0];
+const keyOf = (it,u=curUnit(it),f=curFlavor(it)) => f ? `${it.id}|${u}|${f}` : `${it.id}|${u}`;   // مفتاح السلة
+const withFlavor = (name,f) => f ? `${name} بنكهة ${f}` : name;
 const itemsIn = cid => cid==="featured" ? ITEMS.filter(i=>i.featured) : ITEMS.filter(i=>i.cat===cid);
 function hueFor(it){ let h=0; for(const ch of it.id) h=(h*31+ch.charCodeAt(0))%360; return 14+(h%26); }
 
@@ -595,8 +619,9 @@ function priceHTML(it){
   return `<div class="price"><b>${fmt(unitPrice(it,u))}</b> ${SHOP.currency} <span>/ ${unitLabel(it,u)}</span></div>`;
 }
 function actHTML(it, compact=false){
-  const u=curUnit(it), q=cart[it.id+"|"+u]||0;
+  const q=cart[keyOf(it)]||0;
   if(q) return `<div class="step"><button data-a="inc" data-id="${it.id}" aria-label="زيادة">${UI.plus}</button><b>${q}</b><button data-a="dec" data-id="${it.id}" aria-label="تقليل">${q===1?UI.trash:UI.minus}</button></div>`;
+  if(compact && it.flavors) return `<button class="add round" data-a="pick" data-id="${it.id}" aria-label="اختر النكهة">${UI.plus}</button>`;
   return compact
     ? `<button class="add round" data-a="add" data-id="${it.id}" aria-label="أضف للسلة">${UI.plus}</button>`
     : `<button class="add" data-a="add" data-id="${it.id}">${UI.plus}أضف</button>`;
@@ -608,7 +633,7 @@ function itemCard(it,i){
   return `<article class="item reveal" style="--d:${i}" data-card="${it.id}">
     ${thumb(it,true)}
     <div class="info">
-      <h3>${it.name}</h3><p>${it.desc||""}</p>
+      <h3>${it.name}</h3><p>${it.desc||""}</p>${it.flavors?`<div class="flv" role="group" aria-label="النكهة">${it.flavors.map(f=>`<button data-a="flavor" data-f="${f}" data-id="${it.id}" class="${curFlavor(it)===f?"on":""}">${f}</button>`).join("")}</div>`:""}
       <div data-price>${priceHTML(it)}</div>
       <div class="row">${seg}<div data-act>${actHTML(it)}</div></div>
     </div></article>`;
@@ -633,6 +658,10 @@ function renderHome(){
   }).join("");
 }
 
+function noteCard(n){
+  return `<a class="note-card" href="${waLink(`مرحباً ${SHOP.name} 🤎 ${n.wa}`)}" target="_blank" rel="noopener">
+    <span><h3>${n.title}</h3><p>${n.text}</p></span><span class="go">${UI.wa}</span></a>`;
+}
 function renderCat(cid){
   const c=catOf(cid)||CATS[0]; const list=itemsIn(c.id);
   const hint = c.id==="featured" ? "الأصناف الأكثر طلباً لدينا" : list.some(i=>i.sizes) ? "الأسعار حسب الحجم" : (()=>{ const us=new Set(list.flatMap(unitsOf)); const w=us.has("kg")||us.has("uqiya"), pc=us.has("piece"); return w&&pc ? "الأسعار بالقطعة وبالوزن" : w ? "الأسعار بالكيلو والوقية" : "الأسعار بالقطعة"; })();
@@ -646,7 +675,7 @@ function renderCat(cid){
       + c.subs.map(s=>{ const its=list.filter(i=>i.sub===s.id); if(!its.length) return "";
           return `<div class="subhead" id="sub-${s.id}"><span class="mono">— ${s.en}</span><h2>${s.name}</h2><small>${its.length} أصناف</small></div>` + its.map(i=>itemCard(i,n++)).join(""); }).join("");
   } else {
-    $("#list").innerHTML = (c.id==="cake"?cakeBanner():"") + list.map(itemCard).join("");
+    $("#list").innerHTML = (c.id==="cake"?cakeBanner():"") + list.map(itemCard).join("") + (NOTES[c.id]?noteCard(NOTES[c.id]):"");
   }
   requestAnimationFrame(()=>{ const on=$("#tabs .tab.on"); on && on.scrollIntoView({inline:"center",block:"nearest",behavior:"smooth"}); });
 }
@@ -658,13 +687,14 @@ function refreshItem(id){
     const a=card.querySelector("[data-act]"); if(a) a.innerHTML=actHTML(it,compact);
     const p=card.querySelector("[data-price]"); if(p) p.innerHTML=priceHTML(it);
     card.querySelectorAll(".seg button").forEach(b=>b.classList.toggle("on",b.dataset.u===curUnit(it)));
+    card.querySelectorAll(".flv button").forEach(b=>b.classList.toggle("on",b.dataset.f===curFlavor(it)));
   });
 }
 
 /* =========================================================
    Cart
    ========================================================= */
-const cartLines = () => Object.entries(cart).filter(([,q])=>q>0).map(([k,q])=>{ const [id,u]=k.split("|"); const it=byId[id]; return (it && unitsOf(it).includes(u))?{k,it,u,q,p:unitPrice(it,u)}:null }).filter(Boolean);
+const cartLines = () => Object.entries(cart).filter(([,q])=>q>0).map(([k,q])=>{ const [id,u,f]=k.split("|"); const it=byId[id]; return (it && unitsOf(it).includes(u) && (it.flavors ? it.flavors.includes(f) : !f))?{k,it,u,f,q,p:unitPrice(it,u),name:withFlavor(it.name,f)}:null }).filter(Boolean);
 const cartTotal = () => cartLines().reduce((s,l)=>s+l.p*l.q,0);
 const cartCount = () => cartLines().reduce((s,l)=>s+l.q,0);
 
@@ -710,7 +740,7 @@ function renderPane(p){
       return;
     }
     el.innerHTML=head("سلتك")+`<div class="sheet-body pane">${lines.map(l=>`
-      <div class="crow">${thumb(l.it)}<div class="meta"><h4>${l.it.name}</h4><small>${money(l.p)} / ${unitLabel(l.it,l.u)}</small><div class="lt">${money(l.p*l.q)}</div></div>
+      <div class="crow">${thumb(l.it)}<div class="meta"><h4>${l.name}</h4><small>${money(l.p)} / ${unitLabel(l.it,l.u)}</small><div class="lt">${money(l.p*l.q)}</div></div>
       <div class="step"><button data-a="cinc" data-k="${l.k}" aria-label="زيادة">${UI.plus}</button><b>${l.q}</b><button data-a="cdec" data-k="${l.k}" aria-label="تقليل">${l.q===1?UI.trash:UI.minus}</button></div></div>`).join("")}</div>
       <div class="sheet-foot"><div class="sum"><span>المجموع</span><b>${money(cartTotal())}</b></div><button class="btn" data-a="pane" data-p="checkout">متابعة الحجز ${UI.left}</button></div>`;
   }
@@ -756,7 +786,7 @@ function timeText(v){
   return d.toLocaleDateString("ar-u-nu-latn",{weekday:"long",day:"numeric",month:"numeric"})+" — "+d.toLocaleTimeString("ar-u-nu-latn",{hour:"numeric",minute:"2-digit"});
 }
 function buildMessage(){
-  const lines=cartLines().map(l=> l.it.sizes ? `▫️ ${l.it.name} (${unitLabel(l.it,l.u)}) — ${l.q} × ${fmt(l.p)} = ${money(l.p*l.q)}` : `▫️ ${l.it.name} — ${l.q} ${UNITS[l.u]} × ${fmt(l.p)} = ${money(l.p*l.q)}`);
+  const lines=cartLines().map(l=> l.it.sizes ? `▫️ ${l.name} (${unitLabel(l.it,l.u)}) — ${l.q} × ${fmt(l.p)} = ${money(l.p*l.q)}` : `▫️ ${l.name} — ${l.q} ${UNITS[l.u]} × ${fmt(l.p)} = ${money(l.p*l.q)}`);
   const msg=[
     `مرحباً ${SHOP.name} 🤎 أودّ حجز الطلب التالي:`, "",
     ...lines, "",
@@ -918,8 +948,10 @@ document.addEventListener("click",e=>{
   if(a==="home"){ e.preventDefault(); goHome(); return; }
   if(a==="sub"){ const t=$("#sub-"+b.dataset.s); t&&t.scrollIntoView({behavior:"smooth",block:"start"}); return; }
   if(a==="unit"){ unitPick[id]=b.dataset.u; refreshItem(id); }
-  if(a==="add"){ const it=byId[id]; setQty(id+"|"+curUnit(it),1); save(); flyFrom(b); refreshItem(id); navigator.vibrate&&navigator.vibrate(12); toast(`تمت إضافة ${it.name} إلى السلة`); }
-  if(a==="inc"||a==="dec"){ const it=byId[id], k=id+"|"+curUnit(it); setQty(k,(cart[k]||0)+(a==="inc"?1:-1)); refreshItem(id); updateCartUI(a==="inc"); }
+  if(a==="add"){ const it=byId[id]; setQty(keyOf(it),1); save(); flyFrom(b); refreshItem(id); navigator.vibrate&&navigator.vibrate(12); toast(`تمت إضافة ${withFlavor(it.name,curFlavor(it))} إلى السلة`); }
+  if(a==="flavor"){ flavorPick[id]=b.dataset.f; refreshItem(id); }
+  if(a==="pick"){ const it=byId[id]; go(it.cat); setTimeout(()=>{ const c=$(`#view-cat [data-card="${id}"]`); if(!c) return; c.scrollIntoView({block:"center",behavior:"smooth"}); c.classList.remove("flash"); void c.offsetWidth; c.classList.add("flash"); },350); }
+  if(a==="inc"||a==="dec"){ const it=byId[id], k=keyOf(it); setQty(k,(cart[k]||0)+(a==="inc"?1:-1)); refreshItem(id); updateCartUI(a==="inc"); }
   if(a==="cinc"||a==="cdec"){ const k=b.dataset.k; setQty(k,(cart[k]||0)+(a==="cinc"?1:-1)); renderPane("cart"); refreshItem(k.split("|")[0]); updateCartUI(); }
   if(a==="close") closeSheet();
   if(a==="pane"){ if($("#i-name")) readForm(); renderPane(b.dataset.p); }
