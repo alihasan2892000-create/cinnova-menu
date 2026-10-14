@@ -355,9 +355,9 @@ textarea.inp{min-height:80px;resize:vertical}
       <button class="icon-btn js-cart" aria-label="السلة"><span class="ico-bag"></span><span class="badge"></span></button>
     </header>
     <div class="hero">
-      <div class="hero-logo" id="hero-logo" title="دوس على السينابون 😉">__HERO__</div>
-      <h1 class="reveal" style="--d:2">أهلاً فيك بسينوفا</h1>
-      <p class="reveal" style="--d:3">اختار اللي بتحبه، وابعتلنا طلبك على الواتساب</p>
+      <div class="hero-logo" id="hero-logo" title="اضغط على السينابون">__HERO__</div>
+      <h1 class="reveal" style="--d:2">أهلاً بكم في سينوفا</h1>
+      <p class="reveal" style="--d:3">اختر ما تحب، وأرسل طلبك عبر واتساب</p>
       <div class="chips-info reveal" style="--d:4">
         <span class="chip-i"><span class="ico-pin"></span>دير البلح</span>
         <span class="chip-i"><span class="ico-truck"></span>توصيل أو استلام</span>
@@ -441,12 +441,12 @@ const CATS = [
    img: رابط الصورة (فاضي = صورة مؤقتة)                  */
 const ITEMS = [
   // حلويات شرقية
-  { id:"s1", cat:"sharqi", name:"بقلاوة فستق حلبي", desc:"عجينة رقيقة محشية فستق حلبي فاخر", price:{kg:80, uqiya:20}, featured:true, img:"" },
+  { id:"s1", cat:"sharqi", name:"بقلاوة فستق حلبي", desc:"عجينة رقيقة محشوة بالفستق الحلبي الفاخر", price:{kg:80, uqiya:20}, featured:true, img:"" },
   { id:"s2", cat:"sharqi", name:"بقلاوة كاجو",      desc:"مقرمشة ومحلّاة بقطر خفيف",         price:{kg:60, uqiya:15}, img:"" },
-  { id:"s3", cat:"sharqi", name:"بلورية",           desc:"شعيرية ذهبية محشية فستق",           price:{kg:85, uqiya:22}, img:"" },
-  { id:"s4", cat:"sharqi", name:"وربات بالقشطة",    desc:"وربات طازة بقشطة بلدية",            price:{kg:50, uqiya:13}, img:"" },
+  { id:"s3", cat:"sharqi", name:"بلورية",           desc:"شعيرية ذهبية محشوة بالفستق",           price:{kg:85, uqiya:22}, img:"" },
+  { id:"s4", cat:"sharqi", name:"وربات بالقشطة",    desc:"وربات طازجة بقشطة بلدية",            price:{kg:50, uqiya:13}, img:"" },
   { id:"s5", cat:"sharqi", name:"هريسة بالقشطة",    desc:"سميد وجوز الهند مع القشطة",         price:{kg:30, uqiya:8},  img:"" },
-  { id:"s6", cat:"sharqi", name:"معمول تمر",         desc:"معمول بيتي محشي عجوة",              price:{kg:40, uqiya:10}, img:"" },
+  { id:"s6", cat:"sharqi", name:"معمول تمر",         desc:"معمول منزلي محشو بالعجوة",              price:{kg:40, uqiya:10}, img:"" },
   // كيك — sub: super / special / slab / slice
   // sizes: { s:صغير , l:كبير } لكل حجم عدد القطع والسعر. name اختياري بيغيّر اسم الحجم. leadHours = لازم ينحجز قبلها بكم ساعة
   // سوبر سبيشل: صغير 6 قطع 60 ₪ ، كبير 15 قطعة 120 ₪
@@ -463,7 +463,7 @@ const ITEMS = [
   { id:"kp3", cat:"cake", sub:"special", name:"كيك بالكراميل", desc:"", sizes:{ s:{pieces:6, price:45}, l:{pieces:15, price:80} }, img:"" },
   { id:"kp4", cat:"cake", sub:"special", name:"كيك بالفانيلا", desc:"", sizes:{ s:{pieces:6, price:45}, l:{pieces:15, price:80} }, img:"" },
   // بلاطات: بالحجز قبل بيوم
-  { id:"kb1", cat:"cake", sub:"slab", name:"بلاطة كيك", desc:"يُحدَّد الطعم والشكل حسب الطلب · تتوفر بالحجز المسبق قبل يوم", sizes:{ s:{name:"نص بلاطة", pieces:"25 - 30", price:150}, l:{name:"بلاطة", pieces:"60 - 70", price:300} }, leadHours:24, img:"" },
+  { id:"kb1", cat:"cake", sub:"slab", name:"بلاطة كيك", desc:"يُحدَّد الطعم والشكل حسب الطلب · تتوفر بالحجز المسبق قبل يوم", sizes:{ s:{name:"نصف بلاطة", pieces:"25 - 30", price:150}, l:{name:"بلاطة", pieces:"60 - 70", price:300} }, leadHours:24, img:"" },
   // قطع
   { id:"kc1", cat:"cake", sub:"slice", name:"قطعة كيك مربعة بالشوكولاتة", desc:"", price:5,  img:"" },
   { id:"kc2", cat:"cake", sub:"slice", name:"مثلث كيك نوتيلا", desc:"", price:10, img:"" },
@@ -471,26 +471,26 @@ const ITEMS = [
   { id:"kc4", cat:"cake", sub:"slice", name:"مثلث كيك لوتس", desc:"", price:10, img:"" },
   // بيتفور
   { id:"p1", cat:"petit", name:"بيتفور مشكّل",     desc:"تشكيلة زبدة وشوكولاتة",              price:{kg:45, uqiya:12}, featured:true, img:"" },
-  { id:"p2", cat:"petit", name:"بيتفور بالمربى",   desc:"قلوب محشية مربى فراولة",             price:{kg:40, uqiya:10}, img:"" },
-  { id:"p3", cat:"petit", name:"غريبة",            desc:"تذوب بالتمّ",                        price:{kg:35, uqiya:9},  img:"" },
-  { id:"p4", cat:"petit", name:"بيتفور جوز الهند", desc:"مقرمش ومغطّس شوكولاتة",              price:{kg:42, uqiya:11}, img:"" },
+  { id:"p2", cat:"petit", name:"بيتفور بالمربى",   desc:"قلوب محشوة بمربى الفراولة",             price:{kg:40, uqiya:10}, img:"" },
+  { id:"p3", cat:"petit", name:"غريبة",            desc:"تذوب في الفم",                        price:{kg:35, uqiya:9},  img:"" },
+  { id:"p4", cat:"petit", name:"بيتفور جوز الهند", desc:"مقرمش ومغطّى بالشوكولاتة",              price:{kg:42, uqiya:11}, img:"" },
   // جلي
   { id:"j1", cat:"jelly", name:"بكيت جلي مثلث",   desc:"", price:5,  img:"" },
   { id:"j2", cat:"jelly", name:"كاسة جلي",          desc:"", price:7,  img:"" },
   { id:"j3", cat:"jelly", name:"علبة جلي هدية",     desc:"", price:15, img:"" },
   { id:"j4", cat:"jelly", name:"جلي بالوزن",        desc:"", price:{uqiya:8}, img:"" },
   // مكسرات
-  { id:"n1", cat:"nuts", name:"كاجو محمّص",       desc:"محمّص طازة يومياً",                  price:{kg:90, uqiya:23}, img:"" },
+  { id:"n1", cat:"nuts", name:"كاجو محمّص",       desc:"يُحمَّص طازجاً يومياً",                  price:{kg:90, uqiya:23}, img:"" },
   { id:"n2", cat:"nuts", name:"فستق حلبي",         desc:"حبة كبيرة مملّحة",                   price:{kg:110,uqiya:28}, img:"" },
   { id:"n3", cat:"nuts", name:"لوز محمّص",         desc:"مع ملح خفيف",                        price:{kg:70, uqiya:18}, img:"" },
-  { id:"n4", cat:"nuts", name:"مكسرات مشكّلة",     desc:"إكسترا — كاجو ولوز وبندق",           price:{kg:85, uqiya:22}, featured:true, img:"" },
-  { id:"n5", cat:"nuts", name:"بزر أبيض",          desc:"محمّص على الأصول",                   price:{kg:30, uqiya:8},  img:"" },
+  { id:"n4", cat:"nuts", name:"مكسرات مشكّلة",     desc:"تشكيلة فاخرة من الكاجو واللوز والبندق",           price:{kg:85, uqiya:22}, featured:true, img:"" },
+  { id:"n5", cat:"nuts", name:"بزر أبيض",          desc:"محمّص بالطريقة التقليدية",                   price:{kg:30, uqiya:8},  img:"" },
   // عيد ميلاد
-  { id:"b1", cat:"party", name:"شمعة أرقام",       desc:"ذهبي — اختار الرقم بالملاحظات",      price:5,  img:"" },
-  { id:"b2", cat:"party", name:"بالونات ملوّنة",   desc:"كيس 20 بالون",                       price:10, img:"" },
-  { id:"b3", cat:"party", name:"قبعات حفلة",       desc:"باكيت 10 قبعات",                     price:12, img:"" },
+  { id:"b1", cat:"party", name:"شمعة أرقام",       desc:"ذهبية — يُرجى تحديد الرقم في الملاحظات",      price:5,  img:"" },
+  { id:"b2", cat:"party", name:"بالونات ملوّنة",   desc:"كيس يحتوي على 20 بالوناً",                       price:10, img:"" },
+  { id:"b3", cat:"party", name:"قبعات حفلة",       desc:"عبوة من 10 قبعات",                     price:12, img:"" },
   { id:"b4", cat:"party", name:"لافتة عيد ميلاد",  desc:"Happy Birthday ذهبية",               price:15, img:"" },
-  { id:"b5", cat:"party", name:"شموع نافورة",      desc:"باكيت 4 شموع",                       price:8,  img:"" },
+  { id:"b5", cat:"party", name:"شموع نافورة",      desc:"عبوة من 4 شموع",                       price:8,  img:"" },
   // قهوة
   { id:"c1", cat:"coffee", name:"قهوة حب محمّصة", desc:"", price:{kg:48, uqiya:12}, img:"" },
   { id:"c2", cat:"coffee", name:"قهوة مطحونة",    desc:"", price:{kg:45, uqiya:15}, img:"" }
@@ -501,8 +501,8 @@ const ITEMS = [
    الكيك الخاص — عدّل الخيارات من هون
    ========================================================= */
 const CAKE = {
-  occasion: [{id:"bday",name:"عيد ميلاد"},{id:"engage",name:"خطوبة / زواج"},{id:"grad",name:"تخرّج"},{id:"baby",name:"مولود جديد"},{id:"other",name:"مناسبة ثانية"}],
-  size: [{id:"s",name:"صغيرة",sub:"6 - 8 أشخاص",tiers:1,w:.8},{id:"m",name:"وسط",sub:"10 - 12 شخص",tiers:1,w:1},{id:"l",name:"كبيرة",sub:"15 - 20 شخص",tiers:2,w:1},{id:"xl",name:"طبقات",sub:"25 شخص وأكثر",tiers:3,w:1.05}],
+  occasion: [{id:"bday",name:"عيد ميلاد"},{id:"engage",name:"خطوبة / زواج"},{id:"grad",name:"تخرّج"},{id:"baby",name:"مولود جديد"},{id:"other",name:"مناسبة أخرى"}],
+  size: [{id:"s",name:"صغيرة",sub:"6 - 8 أشخاص",tiers:1,w:.8},{id:"m",name:"وسط",sub:"10 - 12 شخصاً",tiers:1,w:1},{id:"l",name:"كبيرة",sub:"15 - 20 شخصاً",tiers:2,w:1},{id:"xl",name:"طبقات",sub:"25 شخصاً فأكثر",tiers:3,w:1.05}],
   shape: [{id:"round",name:"دائري"},{id:"square",name:"مربع"},{id:"heart",name:"قلب"},{id:"num",name:"رقم أو حرف"}],
   flavor: [{id:"vanilla",name:"فانيلا"},{id:"choco",name:"شوكولاتة"},{id:"red",name:"ريد فيلفت"},{id:"lotus",name:"لوتس"},{id:"carrot",name:"جزر وقرفة"}],
   filling: [{id:"cream",name:"كريمة"},{id:"nutella",name:"نوتيلا"},{id:"fruit",name:"فواكه"},{id:"lotusf",name:"صوص لوتس"},{id:"pist",name:"فستق"}],
@@ -635,7 +635,7 @@ function renderHome(){
 
 function renderCat(cid){
   const c=catOf(cid)||CATS[0]; const list=itemsIn(c.id);
-  const hint = c.id==="featured" ? "أكثر الأصناف طلباً عنّا" : list.some(i=>i.sizes) ? "الأسعار حسب الحجم" : (()=>{ const us=new Set(list.flatMap(unitsOf)); const w=us.has("kg")||us.has("uqiya"), pc=us.has("piece"); return w&&pc ? "الأسعار بالقطعة وبالوزن" : w ? "الأسعار بالكيلو والوقية" : "الأسعار بالقطعة"; })();
+  const hint = c.id==="featured" ? "الأصناف الأكثر طلباً لدينا" : list.some(i=>i.sizes) ? "الأسعار حسب الحجم" : (()=>{ const us=new Set(list.flatMap(unitsOf)); const w=us.has("kg")||us.has("uqiya"), pc=us.has("piece"); return w&&pc ? "الأسعار بالقطعة وبالوزن" : w ? "الأسعار بالكيلو والوقية" : "الأسعار بالقطعة"; })();
   $("#cat-head").innerHTML = `<div class="cat-hero"><div class="ring">${SC}${art(c.icon)}</div>
      <div><span class="mono" style="font-size:11px;color:var(--gold)">— ${c.en}</span><h1>${c.name}</h1><p>${hint} · ${list.length} أصناف</p></div></div>`;
   $("#tabs").innerHTML = CATS.map(t=>`<a class="tab ${t.id===c.id?"on":""}" role="button" data-a="go" data-c="${t.id}" style="text-decoration:none">${t.name}</a>`).join("");
@@ -705,8 +705,8 @@ function renderPane(p){
   if(p==="cart"){
     const lines=cartLines();
     if(!lines.length){
-      el.innerHTML=head("سلتك")+`<div class="sheet-body pane"><div class="empty">${art("roll","")}<p>السلة فاضية… لسا ما اخترت إشي حلو!</p></div></div>
-        <div class="sheet-foot"><button class="btn" data-a="close">تصفّح المنيو</button></div>`;
+      el.innerHTML=head("سلتك")+`<div class="sheet-body pane"><div class="empty">${art("roll","")}<p>السلة فارغة، لم تُضِف أي صنف بعد.</p></div></div>
+        <div class="sheet-foot"><button class="btn" data-a="close">تصفّح القائمة</button></div>`;
       return;
     }
     el.innerHTML=head("سلتك")+`<div class="sheet-body pane">${lines.map(l=>`
@@ -719,22 +719,22 @@ function renderPane(p){
     const now=new Date(Date.now()+Math.max(1,lead)*60*60*1000); now.setSeconds(0,0);
     const minV=new Date(now.getTime()-now.getTimezoneOffset()*60000).toISOString().slice(0,16);
     el.innerHTML=head("بيانات الحجز","cart")+`<div class="sheet-body pane">
-      <div class="field" id="f-name"><label>الاسم</label><input class="inp" id="i-name" autocomplete="name" placeholder="اسمك الكريم" value="${esc(form.name)}"><div class="err">اكتب اسمك لو سمحت</div></div>
+      <div class="field" id="f-name"><label>الاسم</label><input class="inp" id="i-name" autocomplete="name" placeholder="اسمك الكريم" value="${esc(form.name)}"><div class="err">يُرجى كتابة الاسم</div></div>
       <div class="field" id="f-mode"><label>طريقة الاستلام</label><div class="choice">
         <button type="button" data-a="mode" data-m="delivery" class="${form.mode==="delivery"?"on":""}">${UI.truck}توصيل</button>
-        <button type="button" data-a="mode" data-m="pickup" class="${form.mode==="pickup"?"on":""}">${UI.store}بستلم من المحل</button></div><div class="err">اختار طريقة الاستلام</div></div>
-      <div class="field" id="f-time"><label>وقت الاستلام</label><input class="inp" id="i-time" type="datetime-local" min="${minV}" value="${form.time}">${lead?`<div class="hint">طلبك فيه ${leadNames()}، بنحتاج نعرف قبل ${lead} ساعة على الأقل.</div>`:""}<div class="err">${lead?`اختار موعد بعد ${lead} ساعة على الأقل من هلأ`:"حدّد الوقت اللي بناسبك"}</div></div>
+        <button type="button" data-a="mode" data-m="pickup" class="${form.mode==="pickup"?"on":""}">${UI.store}استلام من المحل</button></div><div class="err">يُرجى اختيار طريقة الاستلام</div></div>
+      <div class="field" id="f-time"><label>وقت الاستلام</label><input class="inp" id="i-time" type="datetime-local" min="${minV}" value="${form.time}">${lead?`<div class="hint">يتضمن طلبك ${leadNames()}، ويلزم الحجز قبل ${lead} ساعة على الأقل.</div>`:""}<div class="err">${lead?`يُرجى اختيار موعد بعد ${lead} ساعة على الأقل من الآن`:"يُرجى تحديد الوقت المناسب"}</div></div>
       <div class="collapse ${form.mode==="delivery"?"open":""}" id="addr-wrap"><div>
-        <div class="field" id="f-addr"><label>العنوان</label><input class="inp" id="i-addr" autocomplete="street-address" placeholder="المنطقة، الشارع، أقرب معلم" value="${esc(form.address)}"><div class="err">اكتب عنوان التوصيل</div></div>
+        <div class="field" id="f-addr"><label>العنوان</label><input class="inp" id="i-addr" autocomplete="street-address" placeholder="المنطقة، الشارع، أقرب معلم" value="${esc(form.address)}"><div class="err">يُرجى كتابة عنوان التوصيل</div></div>
       </div></div>
-      <div class="field"><label>ملاحظات <i>(اختياري)</i></label><textarea class="inp" id="i-notes" placeholder="${lead?"مثلاً: طعم وشكل البلاطة، الكتابة عليها…":"مثلاً: الكتابة على الكيكة، رقم الشمعة…"}">${esc(form.notes)}</textarea></div>
+      <div class="field"><label>ملاحظات <i>(اختياري)</i></label><textarea class="inp" id="i-notes" placeholder="${lead?"مثلاً: طعم البلاطة وشكلها، والكتابة عليها…":"مثلاً: الكتابة على الكيكة، رقم الشمعة…"}">${esc(form.notes)}</textarea></div>
     </div>
-    <div class="sheet-foot"><div class="sum"><span>المجموع</span><b>${money(cartTotal())}</b></div><button class="btn" data-a="send">${UI.wa}إرسال الحجز على واتساب</button></div>`;
+    <div class="sheet-foot"><div class="sum"><span>المجموع</span><b>${money(cartTotal())}</b></div><button class="btn" data-a="send">${UI.wa}إرسال الحجز عبر واتساب</button></div>`;
   }
   if(p==="success"){
-    el.innerHTML=head("")+`<div class="sheet-body pane"><div class="success"><div class="ok">${UI.check}</div><h3>طلبك جاهز ينبعت!</h3>
-      <p>فتحنالك الواتساب والرسالة مكتوبة —<br>بس اضغط إرسال وبنرد عليك بأسرع وقت.</p></div></div>
-      <div class="sheet-foot"><button class="btn" data-a="close">رجوع للمنيو</button><button class="btn ghost" data-a="resend">${UI.wa}فتح الواتساب مرة ثانية</button></div>`;
+    el.innerHTML=head("")+`<div class="sheet-body pane"><div class="success"><div class="ok">${UI.check}</div><h3>طلبك جاهز للإرسال</h3>
+      <p>تم فتح واتساب والرسالة جاهزة،<br>اضغط «إرسال» وسنرد عليك في أقرب وقت.</p></div></div>
+      <div class="sheet-foot"><button class="btn" data-a="close">العودة إلى القائمة</button><button class="btn ghost" data-a="resend">${UI.wa}فتح واتساب مرة أخرى</button></div>`;
   }
 }
 function esc(s){ return String(s||"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c])); }
@@ -758,7 +758,7 @@ function timeText(v){
 function buildMessage(){
   const lines=cartLines().map(l=> l.it.sizes ? `▫️ ${l.it.name} (${unitLabel(l.it,l.u)}) — ${l.q} × ${fmt(l.p)} = ${money(l.p*l.q)}` : `▫️ ${l.it.name} — ${l.q} ${UNITS[l.u]} × ${fmt(l.p)} = ${money(l.p*l.q)}`);
   const msg=[
-    `مرحبا ${SHOP.name} 🤎 بدي أحجز الطلب التالي:`, "",
+    `مرحباً ${SHOP.name} 🤎 أودّ حجز الطلب التالي:`, "",
     ...lines, "",
     `💰 المجموع: ${money(cartTotal())}`, "",
     `👤 الاسم: ${form.name}`,
@@ -811,7 +811,7 @@ function cakeSVG(st=cake, mini=false){
 }
 function cakeSummary(){
   const parts=["occasion","size","shape","flavor","filling","deco","color"].filter(k=>cake[k]).map(k=> k==="shape"&&cake.shape==="num"&&cake.shapeText ? `${opt(k,cake[k]).name}: ${esc(cake.shapeText)}` : opt(k,cake[k]).name);
-  return parts.length ? parts.join(" · ") : `<i>لسا ما اخترت إشي — كيكتك بتتشكّل وانت بتختار</i>`;
+  return parts.length ? parts.join(" · ") : `<i>لم تختر شيئاً بعد، وستتشكّل كيكتك مع كل اختيار</i>`;
 }
 function updatePrev(){
   const p=$("#cake-prev"); if(p) p.innerHTML=cakeSVG();
@@ -827,12 +827,12 @@ function cakeBanner(){
   const demo={size:"l",shape:"round",deco:"drip",color:"pink",occasion:"bday"};
   return `<button class="cake-banner" data-a="cake-open">
     <span class="mini">${cakeSVG(demo,true)}</span>
-    <span><h3>صمّم كيكتك على ذوقك</h3><p>اختار الحجم والنكهة والتزيين والكتابة، وإحنا منعملها إلك</p><span class="cta">احجز كيكتك ${UI.left}</span></span>
+    <span><h3>صمّم كيكتك حسب ذوقك</h3><p>اختر الحجم والنكهة والتزيين والكتابة، ونحن نصنعها لك</p><span class="cta">احجز كيكتك ${UI.left}</span></span>
   </button>`;
 }
 
 function optGroup(k, label, extra=""){
-  return `<div class="field" id="f-${k}"><label>${label}</label><div class="opts">${CAKE[k].map(o=>`<button type="button" class="opt ${cake[k]===o.id?"on":""}" data-a="opt" data-k="${k}" data-v="${o.id}"><b style="font-weight:600">${o.name}</b>${o.sub?`<small>${o.sub}</small>`:""}</button>`).join("")}</div><div class="err">اختار ${label.replace(/<[^>]+>/g,"")}</div>${extra}</div>`;
+  return `<div class="field" id="f-${k}"><label>${label}</label><div class="opts">${CAKE[k].map(o=>`<button type="button" class="opt ${cake[k]===o.id?"on":""}" data-a="opt" data-k="${k}" data-v="${o.id}"><b style="font-weight:600">${o.name}</b>${o.sub?`<small>${o.sub}</small>`:""}</button>`).join("")}</div><div class="err">يُرجى اختيار ${label.replace(/<[^>]+>/g,"")}</div>${extra}</div>`;
 }
 function minCakeTime(){ const d=new Date(Date.now()+SHOP.cakeLeadHours*3600e3); d.setSeconds(0,0); d.setMinutes(Math.ceil(d.getMinutes()/15)*15); return new Date(d.getTime()-d.getTimezoneOffset()*60000).toISOString().slice(0,16); }
 
@@ -845,28 +845,28 @@ function renderCake(p){
   let body="", foot="";
   if(cakeStep===1){
     body=prev+optGroup("occasion","المناسبة")+optGroup("size","الحجم")+optGroup("shape","الشكل",
-      `<div class="collapse ${cake.shape==="num"?"open":""}" id="num-wrap"><div><div class="field" id="f-num" style="margin-bottom:0"><input class="inp" id="i-num" maxlength="3" placeholder="شو الرقم أو الحرف؟ مثلاً 18" value="${esc(cake.shapeText)}"><div class="err">اكتب الرقم أو الحرف</div></div></div></div>`);
+      `<div class="collapse ${cake.shape==="num"?"open":""}" id="num-wrap"><div><div class="field" id="f-num" style="margin-bottom:0"><input class="inp" id="i-num" maxlength="3" placeholder="ما الرقم أو الحرف؟ مثلاً 18" value="${esc(cake.shapeText)}"><div class="err">يُرجى كتابة الرقم أو الحرف</div></div></div></div>`);
     foot=`<button class="btn" data-a="cake-step" data-s="2">التالي ${UI.left}</button>`;
   }
   if(cakeStep===2){
-    const cn=cake.color?opt("color",cake.color).name:"اختار لون";
+    const cn=cake.color?opt("color",cake.color).name:"اختر لوناً";
     body=prev+optGroup("flavor","نكهة الكيك")+optGroup("filling","الحشوة")+optGroup("deco","التزيين")+
-      `<div class="field" id="f-color"><label>اللون الأساسي</label><div class="swatches">${CAKE.color.map(c=>`<button type="button" class="sw ${cake.color===c.id?"on":""}" style="background:${c.c}" data-a="opt" data-k="color" data-v="${c.id}" aria-label="${c.name}"></button>`).join("")}</div><div class="sw-name" id="sw-name">${cn}</div><div class="err">اختار لون</div></div>
-      <div class="field"><label>الكتابة على الكيكة <i>(اختياري)</i><span class="counter" id="t-count">${cake.text.length}/${CAKE.textMax}</span></label><input class="inp" id="i-text" maxlength="${CAKE.textMax}" placeholder="مثلاً: كل عام وانتِ بخير يا سارة" value="${esc(cake.text)}"></div>
-      <div class="field"><button type="button" class="check ${cake.ref?"on":""}" data-a="cake-ref"><span class="box">${UI.check}</span>عندي صورة أو فكرة للتصميم، ببعتها على الواتساب</button></div>`;
+      `<div class="field" id="f-color"><label>اللون الأساسي</label><div class="swatches">${CAKE.color.map(c=>`<button type="button" class="sw ${cake.color===c.id?"on":""}" style="background:${c.c}" data-a="opt" data-k="color" data-v="${c.id}" aria-label="${c.name}"></button>`).join("")}</div><div class="sw-name" id="sw-name">${cn}</div><div class="err">يُرجى اختيار لون</div></div>
+      <div class="field"><label>الكتابة على الكيكة <i>(اختياري)</i><span class="counter" id="t-count">${cake.text.length}/${CAKE.textMax}</span></label><input class="inp" id="i-text" maxlength="${CAKE.textMax}" placeholder="مثلاً: كل عام وأنتِ بخير يا سارة" value="${esc(cake.text)}"></div>
+      <div class="field"><button type="button" class="check ${cake.ref?"on":""}" data-a="cake-ref"><span class="box">${UI.check}</span>لديّ صورة أو فكرة للتصميم، وسأرسلها عبر واتساب</button></div>`;
     foot=`<button class="btn" data-a="cake-step" data-s="3">التالي ${UI.left}</button>`;
   }
   if(cakeStep===3){
-    body=`<div class="field" id="f-name"><label>الاسم</label><input class="inp" id="i-name" autocomplete="name" placeholder="اسمك الكريم" value="${esc(cake.name)}"><div class="err">اكتب اسمك لو سمحت</div></div>
+    body=`<div class="field" id="f-name"><label>الاسم</label><input class="inp" id="i-name" autocomplete="name" placeholder="اسمك الكريم" value="${esc(cake.name)}"><div class="err">يُرجى كتابة الاسم</div></div>
       <div class="field" id="f-mode"><label>طريقة الاستلام</label><div class="choice">
         <button type="button" data-a="cake-mode" data-m="delivery" class="${cake.mode==="delivery"?"on":""}">${UI.truck}توصيل</button>
-        <button type="button" data-a="cake-mode" data-m="pickup" class="${cake.mode==="pickup"?"on":""}">${UI.store}بستلم من المحل</button></div><div class="err">اختار طريقة الاستلام</div></div>
-      <div class="field" id="f-time"><label>موعد الاستلام</label><input class="inp" id="i-time" type="datetime-local" min="${minCakeTime()}" value="${cake.time}"><div class="hint">الكيك الخاص بنحتاج نعرف فيه قبل ${SHOP.cakeLeadHours} ساعة على الأقل.</div><div class="err">اختار موعد بعد ${SHOP.cakeLeadHours} ساعة على الأقل من هلأ</div></div>
+        <button type="button" data-a="cake-mode" data-m="pickup" class="${cake.mode==="pickup"?"on":""}">${UI.store}استلام من المحل</button></div><div class="err">يُرجى اختيار طريقة الاستلام</div></div>
+      <div class="field" id="f-time"><label>موعد الاستلام</label><input class="inp" id="i-time" type="datetime-local" min="${minCakeTime()}" value="${cake.time}"><div class="hint">يلزم طلب الكيك الخاص قبل ${SHOP.cakeLeadHours} ساعة على الأقل.</div><div class="err">يُرجى اختيار موعد بعد ${SHOP.cakeLeadHours} ساعة على الأقل من الآن</div></div>
       <div class="collapse ${cake.mode==="delivery"?"open":""}" id="addr-wrap"><div>
-        <div class="field" id="f-addr"><label>العنوان</label><input class="inp" id="i-addr" autocomplete="street-address" placeholder="المنطقة، الشارع، أقرب معلم" value="${esc(cake.address)}"><div class="err">اكتب عنوان التوصيل</div></div></div></div>
-      <div class="field"><label>ملاحظات <i>(اختياري)</i></label><textarea class="inp" id="i-notes" placeholder="أي تفاصيل زيادة عن التصميم…">${esc(cake.notes)}</textarea></div>
-      <div class="hint" style="text-align:center;margin:4px 0 6px">السعر النهائي بنأكّده معك على الواتساب حسب الحجم والتصميم.</div>`;
-    foot=`<button class="btn" data-a="cake-send">${UI.wa}إرسال طلب الكيكة على واتساب</button>`;
+        <div class="field" id="f-addr"><label>العنوان</label><input class="inp" id="i-addr" autocomplete="street-address" placeholder="المنطقة، الشارع، أقرب معلم" value="${esc(cake.address)}"><div class="err">يُرجى كتابة عنوان التوصيل</div></div></div></div>
+      <div class="field"><label>ملاحظات <i>(اختياري)</i></label><textarea class="inp" id="i-notes" placeholder="أي تفاصيل إضافية عن التصميم…">${esc(cake.notes)}</textarea></div>
+      <div class="hint" style="text-align:center;margin:4px 0 6px">يُؤكَّد السعر النهائي عبر واتساب حسب الحجم والتصميم.</div>`;
+    foot=`<button class="btn" data-a="cake-send">${UI.wa}إرسال طلب الكيكة عبر واتساب</button>`;
   }
   el.innerHTML=head+`<div class="sheet-body pane">${body}</div><div class="sheet-foot">${foot}</div>`;
   const ti=$("#i-text"); ti&&ti.addEventListener("input",()=>{ cake.text=ti.value; $("#t-count").textContent=`${ti.value.length}/${CAKE.textMax}`; prevAnim=false; updatePrev(); prevAnim=true; });
@@ -888,7 +888,7 @@ function validCake(step){
 function cakeMessage(){
   const n=k=>opt(k,cake[k]).name; const sz=opt("size",cake.size);
   return [
-    `مرحبا ${SHOP.name} 🤎 بدي أحجز كيكة خاصة:`, "",
+    `مرحباً ${SHOP.name} 🤎 أودّ طلب كيكة خاصة:`, "",
     `🎉 المناسبة: ${n("occasion")}`,
     `📏 الحجم: ${sz.name} (${sz.sub})`,
     `🔷 الشكل: ${n("shape")}${cake.shape==="num"?` — ${cake.shapeText}`:""}`,
@@ -897,13 +897,13 @@ function cakeMessage(){
     `✨ التزيين: ${n("deco")}`,
     `🎨 اللون: ${n("color")}`,
     ...(cake.text?[`✍️ الكتابة: ${cake.text}`]:[]),
-    ...(cake.ref?["📷 عندي صورة للتصميم ببعتها هون"]:[]), "",
+    ...(cake.ref?["📷 لديّ صورة للتصميم وسأرسلها هنا"]:[]), "",
     `👤 الاسم: ${cake.name}`,
     `🚚 الاستلام: ${cake.mode==="delivery"?"توصيل":"استلام من المحل"}`,
     `🕒 الموعد: ${timeText(cake.time)}`,
     ...(cake.mode==="delivery"?[`📍 العنوان: ${cake.address}`]:[]),
     ...(cake.notes?[`📝 ملاحظات: ${cake.notes}`]:[]), "",
-    "بستنى تأكيد السعر 🙏"
+    "بانتظار تأكيد السعر 🙏"
   ].join("\n");
 }
 
@@ -918,7 +918,7 @@ document.addEventListener("click",e=>{
   if(a==="home"){ e.preventDefault(); goHome(); return; }
   if(a==="sub"){ const t=$("#sub-"+b.dataset.s); t&&t.scrollIntoView({behavior:"smooth",block:"start"}); return; }
   if(a==="unit"){ unitPick[id]=b.dataset.u; refreshItem(id); }
-  if(a==="add"){ const it=byId[id]; setQty(id+"|"+curUnit(it),1); save(); flyFrom(b); refreshItem(id); navigator.vibrate&&navigator.vibrate(12); toast(`انضاف ${it.name} للسلة`); }
+  if(a==="add"){ const it=byId[id]; setQty(id+"|"+curUnit(it),1); save(); flyFrom(b); refreshItem(id); navigator.vibrate&&navigator.vibrate(12); toast(`تمت إضافة ${it.name} إلى السلة`); }
   if(a==="inc"||a==="dec"){ const it=byId[id], k=id+"|"+curUnit(it); setQty(k,(cart[k]||0)+(a==="inc"?1:-1)); refreshItem(id); updateCartUI(a==="inc"); }
   if(a==="cinc"||a==="cdec"){ const k=b.dataset.k; setQty(k,(cart[k]||0)+(a==="cinc"?1:-1)); renderPane("cart"); refreshItem(k.split("|")[0]); updateCartUI(); }
   if(a==="close") closeSheet();

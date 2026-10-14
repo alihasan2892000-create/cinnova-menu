@@ -131,12 +131,12 @@ with sync_playwright() as p:
     n0=len(urls); pg.locator('[data-a="send"]').click(); pg.wait_for_timeout(300)
     chk('slab: rejects time < 24h', len(urls)==n0 and pg.locator('#f-time.bad').count()==1)
     pg.fill('#i-time',pg.evaluate(f'({lt})(30)')); pg.locator('[data-a="send"]').click(); pg.wait_for_timeout(800)
-    chk('slab: order sent after 24h', len(urls)==n0+1 and 'بلاطة كيك (نص بلاطة · 25 - 30 قطعة) — 1 × 150 = 150 ₪' in urls[-1])
+    chk('slab: order sent after 24h', len(urls)==n0+1 and 'بلاطة كيك (نصف بلاطة · 25 - 30 قطعة) — 1 × 150 = 150 ₪' in urls[-1])
     pg.locator('#sheet [data-a="close"]').first.click(); pg.wait_for_timeout(400)
     # cake builder
     pg.evaluate('go("cake")'); pg.wait_for_timeout(500)
     chk('cake subnav 4 buttons', pg.locator('.subnav button').count()==4)
-    chk('slab size labels', pg.locator('[data-card="kb1"] .seg button').all_inner_texts()==['نص بلاطة','بلاطة'])
+    chk('slab size labels', pg.locator('[data-card="kb1"] .seg button').all_inner_texts()==['نصف بلاطة','بلاطة'])
     pg.locator('[data-card="kb1"] [data-u="l"]').click(); pg.wait_for_timeout(150)
     chk('slab large price/pieces', '300' in pg.locator('#view-cat [data-card="kb1"] [data-price]').inner_text() and '60 - 70 قطعة' in pg.locator('#view-cat [data-card="kb1"] [data-price]').inner_text())
     chk('cake slices sold by piece', pg.locator('[data-card="kc2"] .unit-chip').inner_text()=='بالقطعة')
@@ -169,7 +169,7 @@ with sync_playwright() as p:
     pg.fill('#i-time',later); pg.locator('[data-a="cake-send"]').click(); pg.wait_for_timeout(800)
     cm=urls[-1] if len(urls)>n0 else ''
     chk('cake WA message sent', bool(cm))
-    for s in ['كيكة خاصة','رقم أو حرف — 30','لوتس','فوندان','ذهبي','الكتابة: مبروك','بستنى تأكيد السعر']:
+    for s in ['كيكة خاصة','رقم أو حرف — 30','لوتس','فوندان','ذهبي','الكتابة: مبروك','بانتظار تأكيد السعر']:
         chk(f'cake msg has "{s}"', s in cm)
     chk('cake order did not touch cart', pg.evaluate('cartCount()')==0)
     pg.locator('#sheet [data-a="close"]').first.click(); pg.wait_for_timeout(300)
