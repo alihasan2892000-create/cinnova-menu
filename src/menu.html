@@ -454,13 +454,26 @@ const ITEMS = [
   { id:"f1", cat:"featured", featured:true, name:"مكس سينوفا", desc:"", flavors:["بيستاشيو","لوتس"], sizes:{ t:{name:"مثلث", price:15}, s:{name:"صغير", price:20}, m:{name:"وسط", price:25}, l:{name:"كبير", price:30} }, img:"" },
   { id:"f2", cat:"featured", featured:true, name:"شوكولاتة بلجيكية", desc:"", sizes:{ s:{name:"علبة صغيرة", price:30}, l:{name:"علبة كبيرة", price:50} }, img:"" },
   { id:"f3", cat:"featured", featured:true, name:"تشيز كيك", desc:"", flavors:["بلوبيري","لوتس","نوتيلا","بيستاشيو","مانجو"], price:10, img:"" },
-  // حلويات شرقية
-  { id:"s1", cat:"sharqi", name:"بقلاوة فستق حلبي", desc:"عجينة رقيقة محشوة بالفستق الحلبي الفاخر", price:{kg:80, uqiya:20}, img:"" },
-  { id:"s2", cat:"sharqi", name:"بقلاوة كاجو",      desc:"مقرمشة ومحلّاة بقطر خفيف",         price:{kg:60, uqiya:15}, img:"" },
-  { id:"s3", cat:"sharqi", name:"بلورية",           desc:"شعيرية ذهبية محشوة بالفستق",           price:{kg:85, uqiya:22}, img:"" },
-  { id:"s4", cat:"sharqi", name:"وربات بالقشطة",    desc:"وربات طازجة بقشطة بلدية",            price:{kg:50, uqiya:13}, img:"" },
-  { id:"s5", cat:"sharqi", name:"هريسة بالقشطة",    desc:"سميد وجوز الهند مع القشطة",         price:{kg:30, uqiya:8},  img:"" },
-  { id:"s6", cat:"sharqi", name:"معمول تمر",         desc:"معمول منزلي محشو بالعجوة",              price:{kg:40, uqiya:10}, img:"" },
+  // حلويات شرقية — السعر للكيلو، والوقية = الكيلو ÷ 4 مقرّبة لأعلى رقم صحيح
+  { id:"s1", cat:"sharqi", name:"أساور", desc:"", price:{kg:45, uqiya:12}, img:"" },
+  { id:"s2", cat:"sharqi", name:"أساور إكسترا", desc:"", price:{kg:90, uqiya:23}, img:"" },
+  { id:"s3", cat:"sharqi", name:"عش البلبل فستق", desc:"", price:{kg:30, uqiya:8}, img:"" },
+  { id:"s4", cat:"sharqi", name:"بقلاوة لوز", desc:"", price:{kg:50, uqiya:13}, img:"" },
+  { id:"s5", cat:"sharqi", name:"كُل واشكر لوز", desc:"", price:{kg:50, uqiya:13}, img:"" },
+  { id:"s6", cat:"sharqi", name:"كُل واشكر فستق", desc:"", price:{kg:30, uqiya:8}, img:"" },
+  { id:"s7", cat:"sharqi", name:"سنيورة لوز", desc:"", price:{kg:50, uqiya:13}, img:"" },
+  { id:"s8", cat:"sharqi", name:"سنيورة فستق", desc:"", price:{kg:30, uqiya:8}, img:"" },
+  { id:"s9", cat:"sharqi", name:"وربات عين جمل", desc:"", price:{kg:50, uqiya:13}, img:"" },
+  { id:"s10", cat:"sharqi", name:"نمّورة سمن بلدي", desc:"", price:{kg:25, uqiya:7}, img:"" },
+  { id:"s11", cat:"sharqi", name:"نمّورة لوز", desc:"", price:{kg:30, uqiya:8}, img:"" },
+  { id:"s12", cat:"sharqi", name:"نمّورة سبيشل", desc:"", price:{kg:30, uqiya:8}, img:"" },
+  { id:"s13", cat:"sharqi", name:"بسبوسة نوتيلا", desc:"", price:{kg:40, uqiya:10}, img:"" },
+  { id:"s14", cat:"sharqi", name:"بسبوسة مكسرات", desc:"", price:{kg:35, uqiya:9}, img:"" },
+  { id:"s15", cat:"sharqi", name:"كنافة عربية", desc:"", price:{kg:40, uqiya:10}, img:"" },
+  { id:"s16", cat:"sharqi", name:"كلاج نوتيلا", desc:"", price:{kg:40, uqiya:10}, img:"" },
+  { id:"s17", cat:"sharqi", name:"كلاج قشطة", desc:"", price:{kg:30, uqiya:8}, img:"" },
+  { id:"s18", cat:"sharqi", name:"بورمة لوز وعين جمل", desc:"", price:{kg:100, uqiya:25}, img:"" },
+  { id:"s19", cat:"sharqi", name:"بورمة حلبي", desc:"", price:{kg:140, uqiya:35}, img:"" },
   // كيك — sub: super / special / slab / slice
   // sizes: { s:صغير , l:كبير } لكل حجم عدد القطع والسعر. name اختياري بيغيّر اسم الحجم. leadHours = لازم ينحجز قبلها بكم ساعة
   // سوبر سبيشل: صغير 6 قطع 60 ₪ ، كبير 15 قطعة 120 ₪

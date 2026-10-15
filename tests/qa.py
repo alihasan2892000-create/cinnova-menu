@@ -129,7 +129,7 @@ with sync_playwright() as p:
     chk('WhatsApp opens on valid order', len(urls)==1)
     msg=urls[-1] if urls else ''
     chk('WA number correct', msg.startswith('https://wa.me/972594870202?text='))
-    for s in ['بقلاوة فستق حلبي — 2 وقية × 20 = 40 ₪','كيك نوتيلا (كبير · 15 قطعة) — 1 × 120 = 120 ₪','جلي بالوزن — 3 وقية × 8 = 24 ₪','المجموع: 184 ₪','الاسم: تجربة','توصيل','العنوان: دير البلح','ملاحظات: بدون مكسرات']:
+    for s in ['أساور — 2 وقية × 12 = 24 ₪','كيك نوتيلا (كبير · 15 قطعة) — 1 × 120 = 120 ₪','جلي بالوزن — 3 وقية × 8 = 24 ₪','المجموع: 168 ₪','الاسم: تجربة','توصيل','العنوان: دير البلح','ملاحظات: بدون مكسرات']:
         chk(f'WA msg contains "{s}"', s in msg)
     chk('success screen', pg.locator('.success').count()==1)
     chk('cart cleared after send', pg.evaluate('cartCount()')==0)
