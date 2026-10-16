@@ -439,6 +439,7 @@ const CATS = [
   { id:"cake",     name:"كيك",            en:"cakes",    icon:"cake",     type:"piece",
     subs:[ {id:"super",name:"كيك سوبر سبيشل",short:"سوبر سبيشل",en:"super special"}, {id:"special",name:"كيك سبيشل",short:"سبيشل",en:"special"}, {id:"slab",name:"كيك بلاطات",short:"بلاطات",en:"sheet cakes"}, {id:"slice",name:"كيك قطع",short:"قطع",en:"slices"} ] },
   { id:"petit",    name:"بيتفور",         en:"petit four",icon:"cookie",  type:"weight" },
+  { id:"pastry",   name:"معجنات",         en:"pastries", icon:"pizza",    type:"piece" },
   { id:"jelly",    name:"جلي",            en:"jelly",    icon:"jelly",    type:"piece" },
   { id:"nuts",     name:"مكسرات",         en:"nuts",     icon:"nuts",     type:"weight" },
   { id:"party",    name:"أغراض عيد ميلاد", en:"party",    icon:"balloon",  type:"piece" },
@@ -522,12 +523,23 @@ const ITEMS = [
   { id:"n3", cat:"nuts", name:"بزر شمس",                 desc:"", price:{uqiya:13}, img:"" },
   { id:"n4", cat:"nuts", name:"ماكاديميا",               desc:"", price:{uqiya:15}, img:"" },
   { id:"n5", cat:"nuts", name:"علبة مكسرات مشكّلة هدية", desc:"", price:15, img:"" },
-  // عيد ميلاد
-  { id:"b1", cat:"party", name:"شمعة أرقام",       desc:"ذهبية — يُرجى تحديد الرقم في الملاحظات",      price:5,  img:"" },
-  { id:"b2", cat:"party", name:"بالونات ملوّنة",   desc:"كيس يحتوي على 20 بالوناً",                       price:10, img:"" },
-  { id:"b3", cat:"party", name:"قبعات حفلة",       desc:"عبوة من 10 قبعات",                     price:12, img:"" },
-  { id:"b4", cat:"party", name:"لافتة عيد ميلاد",  desc:"Happy Birthday ذهبية",               price:15, img:"" },
-  { id:"b5", cat:"party", name:"شموع نافورة",      desc:"عبوة من 4 شموع",                       price:8,  img:"" },
+  // عيد ميلاد — السعر للقطعة
+  { id:"b1", cat:"party", name:"طربوش عيد ميلاد", desc:"", price:7, img:"" },
+  { id:"b2", cat:"party", name:"شمعة أرقام", desc:"", price:7, img:"" },
+  { id:"b3", cat:"party", name:"شعلة", desc:"", price:10, img:"" },
+  { id:"b4", cat:"party", name:"تغريزات أرقام", desc:"", price:7, img:"" },
+  { id:"b5", cat:"party", name:"تغريزات هابي بيرثداي", desc:"", price:10, img:"" },
+  { id:"b6", cat:"party", name:"صحون ملوّنة", desc:"", price:8, img:"" },
+  { id:"b7", cat:"party", name:"شوك ملوّنة", desc:"", price:8, img:"" },
+  { id:"b8", cat:"party", name:"بالون", desc:"", price:3, img:"" },
+  { id:"b9", cat:"party", name:"علبة شمع", desc:"", price:8, img:"" },
+  { id:"b10", cat:"party", name:"شمع كبير مجرود", desc:"", price:15, img:"" },
+  { id:"b11", cat:"party", name:"حبال زينة", desc:"", price:8, img:"" },
+  // معجنات
+  { id:"m1", cat:"pastry", name:"بيتزا", desc:"", sizes:{ m:{name:"وسط", price:15}, l:{name:"كبير", price:20} }, img:"" },
+  { id:"m2", cat:"pastry", name:"معجنات باللحمة", desc:"", price:5, img:"" },
+  { id:"m3", cat:"pastry", name:"معجنات بالقطعة", desc:"", price:3, img:"" },
+  { id:"m4", cat:"pastry", name:"معجنات مشكّلة", desc:"", price:{kg:40, uqiya:10}, img:"" },
   // قهوة — بالوقية بس
   { id:"c1", cat:"coffee", name:"قهوة مطحونة سبيشل",      desc:"", price:{uqiya:20}, img:"" },
   { id:"c2", cat:"coffee", name:"قهوة مطحونة بيضاء عربية", desc:"", price:{uqiya:25}, img:"" }
@@ -581,6 +593,7 @@ const ART = {
   nuts:    '<path d="M9 34h46c0 10-10 17-23 17S9 44 9 34z"/><ellipse cx="22" cy="29" rx="6" ry="3.8" transform="rotate(-15 22 29)"/><ellipse cx="33" cy="26" rx="5.5" ry="3.6"/><ellipse cx="43.5" cy="29.5" rx="5" ry="3.3" transform="rotate(18 43.5 29.5)"/>',
   balloon: '<path d="M24 10c-7.5 0-12 6-12 12.5C12 31 19.5 38 24 38s12-7 12-15.5C36 16 31.5 10 24 10z"/><path d="M24 38l-2.2 3.2h4.4zM24 41.2c-2.5 4 2.5 6.5 0 12"/><path d="M45 52V31h7v21M48.5 31v-4"/><path d="M48.5 20c-2 2.2-2 3.8 0 5 2-1.2 2-2.8 0-5z"/><path d="M19 17a6 6 0 0 1 4-2.5"/>',
   coffee:  '<path d="M13 28h30v8c0 8.5-6.7 15-15 15S13 44.5 13 36z"/><path d="M43 31h3.5a5.5 5.5 0 0 1 0 11H42M10 55h36"/><path d="M23 22c-2.2-3 2.2-5 0-9M31 22c-2.2-3 2.2-5 0-9"/>',
+  pizza:   '<path d="M14 18c11-6 25-6 36 0L32 54z"/><path d="M16.5 23.5c10-5 21-5 31 0"/><circle cx="27" cy="31" r="3"/><circle cx="37.5" cy="33" r="2.6"/><circle cx="32" cy="42.5" r="2.4"/>',
   roll:    '<path d="M32 33a2.5 2.5 0 1 0 5 0 7 7 0 1 0-14 0 11.5 11.5 0 1 0 23 0 16 16 0 1 0-32 0"/>'
 };
 const art = (k,cls="ic") => S(ART[k]||ART.star,"0 0 64 64",cls);

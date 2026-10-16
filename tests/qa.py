@@ -217,7 +217,7 @@ with sync_playwright() as p:
         if pg.evaluate('document.documentElement.scrollWidth')>w: over.append('home')
         # card overflow inside
         clip=0
-        for cc in ['cake','sharqi','nuts','jelly','party','coffee','petit']:
+        for cc in ['cake','sharqi','nuts','jelly','party','coffee','petit','pastry']:
             pg.evaluate(f'go("{cc}")'); pg.wait_for_timeout(120)
             clip+=pg.evaluate('[...document.querySelectorAll(".item .row")].filter(r=>r.scrollWidth>r.clientWidth+1).length')
             pg.evaluate('document.querySelectorAll("#view-cat [data-a=add]").forEach(b=>b.click())'); pg.wait_for_timeout(120)
