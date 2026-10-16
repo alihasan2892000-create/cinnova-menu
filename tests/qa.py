@@ -149,7 +149,7 @@ with sync_playwright() as p:
     n0=len(urls); pg.locator('[data-a="send"]').click(); pg.wait_for_timeout(300)
     chk('slab: rejects time < 24h', len(urls)==n0 and pg.locator('#f-time.bad').count()==1)
     pg.fill('#i-time',pg.evaluate(f'({lt})(30)')); pg.locator('[data-a="send"]').click(); pg.wait_for_timeout(800)
-    chk('slab: order sent after 24h', len(urls)==n0+1 and 'بلاطة كيك (نصف بلاطة · 25 - 30 قطعة) — 1 × 150 = 150 ₪' in urls[-1])
+    chk('slab: order sent after 24h', len(urls)==n0+1 and 'بلاطة سبيشل (نصف بلاطة · 25 - 30 قطعة) — 1 × 150 = 150 ₪' in urls[-1])
     pg.locator('#sheet [data-a="close"]').first.click(); pg.wait_for_timeout(400)
     # cake builder
     pg.evaluate('go("cake")'); pg.wait_for_timeout(500)
@@ -158,6 +158,8 @@ with sync_playwright() as p:
     pg.locator('[data-card="kb1"] [data-u="l"]').click(); pg.wait_for_timeout(150)
     chk('slab large price/pieces', '300' in pg.locator('#view-cat [data-card="kb1"] [data-price]').inner_text() and '60 - 70 قطعة' in pg.locator('#view-cat [data-card="kb1"] [data-price]').inner_text())
     chk('cake slices sold by piece', pg.locator('[data-card="kc2"] .unit-chip').inner_text()=='بالقطعة')
+    chk('triangle shows 3 flavors', pg.locator('#view-cat [data-card="kc2"] .flv button').all_inner_texts()==['نوتيلا','بيستاشيو','لوتس'])
+    chk('super special slab prices', pg.evaluate('[unitPrice(byId.kb2,"s"),unitPrice(byId.kb2,"l")]')==[170,340])
     chk('cake sub headers', pg.locator('.subhead').count()==4)
     pg.locator('.cake-banner').click(); pg.wait_for_timeout(500)
     pg.locator('[data-a="cake-step"][data-s="2"]').click(); pg.wait_for_timeout(200)
