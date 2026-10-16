@@ -137,7 +137,7 @@ with sync_playwright() as p:
     chk('resend opens WA again', len(urls)==2 and urls[-1]==urls[-2])
     pg.locator('#sheet [data-a="close"]').first.click(); pg.wait_for_timeout(400)
     # pickup: no address in msg
-    pg.evaluate('cart={"c1|kg":1};updateCartUI();form={name:"",mode:"",time:"",address:"",notes:""};openSheet("checkout")'); pg.wait_for_timeout(400)
+    pg.evaluate('cart={"c1|uqiya":1};updateCartUI();form={name:"",mode:"",time:"",address:"",notes:""};openSheet("checkout")'); pg.wait_for_timeout(400)
     pg.fill('#i-name','ب'); pg.locator('[data-m="pickup"]').click(); pg.fill('#i-time','2026-10-20T16:00'); pg.locator('[data-a="send"]').click(); pg.wait_for_timeout(800)
     chk('pickup order: no address line', 'العنوان' not in urls[-1] and 'استلام من المحل' in urls[-1])
     pg.locator('#sheet [data-a="close"]').first.click(); pg.wait_for_timeout(400)
