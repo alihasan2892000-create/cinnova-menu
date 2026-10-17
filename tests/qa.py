@@ -36,7 +36,8 @@ with sync_playwright() as p:
     # categories grid
     cats=[c for c in data['cats']]
     chk('all category cards on home', pg.locator('.cats [data-a="go"]').count()==len(cats), f"{pg.locator('.cats [data-a=go]').count()} vs {len(cats)}")
-    chk('featured rail count', pg.locator('#rail .feat').count()==sum(i['f'] for i in data['items']))
+    chk('no featured slider on home', pg.locator('#rail').count()==0 and pg.locator('#view-home .feat').count()==0)
+    chk('categories come right after the hero', pg.evaluate('document.querySelector(".hero").nextElementSibling.contains(document.querySelector("#cats"))'))
     # visit each category
     for c in cats:
         pg.evaluate(f'go("{c}")'); pg.wait_for_timeout(250)
@@ -54,10 +55,11 @@ with sync_playwright() as p:
     pg.locator('.cats [data-c="petit"]').click(); pg.wait_for_timeout(400)
     pg.go_back(); pg.wait_for_timeout(500)
     chk('phone back returns home', pg.evaluate('document.querySelector("#view-home").classList.contains("active")'))
-    # featured rail add
-    fid=pg.evaluate('ITEMS.find(i=>i.featured&&!i.flavors).id')
-    pg.locator(f'#rail [data-card="{fid}"] [data-a="add"]').click(); pg.wait_for_timeout(900)
-    chk('add from featured rail', pg.evaluate('cartCount()')==1)
+    # add from a category, badge on home
+    pg.evaluate('go("featured")'); pg.wait_for_timeout(300)
+    pg.locator('#view-cat [data-card="f2"] [data-a="add"]').click(); pg.wait_for_timeout(900)
+    chk('add from featured category', pg.evaluate('cartCount()')==1)
+    pg.evaluate('goHome()'); pg.wait_for_timeout(500)
     chk('cart badge shows 1', pg.locator('#view-home .badge').inner_text()=='1')
     # every item add in every category, unit switching
     pg.evaluate('cart={};updateCartUI()')
@@ -93,8 +95,6 @@ with sync_playwright() as p:
     for s2 in ['تشيز كيك بنكهة لوتس — 1 قطعة × 10 = 10 ₪','تشيز كيك بنكهة مانجو — 2 قطعة × 10 = 20 ₪','مكس سينوفا بنكهة لوتس (مثلث) — 1 × 15 = 15 ₪']:
         chk(f'WA flavor line "{s2}"', s2 in msg2, msg2[:200])
     pg.evaluate("cart={};updateCartUI();form={name:'',mode:'',time:'',address:'',notes:''};goHome()"); pg.wait_for_timeout(500)
-    pg.locator('#rail [data-card="f1"] [data-a="pick"]').click(); pg.wait_for_timeout(900)
-    chk('rail + on flavored item opens its card', pg.locator('#cat-head h1').inner_text()=='أصناف مميزة' and pg.evaluate('cartCount()')==0)
     # inc/dec/remove in card
     pg.evaluate("cart={};for(const k in unitPick) delete unitPick[k];updateCartUI();go(\"sharqi\")"); pg.wait_for_timeout(300)
     c=pg.locator('#view-cat [data-card="s1"]')

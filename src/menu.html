@@ -105,29 +105,11 @@ img{display:block;max-width:100%}
 .link svg{width:14px;height:14px}
 
 /* ---------- Featured carousel ---------- */
-.rail{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;scroll-padding-inline:20px;overscroll-behavior-x:contain;-webkit-overflow-scrolling:touch;padding:2px 20px 6px;scrollbar-width:none}
-.feat:last-child{scroll-snap-align:end}
-.rail-dots{display:flex;justify-content:center;gap:6px;padding:10px 0 0}
-.rail-dots button{width:7px;height:7px;border-radius:4px;background:var(--line-2);transition:width .35s var(--ease),background .35s}
-.rail-dots button.on{width:20px;background:var(--cream)}
-.rail-nav{display:none;gap:6px}
-.rail-nav button{width:34px;height:34px;border-radius:11px;background:var(--card);border:1px solid var(--line);color:var(--cream);display:grid;place-items:center;transition:opacity .2s,transform .2s var(--spring)}
-.rail-nav button:active{transform:scale(.9)}
-.rail-nav button:disabled{opacity:.3;cursor:default}
-.rail-nav svg{width:16px;height:16px}
 @media (hover:hover) and (pointer:fine){
-  .rail-nav{display:flex}
-  .rail,.tabs{cursor:grab}
-  .rail.dragging,.tabs.dragging{cursor:grabbing;scroll-snap-type:none;-webkit-user-select:none;user-select:none}
-  .rail.dragging *,.tabs.dragging *{pointer-events:none}
+    .tabs{cursor:grab}
+  .tabs.dragging{cursor:grabbing;scroll-snap-type:none;-webkit-user-select:none;user-select:none}
+  .tabs.dragging *{pointer-events:none}
 }
-.rail::-webkit-scrollbar{display:none}
-.feat{flex:0 0 68%;scroll-snap-align:start;scroll-snap-stop:always;background:var(--card);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;transition:transform .25s var(--spring)}
-.feat:active{transform:scale(.97)}
-.feat .thumb{aspect-ratio:4/3;border-radius:0}
-.feat .body{padding:12px 14px 14px;display:flex;align-items:end;justify-content:space-between;gap:8px}
-.feat h3{margin:0 0 4px;font-size:15.5px;font-weight:600}
-.feat .price{font-size:13px}
 
 /* ---------- Categories ---------- */
 .cats{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:0 20px}
@@ -197,8 +179,6 @@ img{display:block;max-width:100%}
 .flv{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
 .flv button{padding:4px 10px;border-radius:999px;font-size:12px;color:var(--muted);border:1px solid var(--line-2);transition:.25s var(--ease)}
 .flv button.on{color:var(--cream);border-color:var(--cream);background:rgba(243,210,117,.12)}
-.item.flash{animation:flash 1.2s var(--ease)}
-@keyframes flash{0%,100%{box-shadow:0 0 0 0 transparent}25%{box-shadow:0 0 0 3px var(--cream)}}
 .note-card{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:16px;border-radius:var(--r);border:1px dashed var(--gold);background:rgba(194,154,84,.08);color:var(--cream);text-decoration:none}
 .note-card h3{margin:0 0 3px;font-size:16px}
 .note-card p{margin:0;font-size:12.5px;line-height:1.6;color:var(--muted)}
@@ -372,14 +352,6 @@ textarea.inp{min-height:80px;resize:vertical}
         <span class="chip-i"><span class="ico-pin"></span>دير البلح</span>
         <span class="chip-i"><span class="ico-truck"></span>توصيل أو استلام</span>
       </div>
-    </div>
-    <div class="sec reveal" style="--d:5">
-      <div class="sec-head">
-        <div><span class="en mono">— featured</span><h2>أصناف مميزة</h2></div>
-        <div style="display:flex;align-items:center;gap:12px"><div class="rail-nav"><button id="rail-prev" aria-label="السابق"><span class="ico-right"></span></button><button id="rail-next" aria-label="التالي"><span class="ico-left"></span></button></div><a class="link" role="button" data-a="go" data-c="featured">عرض الكل <span class="ico-left"></span></a></div>
-      </div>
-      <div class="rail" id="rail"></div>
-      <div class="rail-dots" id="rail-dots"></div>
     </div>
     <div class="sec">
       <div class="sec-head"><div><span class="en mono">— menu</span><h2>الأقسام</h2></div></div>
@@ -659,7 +631,6 @@ function priceHTML(it){
 function actHTML(it, compact=false){
   const q=cart[keyOf(it)]||0;
   if(q) return `<div class="step"><button data-a="inc" data-id="${it.id}" aria-label="زيادة">${UI.plus}</button><b>${q}</b><button data-a="dec" data-id="${it.id}" aria-label="تقليل">${q===1?UI.trash:UI.minus}</button></div>`;
-  if(compact && it.flavors) return `<button class="add round" data-a="pick" data-id="${it.id}" aria-label="اختر النكهة">${UI.plus}</button>`;
   return compact
     ? `<button class="add round" data-a="add" data-id="${it.id}" aria-label="أضف للسلة">${UI.plus}</button>`
     : `<button class="add" data-a="add" data-id="${it.id}">${UI.plus}أضف</button>`;
@@ -676,17 +647,8 @@ function itemCard(it,i){
       <div class="row">${seg}<div data-act>${actHTML(it)}</div></div>
     </div></article>`;
 }
-function featCard(it){
-  return `<div class="feat" data-card="${it.id}">
-    ${thumb(it)}
-    <div class="body"><div><h3>${it.name}</h3><div data-price>${priceHTML(it)}</div></div><div data-act>${actHTML(it,true)}</div></div>
-  </div>`;
-}
 
 function renderHome(){
-  $("#rail").innerHTML = itemsIn("featured").map(featCard).join("");
-  $("#rail-dots").innerHTML = itemsIn("featured").map((_,i)=>`<button data-i="${i}" aria-label="شريحة ${i+1}"></button>`).join("");
-  requestAnimationFrame(railSync);
   $("#cats").innerHTML = CATS.map((c,i)=>{
     const n=itemsIn(c.id).length;
     if(c.id==="featured") return `<a class="cat wide reveal" style="--d:${i+6};text-decoration:none" role="button" data-a="go" data-c="${c.id}">
@@ -988,7 +950,6 @@ document.addEventListener("click",e=>{
   if(a==="unit"){ unitPick[id]=b.dataset.u; refreshItem(id); }
   if(a==="add"){ const it=byId[id]; setQty(keyOf(it),1); save(); flyFrom(b); refreshItem(id); navigator.vibrate&&navigator.vibrate(12); toast(`تمت إضافة ${withFlavor(it.name,curFlavor(it))} إلى السلة`); }
   if(a==="flavor"){ flavorPick[id]=b.dataset.f; refreshItem(id); }
-  if(a==="pick"){ const it=byId[id]; go(it.cat); setTimeout(()=>{ const c=$(`#view-cat [data-card="${id}"]`); if(!c) return; c.scrollIntoView({block:"center",behavior:"smooth"}); c.classList.remove("flash"); void c.offsetWidth; c.classList.add("flash"); },350); }
   if(a==="inc"||a==="dec"){ const it=byId[id], k=keyOf(it); setQty(k,(cart[k]||0)+(a==="inc"?1:-1)); refreshItem(id); updateCartUI(a==="inc"); }
   if(a==="cinc"||a==="cdec"){ const k=b.dataset.k; setQty(k,(cart[k]||0)+(a==="cinc"?1:-1)); renderPane("cart"); refreshItem(k.split("|")[0]); updateCartUI(); }
   if(a==="close") closeSheet();
@@ -1022,48 +983,23 @@ let toastT; function toast(t){ const el=$("#toast"); el.textContent=t; el.classL
 
 
 /* =========================================================
-   Horizontal sliders: mouse drag, arrows, dots
+   Tabs: mouse drag on desktop
    ========================================================= */
-const railCards = () => [...$("#rail").children];
-function railIndex(){
-  const r=$("#rail"), cs=railCards(); if(!cs.length) return 0;
-  if(Math.abs(r.scrollLeft) >= r.scrollWidth-r.clientWidth-4) return cs.length-1;
-  const edge=r.getBoundingClientRect().right-20; let best=0, bd=1e9;
-  cs.forEach((c,i)=>{ const d=Math.abs(c.getBoundingClientRect().right-edge); if(d<bd){bd=d;best=i;} });
-  return best;
-}
-function railGo(i){
-  const r=$("#rail"), cs=railCards(); i=Math.max(0,Math.min(cs.length-1,i)); const c=cs[i]; if(!c) return;
-  const delta=c.getBoundingClientRect().right-(r.getBoundingClientRect().right-20);
-  const max=r.scrollWidth-r.clientWidth; let to=r.scrollLeft+delta; to=Math.max(-max,Math.min(max,to));
-  r.style.scrollSnapType="none"; r.scrollTo({left:to,behavior:"smooth"});
-  clearTimeout(railGo.t); railGo.t=setTimeout(()=>{ r.style.scrollSnapType=""; railSync(); },650);
-}
-function railSync(){
-  const i=railIndex(), n=railCards().length;
-  $$("#rail-dots button").forEach((d,k)=>d.classList.toggle("on",k===i));
-  const pv=$("#rail-prev"), nx=$("#rail-next"); if(pv) pv.disabled=i<=0; if(nx) nx.disabled=i>=n-1;
-}
+
 function dragScroll(el){
-  let down=false, moved=false, x0=0, s0=0, lx=0, lt=0, v=0, i0=0;
-  el.addEventListener("pointerdown",e=>{ if(e.pointerType!=="mouse"||e.button!==0) return; down=true; moved=false; x0=lx=e.clientX; s0=el.scrollLeft; lt=performance.now(); v=0; if(el.id==="rail") i0=railIndex(); });
+  let down=false, moved=false, x0=0, s0=0, lx=0, lt=0, v=0;
+  el.addEventListener("pointerdown",e=>{ if(e.pointerType!=="mouse"||e.button!==0) return; down=true; moved=false; x0=lx=e.clientX; s0=el.scrollLeft; lt=performance.now(); v=0; });
   addEventListener("pointermove",e=>{ if(!down) return; const dx=e.clientX-x0;
     if(!moved && Math.abs(dx)>5){ moved=true; el.classList.add("dragging"); }
     if(moved){ el.scrollLeft=s0-dx; const t=performance.now(); v=(e.clientX-lx)/Math.max(1,t-lt); lx=e.clientX; lt=t; } });
   addEventListener("pointerup",e=>{ if(!down) return; down=false; if(!moved) return;
     el.classList.remove("dragging");
-    if(el.id==="rail"){ const dx=e.clientX-x0, c=railCards()[0], step=c?c.offsetWidth+12:300; let n=Math.round(Math.abs(dx)/step); if(!n && (Math.abs(dx)>40||Math.abs(v)>0.3)) n=1; railGo(i0+(dx>0?n:-n)); }
-    else el.scrollBy({left:-v*220,behavior:"smooth"});
+    el.scrollBy({left:-v*220,behavior:"smooth"});
     setTimeout(()=>{ moved=false; },0); });
   el.addEventListener("click",e=>{ if(moved){ e.preventDefault(); e.stopPropagation(); } },true);
   el.addEventListener("dragstart",e=>e.preventDefault());
 }
-dragScroll($("#rail")); dragScroll($("#tabs"));
-let railT; $("#rail").addEventListener("scroll",()=>{ cancelAnimationFrame(railT); railT=requestAnimationFrame(railSync); },{passive:true});
-$("#rail-dots").addEventListener("click",e=>{ const d=e.target.closest("button"); if(d) railGo(+d.dataset.i); });
-$("#rail-prev").addEventListener("click",()=>railGo(railIndex()-1));
-$("#rail-next").addEventListener("click",()=>railGo(railIndex()+1));
-addEventListener("resize",railSync);
+dragScroll($("#tabs"));
 
 /* =========================================================
    Router
