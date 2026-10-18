@@ -1,7 +1,7 @@
 """Build the single-file menu: src/menu.html + assets/* -> cinnova-menu.html (+ public/index.html, deployed by Cloudflare)
 Usage:  python build.py
 """
-import base64, re, pathlib
+import base64, re, pathlib, shutil
 ROOT = pathlib.Path(__file__).resolve().parent
 A = ROOT / "assets"
 
@@ -21,4 +21,7 @@ out = ROOT / "cinnova-menu.html"
 out.write_text(html, encoding="utf-8")
 (ROOT / "public").mkdir(exist_ok=True)
 (ROOT / "public" / "index.html").write_text(html, encoding="utf-8")   # published copy (Cloudflare)
+# product photos: images/*.webp -> public/images/
+if (ROOT / "public" / "images").exists(): shutil.rmtree(ROOT / "public" / "images")
+shutil.copytree(ROOT / "images", ROOT / "public" / "images")
 print(f"built {out.name} ({len(html)//1024} KB)")

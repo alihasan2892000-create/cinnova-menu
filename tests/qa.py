@@ -46,6 +46,12 @@ with sync_playwright() as p:
         chk(f'category "{c}" shows {exp} items', n==exp and exp>0, f'got {n}')
         empty=pg.evaluate('[...document.querySelectorAll("#view-cat .item")].filter(e=>!e.querySelector(".price b")||e.querySelector(".price b").textContent.trim()===""||/NaN|undefined/.test(e.textContent)).length')
         chk(f'category "{c}" no NaN/undefined', empty==0, str(empty))
+    # product photos: every img path exists, and a visible one actually loads
+    imgs=pg.evaluate('ITEMS.filter(i=>i.img).map(i=>i.img)')
+    missing=[x for x in imgs if not (ROOT/x).exists()]
+    chk('all item photos exist on disk', imgs and not missing, str(missing[:5]))
+    pg.evaluate('go("sharqi")'); pg.wait_for_timeout(800)
+    chk('item photo renders', pg.evaluate('(i=>i&&i.complete&&i.naturalWidth>0)(document.querySelector("#view-cat .thumb img"))'))
     # tabs + back
     pg.evaluate('go("sharqi")'); pg.wait_for_timeout(300)
     pg.locator('#tabs [data-c="nuts"]').click(); pg.wait_for_timeout(400)
