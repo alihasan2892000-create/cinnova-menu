@@ -320,6 +320,7 @@ textarea.inp{min-height:80px;resize:vertical}
   .item .add{width:38px;padding:0;justify-content:center;font-size:0}
   .item .add svg{width:18px;height:18px}
   .item .seg button{padding:5px 9px}
+  .item .seg button:nth-last-child(n+4),.item .seg button:nth-last-child(n+4)~button{padding:5px 6px}   /* 4 أحجام (مكس سينوفا) */
   .item .row{gap:6px}
 }
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-delay:0ms!important;transition-duration:.01ms!important}}
@@ -424,11 +425,11 @@ const CATS = [
    img: رابط الصورة (فاضي = صورة مؤقتة)                  */
 const ITEMS = [
   // أصناف مميزة — cat:"featured". flavors = نكهات بيختار منها الزبون بنفس السعر
-  { id:"f1", cat:"featured", featured:true, name:"مكس سينوفا", desc:"", flavors:["بيستاشيو","لوتس"], sizes:{ t:{name:"مثلث", price:15}, s:{name:"صغير", price:20}, m:{name:"وسط", price:25}, l:{name:"كبير", price:30} }, img:"images/f1.webp" },
+  { id:"f1", cat:"featured", featured:true, name:"مكس سينوفا", desc:"", flavors:["بيستاشيو","لوتس"], flavorImgs:{"لوتس":"images/f1_lotus.webp"}, sizes:{ t:{name:"مثلث", price:15}, s:{name:"صغير", price:20}, m:{name:"وسط", price:25}, l:{name:"كبير", price:30} }, img:"images/f1.webp" },
   { id:"f2", cat:"featured", featured:true, name:"شوكولاتة بلجيكية", desc:"", sizes:{ s:{name:"علبة صغيرة", price:30}, l:{name:"علبة كبيرة", price:50} }, img:"" },
-  { id:"f3", cat:"featured", featured:true, name:"تشيز كيك", desc:"", flavors:["بلوبيري","لوتس","نوتيلا","بيستاشيو","مانجو"], price:10, img:"images/f3.webp" },
+  { id:"f3", cat:"featured", featured:true, name:"تشيز كيك", desc:"", flavors:["بلوبيري","لوتس","نوتيلا","بيستاشيو","مانجو","شوكولاتة"], flavorImgs:{"بيستاشيو":"images/f3_pist.webp","شوكولاتة":"images/f3_choc.webp"}, price:10, img:"images/f3.webp" },
   { id:"f4", cat:"featured", featured:true, name:"عسل الطاقة بالمكسرات", desc:"", price:13, img:"" },
-  { id:"f5", cat:"featured", featured:true, name:"لاير كيك", desc:"", flavors:["بيستاشيو","لوتس","نوتيلا"], price:15, img:"images/f5.webp" },
+  { id:"f5", cat:"featured", featured:true, name:"لاير كيك", desc:"", flavors:["بيستاشيو","لوتس","نوتيلا","كراميل","بلوبيري"], flavorImgs:{"كراميل":"images/f5.webp","بلوبيري":"images/f5_blue.webp"}, price:15, img:"images/f5.webp" },
   // حلويات شرقية — السعر للكيلو، والوقية = الكيلو ÷ 4 مقرّبة لأعلى رقم صحيح
   { id:"s20", cat:"sharqi", name:"صينية هدية مكس فاخر", desc:"", sizes:{ s:{price:30}, l:{price:50} }, img:"" },
   { id:"s1", cat:"sharqi", name:"أساور", desc:"", price:{kg:45, uqiya:12}, img:"images/s1.webp" },
@@ -471,7 +472,7 @@ const ITEMS = [
   { id:"kb2", cat:"cake", sub:"slab", name:"بلاطة سوبر سبيشل", desc:"يُحدَّد الطعم والشكل حسب الطلب · تتوفر بالحجز المسبق قبل يوم", sizes:{ s:{name:"نصف بلاطة", pieces:"25 - 30", price:170}, l:{name:"بلاطة", pieces:"60 - 70", price:340} }, leadHours:24, img:"" },
   // قطع
   { id:"kc1", cat:"cake", sub:"slice", name:"قطعة كيك مربعة بالشوكولاتة", desc:"", price:6,  img:"" },
-  { id:"kc2", cat:"cake", sub:"slice", name:"مثلث كيك", desc:"متوفّر بثلاث نكهات", flavors:["نوتيلا","بيستاشيو","لوتس"], price:10, img:"images/kc2.webp" },
+  { id:"kc2", cat:"cake", sub:"slice", name:"مثلث كيك", desc:"متوفّر بثلاث نكهات", flavors:["نوتيلا","بيستاشيو","لوتس"], flavorImgs:{"بيستاشيو":"images/kc2_pist.webp","لوتس":"images/kc2_lotus.webp"}, price:10, img:"images/kc2.webp" },
   // بيتفور — الوقية = سعر الكيلو ÷ 4، مقرّبة لأعلى رقم صحيح
   { id:"p1", cat:"petit", name:"بيتفور بالشوكولاتة", desc:"", price:{kg:40, uqiya:10},   img:"images/p1.webp" },
   { id:"p2", cat:"petit", name:"بيتفور بالعجوة",     desc:"", price:{kg:30, uqiya:8},  img:"images/p2.webp" },
@@ -618,9 +619,11 @@ function hueFor(it){ let h=0; for(const ch of it.id) h=(h*31+ch.charCodeAt(0))%3
 /* =========================================================
    Render pieces
    ========================================================= */
-function thumb(it, tag=false){
-  const inner = it.img
-    ? `<img src="${it.img}" alt="${it.name}" loading="lazy">`
+const imgOf = (it,f=curFlavor(it)) => (it.flavorImgs && it.flavorImgs[f]) || it.img;   // صورة النكهة إذا موجودة، وإلا صورة الصنف
+function thumb(it, tag=false, f){
+  const src = imgOf(it, f===undefined ? curFlavor(it) : f);
+  const inner = src
+    ? `<img src="${src}" alt="${withFlavor(it.name, f===undefined ? curFlavor(it) : f)}" loading="lazy">`
     : `<div class="ph" style="--h:${hueFor(it)}">${SC}${art(catOf(it.cat).icon)}<em class="mono">photo soon</em></div>`;
   return `<div class="thumb">${tag&&it.featured?'<span class="tag">مميز</span>':""}${inner}</div>`;
 }
@@ -688,6 +691,7 @@ function refreshItem(id){
     const p=card.querySelector("[data-price]"); if(p) p.innerHTML=priceHTML(it);
     card.querySelectorAll(".seg button").forEach(b=>b.classList.toggle("on",b.dataset.u===curUnit(it)));
     card.querySelectorAll(".flv button").forEach(b=>b.classList.toggle("on",b.dataset.f===curFlavor(it)));
+    const im=card.querySelector(".thumb img"), src=imgOf(it); if(it.flavorImgs && im && src && im.getAttribute("src")!==src){ im.src=src; im.alt=withFlavor(it.name,curFlavor(it)); }
   });
 }
 
@@ -740,7 +744,7 @@ function renderPane(p){
       return;
     }
     el.innerHTML=head("سلتك")+`<div class="sheet-body pane">${lines.map(l=>`
-      <div class="crow">${thumb(l.it)}<div class="meta"><h4>${l.name}</h4><small>${money(l.p)} / ${unitLabel(l.it,l.u)}</small><div class="lt">${money(l.p*l.q)}</div></div>
+      <div class="crow">${thumb(l.it,false,l.f)}<div class="meta"><h4>${l.name}</h4><small>${money(l.p)} / ${unitLabel(l.it,l.u)}</small><div class="lt">${money(l.p*l.q)}</div></div>
       <div class="step"><button data-a="cinc" data-k="${l.k}" aria-label="زيادة">${UI.plus}</button><b>${l.q}</b><button data-a="cdec" data-k="${l.k}" aria-label="تقليل">${l.q===1?UI.trash:UI.minus}</button></div></div>`).join("")}</div>
       <div class="sheet-foot"><div class="sum"><span>المجموع</span><b>${money(cartTotal())}</b></div><button class="btn" data-a="pane" data-p="checkout">متابعة الحجز ${UI.left}</button></div>`;
   }

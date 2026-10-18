@@ -47,7 +47,7 @@ with sync_playwright() as p:
         empty=pg.evaluate('[...document.querySelectorAll("#view-cat .item")].filter(e=>!e.querySelector(".price b")||e.querySelector(".price b").textContent.trim()===""||/NaN|undefined/.test(e.textContent)).length')
         chk(f'category "{c}" no NaN/undefined', empty==0, str(empty))
     # product photos: every img path exists, and a visible one actually loads
-    imgs=pg.evaluate('ITEMS.filter(i=>i.img).map(i=>i.img)')
+    imgs=pg.evaluate('ITEMS.flatMap(i=>[i.img,...Object.values(i.flavorImgs||{})]).filter(Boolean)')
     missing=[x for x in imgs if not (ROOT/x).exists()]
     chk('all item photos exist on disk', imgs and not missing, str(missing[:5]))
     pg.evaluate('go("sharqi")'); pg.wait_for_timeout(800)
@@ -89,7 +89,11 @@ with sync_playwright() as p:
     pg.evaluate("cart={};updateCartUI();go('featured')"); pg.wait_for_timeout(300)
     chk('crepe note with WA link', 'كريب سبيشل' in pg.locator('#view-cat .note-card').inner_text() and pg.locator('#view-cat .note-card').get_attribute('href').startswith('https://wa.me/972594870202?text='))
     fc=pg.locator('#view-cat [data-card="f3"]')
-    chk('cheesecake shows 5 flavors', fc.locator('.flv button').count()==5)
+    chk('cheesecake shows 6 flavors', fc.locator('.flv button').count()==6)
+    fc.locator('[data-f="شوكولاتة"]').click(); pg.wait_for_timeout(100)
+    chk('flavor switch changes photo', fc.locator('.thumb img').get_attribute('src')=='images/f3_choc.webp')
+    fc.locator('[data-f="لوتس"]').click(); pg.wait_for_timeout(100)
+    chk('flavor without own photo falls back to item photo', fc.locator('.thumb img').get_attribute('src')=='images/f3.webp')
     fc.locator('[data-f="لوتس"]').click(); fc.locator('[data-a="add"]').click(); pg.wait_for_timeout(100)
     fc.locator('[data-f="مانجو"]').click(); pg.wait_for_timeout(100)
     chk('flavor switch shows add again', fc.locator('[data-a="add"]').count()==1)
@@ -225,7 +229,7 @@ with sync_playwright() as p:
         if pg.evaluate('document.documentElement.scrollWidth')>w: over.append('home')
         # card overflow inside
         clip=0
-        for cc in ['cake','sharqi','nuts','jelly','party','coffee','petit','pastry']:
+        for cc in ['featured','cake','sharqi','nuts','jelly','party','coffee','petit','pastry']:
             pg.evaluate(f'go("{cc}")'); pg.wait_for_timeout(120)
             clip+=pg.evaluate('[...document.querySelectorAll(".item .row")].filter(r=>r.scrollWidth>r.clientWidth+1).length')
             pg.evaluate('document.querySelectorAll("#view-cat [data-a=add]").forEach(b=>b.click())'); pg.wait_for_timeout(120)
