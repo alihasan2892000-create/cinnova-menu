@@ -52,6 +52,13 @@ with sync_playwright() as p:
     chk('all item photos exist on disk', imgs and not missing, str(missing[:5]))
     pg.evaluate('go("sharqi")'); pg.wait_for_timeout(800)
     chk('item photo renders', pg.evaluate('(i=>i&&i.complete&&i.naturalWidth>0)(document.querySelector("#view-cat .thumb img"))'))
+    # tap photo -> enlarged view; back button / tap closes it and stays on the category
+    pg.locator('#view-cat [data-card="s4"] .thumb img').click(); pg.wait_for_timeout(450)
+    chk('photo opens enlarged', pg.evaluate('document.querySelector("#lb").classList.contains("on")') and pg.locator('#lb-img').get_attribute('src')=='images/s4.webp' and pg.locator('#lb-name').inner_text()=='بقلاوة لوز')
+    pg.go_back(); pg.wait_for_timeout(450)
+    chk('phone back closes photo, stays in category', not pg.evaluate('document.querySelector("#lb").classList.contains("on")') and pg.evaluate('document.querySelector("#view-cat").classList.contains("active")'))
+    pg.locator('#view-cat [data-card="s4"] .thumb img').click(); pg.wait_for_timeout(400); pg.locator('#lb-x').click(); pg.wait_for_timeout(450)
+    chk('X closes photo, stays in category', not pg.evaluate('document.querySelector("#lb").classList.contains("on")') and pg.evaluate('document.querySelector("#view-cat").classList.contains("active")') and pg.evaluate('document.body.style.overflow')=='')
     # tabs + back
     pg.evaluate('go("sharqi")'); pg.wait_for_timeout(300)
     pg.locator('#tabs [data-c="nuts"]').click(); pg.wait_for_timeout(400)

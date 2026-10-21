@@ -206,6 +206,17 @@ img{display:block;max-width:100%}
 .cartbar .tot{margin-inline-start:auto;font-weight:700;font-size:16px}
 
 /* ---------- Sheet ---------- */
+/* تكبير صورة الصنف */
+.item .thumb img{cursor:zoom-in}
+.lb{position:fixed;inset:0;z-index:90;display:grid;place-items:center;padding:20px;background:rgba(14,6,3,.9);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);opacity:0;visibility:hidden;transition:opacity .3s ease,visibility 0s .3s}
+.lb.on{opacity:1;visibility:visible;transition:opacity .3s ease}
+.lb figure{margin:0;width:min(92vw,520px);transform:scale(.92);transition:transform .35s var(--spring)}
+.lb.on figure{transform:none}
+.lb img{display:block;width:100%;aspect-ratio:1;object-fit:cover;border-radius:22px;box-shadow:0 20px 60px rgba(0,0,0,.6);background:var(--card)}
+.lb figcaption{display:flex;justify-content:space-between;align-items:baseline;gap:12px;padding:14px 4px 0;color:var(--cream)}
+.lb figcaption b{font-size:17px;font-weight:600}
+.lb figcaption .price{font-size:14px}
+.lb-x{position:absolute;top:calc(14px + env(safe-area-inset-top,0px));inset-inline-end:16px}
 .scrim{position:fixed;inset:0;z-index:60;background:rgba(10,4,2,.6);opacity:0;pointer-events:none;transition:opacity .35s}
 .scrim.on{opacity:1;pointer-events:auto}
 .sheet{position:fixed;z-index:61;left:50%;bottom:0;width:min(480px,100%);max-height:92dvh;display:flex;flex-direction:column;background:var(--bg);border:1px solid var(--line-2);border-bottom:0;border-radius:26px 26px 0 0;transform:translate(-50%,105%);transition:transform .5s var(--ease)}
@@ -384,6 +395,7 @@ textarea.inp{min-height:80px;resize:vertical}
 <div class="cartbar" id="cartbar"><button class="js-cart"><span class="cnt" id="cb-n">0</span><span class="lbl">عرض السلة</span><span class="tot" id="cb-t">0 ₪</span></button></div>
 
 <div class="scrim" id="scrim"></div>
+<div class="lb" id="lb" role="dialog" aria-modal="true" aria-label="صورة الصنف" aria-hidden="true"><button class="icon-btn lb-x" id="lb-x" aria-label="إغلاق"></button><figure><img id="lb-img" alt=""><figcaption><b id="lb-name"></b><span id="lb-price"></span></figcaption></figure></div>
 <div class="sheet" id="sheet" role="dialog" aria-modal="true">
   <div class="grab"></div>
   <div id="sheet-inner" style="display:flex;flex-direction:column;min-height:0"></div>
@@ -964,7 +976,24 @@ function cakeMessage(){
 /* =========================================================
    Events
    ========================================================= */
+/* تكبير الصورة: بالضغط على صورة الصنف. زر الرجوع بالجوال بيسكّرها */
+let lbPushed=false;
+function openLB(id){
+  const it=byId[id], src=imgOf(it); if(!src) return;
+  $("#lb-img").src=src; $("#lb-img").alt=withFlavor(it.name,curFlavor(it),it);
+  $("#lb-name").textContent=withFlavor(it.name,curFlavor(it),it); $("#lb-price").innerHTML=priceHTML(it);
+  $("#lb").classList.add("on"); $("#lb").setAttribute("aria-hidden","false"); document.body.style.overflow="hidden";
+  try{ history.pushState(Object.assign({},history.state,{lb:1}),""); lbPushed=true; }catch(err){ lbPushed=false; }
+}
+function closeLB(fromPop){
+  if(!$("#lb").classList.contains("on")) return;
+  $("#lb").classList.remove("on"); $("#lb").setAttribute("aria-hidden","true");
+  if(!$("#sheet").classList.contains("on")) document.body.style.overflow="";
+  if(lbPushed && !fromPop){ lbPushed=false; try{ history.back(); }catch(err){} } else lbPushed=false;
+}
 document.addEventListener("click",e=>{
+  if(e.target.closest("#lb")){ closeLB(); return; }
+  const zoom=e.target.closest(".item .thumb img"); if(zoom){ openLB(zoom.closest("[data-card]").dataset.card); return; }
   const cartBtn=e.target.closest(".js-cart"); if(cartBtn){ openSheet("cart"); return; }
   const b=e.target.closest("[data-a]"); if(!b) return;
   const a=b.dataset.a, id=b.dataset.id;
@@ -994,7 +1023,7 @@ document.addEventListener("click",e=>{
 });
 document.addEventListener("input",e=>{ const f=e.target.closest(".field"); f&&f.classList.remove("bad"); });
 $("#scrim").addEventListener("click",closeSheet);
-document.addEventListener("keydown",e=>{ if(e.key==="Escape") closeSheet(); });
+document.addEventListener("keydown",e=>{ if(e.key==="Escape"){ if($("#lb").classList.contains("on")) closeLB(); else closeSheet(); } });
 
 let toastT; function toast(t){ const el=$("#toast"); el.textContent=t; el.classList.add("on"); clearTimeout(toastT); toastT=setTimeout(()=>el.classList.remove("on"),1600); }
 
@@ -1061,13 +1090,14 @@ function goHome(){
   show(null);
 }
 function refreshAll(){ $$("[data-card]").forEach(c=>refreshItem(c.dataset.card)); }
-addEventListener("popstate",e=>{ const c=e.state&&e.state.c||null; if(!c) pushed=false; show(c); });
+addEventListener("popstate",e=>{ if($("#lb").classList.contains("on")){ closeLB(true); return; } const c=e.state&&e.state.c||null; if(!c) pushed=false; show(c); });
 addEventListener("scroll",()=>{ $("#bar-home").classList.toggle("scrolled",scrollY>120); },{passive:true});
 
 /* =========================================================
    Init
    ========================================================= */
 const LOGOS={badge:"__BADGE__",word:"__WORD__"};
+$("#lb-x").innerHTML=UI.close;
 $$("[data-logo]").forEach(i=>i.src=LOGOS[i.dataset.logo]);
 $$(".ico-bag").forEach(e=>e.outerHTML=UI.bag);
 $$(".ico-left").forEach(e=>e.outerHTML=UI.left);
