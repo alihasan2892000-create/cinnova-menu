@@ -139,7 +139,7 @@ with sync_playwright() as p:
     chk('WhatsApp opens on valid order', len(urls)==1)
     msg=urls[-1] if urls else ''
     chk('WA number correct', msg.startswith('https://wa.me/972594870202?text='))
-    for s in ['أساور — 2 وقية × 12 = 24 ₪','كيك نوتيلا (كبير · 12 قطعة) — 1 × 120 = 120 ₪','جلي بالوزن — 3 وقية × 8 = 24 ₪','المجموع: 168 ₪','الاسم: تجربة','توصيل','العنوان: دير البلح','ملاحظات: بدون مكسرات']:
+    for s in ['أساور — 2 وقية × 12 = 24 ₪','كيك نوتيلا (كبير · 12 قطعة) — 1 × 120 = 120 ₪','جلي تركي — 3 وقية × 8 = 24 ₪','المجموع: 168 ₪','الاسم: تجربة','توصيل','العنوان: دير البلح','ملاحظات: بدون مكسرات']:
         chk(f'WA msg contains "{s}"', s in msg)
     chk('success screen', pg.locator('.success').count()==1)
     chk('cart cleared after send', pg.evaluate('cartCount()')==0)
@@ -170,6 +170,7 @@ with sync_playwright() as p:
     chk('cake slices sold by piece', pg.locator('[data-card="kc2"] .unit-chip').inner_text()=='بالقطعة')
     chk('triangle shows 3 flavors', pg.locator('#view-cat [data-card="kc2"] .flv button').all_inner_texts()==['نوتيلا','بيستاشيو','لوتس'])
     chk('sharqi items also in featured', pg.evaluate('["s12","s22","s23"].every(id=>itemsIn("featured").includes(byId[id]) && byId[id].cat==="sharqi")'))
+    chk('flavor names read naturally', pg.evaluate('[withFlavor("كرواسون بيضاوي","بالجبنة الصفراء",byId.m10), withFlavor("معجنات باللحوم","كفتة عجل",byId.m11), withFlavor("كيت كات","بلوبيري",byId.m8)]')==['كرواسون بيضاوي بالجبنة الصفراء','معجنات باللحوم — كفتة عجل','كيت كات بنكهة بلوبيري'])
     chk('layer cake moved to cake slices', pg.evaluate('byId.f5.cat==="cake" && byId.f5.sub==="slice" && !byId.f5.featured'))
     chk('super special: small 65 (nutella 60), large 12 pcs', pg.evaluate('byId.ks1.sizes.s.price===60 && ["ks2","ks3","ks4","ks5","ks6","ks7"].every(k=>byId[k].sizes.s.price===65) && ITEMS.filter(i=>i.sub==="super"||i.sub==="special").every(i=>i.sizes.s.pieces===6&&i.sizes.l.pieces===12)'))
     chk('custom cake sizes: slabs, no tiers', pg.evaluate('JSON.stringify(CAKE.size.map(x=>x.name))')=='["صغيرة","وسط","نصف بلاطة","بلاطة"]')

@@ -493,13 +493,21 @@ const ITEMS = [
   { id:"j1", cat:"jelly", name:"بكيت جلي مثلث",   desc:"", price:5,  img:"" },
   { id:"j2", cat:"jelly", name:"كاسة جلي",          desc:"", price:7,  img:"" },
   { id:"j3", cat:"jelly", name:"علبة جلي هدية",     desc:"", price:15, img:"images/j3.webp" },
-  { id:"j4", cat:"jelly", name:"جلي بالوزن",        desc:"", price:{uqiya:8}, img:"" },
+  { id:"j4", cat:"jelly", name:"جلي تركي",          desc:"", price:{uqiya:8},  img:"" },
+  { id:"j5", cat:"jelly", name:"جلي إسباني",        desc:"", price:{uqiya:12}, img:"" },
   // مكسرات
-  { id:"n1", cat:"nuts", name:"مكسرات فاخرة مشكّلة",      desc:"", price:{uqiya:15}, img:"images/n1.webp" },
-  { id:"n2", cat:"nuts", name:"بزر بطيخ",                desc:"", price:{uqiya:13}, img:"images/n2.webp" },
-  { id:"n3", cat:"nuts", name:"بزر شمس",                 desc:"", price:{uqiya:13}, img:"images/n3.webp" },
-  { id:"n4", cat:"nuts", name:"ماكاديميا",               desc:"", price:{uqiya:15}, img:"" },
-  { id:"n5", cat:"nuts", name:"علبة مكسرات مشكّلة هدية", desc:"", price:15, img:"" },
+  { id:"n1", cat:"nuts", name:"مكسرات فاخرة", desc:"", price:{uqiya:15}, img:"images/n1.webp" },
+  { id:"n6", cat:"nuts", name:"لوز مقشّر", desc:"", price:{uqiya:15}, img:"images/n6.webp" },
+  { id:"n7", cat:"nuts", name:"فستق حلبي مقشّر", desc:"", price:{uqiya:15}, img:"images/n7.webp" },
+  { id:"n8", cat:"nuts", name:"كاجو جامبو", desc:"", price:{uqiya:15}, img:"images/n8.webp" },
+  { id:"n2", cat:"nuts", name:"بزر بطيخ", desc:"", price:{uqiya:15}, img:"images/n2.webp" },
+  { id:"n3", cat:"nuts", name:"بزر شمس", desc:"", price:{uqiya:8}, img:"images/n3.webp" },
+  { id:"n9", cat:"nuts", name:"بزر قرع متبّل", desc:"", price:{uqiya:12}, img:"" },
+  { id:"n10", cat:"nuts", name:"بيكان مالح", desc:"", price:{uqiya:25}, img:"" },
+  { id:"n11", cat:"nuts", name:"ماكاديميا مقشّرة", desc:"", price:{uqiya:25}, img:"" },
+  { id:"n12", cat:"nuts", name:"مشكّل هندي", desc:"", price:{uqiya:10}, img:"" },
+  { id:"n13", cat:"nuts", name:"ذرة محمّصة", desc:"", price:{uqiya:10}, img:"" },
+  { id:"n14", cat:"nuts", name:"بزر قرع", desc:"", price:{uqiya:10}, img:"" },
   // عيد ميلاد — السعر للقطعة
   { id:"b1", cat:"party", name:"طربوش عيد ميلاد", desc:"", price:7, img:"" },
   { id:"b2", cat:"party", name:"شمعة أرقام", desc:"", price:7, img:"" },
@@ -513,10 +521,17 @@ const ITEMS = [
   { id:"b10", cat:"party", name:"شمع كبير مجرود", desc:"", price:15, img:"" },
   { id:"b11", cat:"party", name:"حبال زينة", desc:"", price:8, img:"" },
   // معجنات
-  { id:"m1", cat:"pastry", name:"بيتزا", desc:"", sizes:{ m:{name:"وسط", price:15}, l:{name:"كبير", price:20} }, img:"images/m1.webp" },
-  { id:"m2", cat:"pastry", name:"معجنات باللحمة", desc:"", price:5, img:"" },
-  { id:"m3", cat:"pastry", name:"معجنات بالقطعة", desc:"", price:3, img:"images/m3.webp" },
-  { id:"m4", cat:"pastry", name:"معجنات مشكّلة", desc:"", price:{kg:40, uqiya:10}, img:"" },
+  { id:"m1", cat:"pastry", name:"بيتزا صغيرة", desc:"", price:3, img:"images/m1.webp" },
+  { id:"m2", cat:"pastry", name:"بوريكس جبنة بيضاء", desc:"", price:3, img:"" },
+  { id:"m3", cat:"pastry", name:"بوريكس جبنة صفراء", desc:"", price:3, img:"" },
+  { id:"m4", cat:"pastry", name:"كرواسون بالجبنة البيضاء", desc:"", price:3, img:"images/m4.webp" },
+  { id:"m5", cat:"pastry", name:"كرواسون بالشوكولاتة", desc:"", price:3, img:"" },
+  { id:"m6", cat:"pastry", name:"سينابون بالجبنة الصفراء", desc:"", price:3, img:"" },
+  { id:"m7", cat:"pastry", name:"بيتزا رول", desc:"", price:3, img:"" },
+  { id:"m8", cat:"pastry", name:"كيت كات", desc:"", flavors:["شوكولاتة","بلوبيري"], price:3, img:"" },
+  { id:"m9", cat:"pastry", name:"مطبّق فرنسي", desc:"", flavors:["بالبلوبيري","بالقشطة"], flavorPrefix:"", price:3, img:"" },
+  { id:"m10", cat:"pastry", name:"كرواسون بيضاوي", desc:"", flavors:["بالجبنة الصفراء","بالجبنة البيضاء"], flavorPrefix:"", price:3, img:"" },
+  { id:"m11", cat:"pastry", name:"معجنات باللحوم", desc:"", flavors:["صدر دجاج","كفتة عجل"], flavorPrefix:"— ", price:5, img:"" },
   // قهوة — بالوقية بس
   { id:"c1", cat:"coffee", name:"قهوة مطحونة سبيشل",      desc:"", price:{uqiya:20}, img:"images/c1.webp" },
   { id:"c2", cat:"coffee", name:"قهوة مطحونة بيضاء عربية", desc:"", price:{uqiya:25}, img:"" }
@@ -614,7 +629,7 @@ const unitName = (it,u) => it.sizes ? (it.sizes[u].name||SIZES[u]||u) : UNITS[u]
 const unitLabel = (it,u) => it.sizes ? (it.sizes[u].pieces!=null ? `${unitName(it,u)} · ${pcs(it.sizes[u].pieces)}` : unitName(it,u)) : UNITS[u];
 const curFlavor = it => !it.flavors ? "" : it.flavors.includes(flavorPick[it.id]) ? flavorPick[it.id] : it.flavors[0];
 const keyOf = (it,u=curUnit(it),f=curFlavor(it)) => f ? `${it.id}|${u}|${f}` : `${it.id}|${u}`;   // مفتاح السلة
-const withFlavor = (name,f) => f ? `${name} بنكهة ${f}` : name;
+const withFlavor = (name,f,it) => !f ? name : (it && it.flavorPrefix!=null) ? `${name} ${it.flavorPrefix}${f}` : `${name} بنكهة ${f}`;   // flavorPrefix:"" لما النكهة نفسها فيها "بال…"
 const itemsIn = cid => cid==="featured" ? ITEMS.filter(i=>i.featured) : ITEMS.filter(i=>i.cat===cid);
 function hueFor(it){ let h=0; for(const ch of it.id) h=(h*31+ch.charCodeAt(0))%360; return 14+(h%26); }
 
@@ -625,7 +640,7 @@ const imgOf = (it,f=curFlavor(it)) => (it.flavorImgs && it.flavorImgs[f]) || it.
 function thumb(it, tag=false, f){
   const src = imgOf(it, f===undefined ? curFlavor(it) : f);
   const inner = src
-    ? `<img src="${src}" alt="${withFlavor(it.name, f===undefined ? curFlavor(it) : f)}" loading="lazy">`
+    ? `<img src="${src}" alt="${withFlavor(it.name, f===undefined ? curFlavor(it) : f, it)}" loading="lazy">`
     : `<div class="ph" style="--h:${hueFor(it)}">${SC}${art(catOf(it.cat).icon)}<em class="mono">photo soon</em></div>`;
   return `<div class="thumb">${tag&&it.featured?'<span class="tag">مميز</span>':""}${inner}</div>`;
 }
@@ -693,14 +708,14 @@ function refreshItem(id){
     const p=card.querySelector("[data-price]"); if(p) p.innerHTML=priceHTML(it);
     card.querySelectorAll(".seg button").forEach(b=>b.classList.toggle("on",b.dataset.u===curUnit(it)));
     card.querySelectorAll(".flv button").forEach(b=>b.classList.toggle("on",b.dataset.f===curFlavor(it)));
-    const im=card.querySelector(".thumb img"), src=imgOf(it); if(it.flavorImgs && im && src && im.getAttribute("src")!==src){ im.src=src; im.alt=withFlavor(it.name,curFlavor(it)); }
+    const im=card.querySelector(".thumb img"), src=imgOf(it); if(it.flavorImgs && im && src && im.getAttribute("src")!==src){ im.src=src; im.alt=withFlavor(it.name,curFlavor(it),it); }
   });
 }
 
 /* =========================================================
    Cart
    ========================================================= */
-const cartLines = () => Object.entries(cart).filter(([,q])=>q>0).map(([k,q])=>{ const [id,u,f]=k.split("|"); const it=byId[id]; return (it && unitsOf(it).includes(u) && (it.flavors ? it.flavors.includes(f) : !f))?{k,it,u,f,q,p:unitPrice(it,u),name:withFlavor(it.name,f)}:null }).filter(Boolean);
+const cartLines = () => Object.entries(cart).filter(([,q])=>q>0).map(([k,q])=>{ const [id,u,f]=k.split("|"); const it=byId[id]; return (it && unitsOf(it).includes(u) && (it.flavors ? it.flavors.includes(f) : !f))?{k,it,u,f,q,p:unitPrice(it,u),name:withFlavor(it.name,f,it)}:null }).filter(Boolean);
 const cartTotal = () => cartLines().reduce((s,l)=>s+l.p*l.q,0);
 const cartCount = () => cartLines().reduce((s,l)=>s+l.q,0);
 
@@ -954,7 +969,7 @@ document.addEventListener("click",e=>{
   if(a==="home"){ e.preventDefault(); goHome(); return; }
   if(a==="sub"){ const t=$("#sub-"+b.dataset.s); t&&t.scrollIntoView({behavior:"smooth",block:"start"}); return; }
   if(a==="unit"){ unitPick[id]=b.dataset.u; refreshItem(id); }
-  if(a==="add"){ const it=byId[id]; setQty(keyOf(it),1); save(); flyFrom(b); refreshItem(id); navigator.vibrate&&navigator.vibrate(12); toast(`تمت إضافة ${withFlavor(it.name,curFlavor(it))} إلى السلة`); }
+  if(a==="add"){ const it=byId[id]; setQty(keyOf(it),1); save(); flyFrom(b); refreshItem(id); navigator.vibrate&&navigator.vibrate(12); toast(`تمت إضافة ${withFlavor(it.name,curFlavor(it),it)} إلى السلة`); }
   if(a==="flavor"){ flavorPick[id]=b.dataset.f; refreshItem(id); }
   if(a==="inc"||a==="dec"){ const it=byId[id], k=keyOf(it); setQty(k,(cart[k]||0)+(a==="inc"?1:-1)); refreshItem(id); updateCartUI(a==="inc"); }
   if(a==="cinc"||a==="cdec"){ const k=b.dataset.k; setQty(k,(cart[k]||0)+(a==="cinc"?1:-1)); renderPane("cart"); refreshItem(k.split("|")[0]); updateCartUI(); }
