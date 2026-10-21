@@ -426,7 +426,7 @@ const CATS = [
 const ITEMS = [
   // أصناف مميزة — cat:"featured". flavors = نكهات بيختار منها الزبون بنفس السعر
   { id:"f1", cat:"featured", featured:true, name:"مكس سينوفا", desc:"", flavors:["بيستاشيو","لوتس"], flavorImgs:{"لوتس":"images/f1_lotus.webp"}, sizes:{ t:{name:"مثلث", price:15}, s:{name:"صغير", price:20}, m:{name:"وسط", price:25}, l:{name:"كبير", price:30} }, img:"images/f1.webp" },
-  { id:"f2", cat:"featured", featured:true, name:"شوكولاتة بلجيكية", desc:"", sizes:{ s:{name:"علبة صغيرة", price:30}, l:{name:"علبة كبيرة", price:50} }, img:"images/f2.webp" },
+  { id:"f2", cat:"featured", featured:true, name:"شوكولاتة بلجيكية", desc:"", sizes:{ s:{name:"علبة صغيرة", price:30}, l:{name:"علبة كبيرة", price:50} }, sizeImgs:{l:"images/f2_l.webp"}, img:"images/f2.webp" },
   { id:"f3", cat:"featured", featured:true, name:"تشيز كيك", desc:"", flavors:["بلوبيري","لوتس","نوتيلا","بيستاشيو","مانجو","شوكولاتة"], flavorImgs:{"بيستاشيو":"images/f3_pist.webp","شوكولاتة":"images/f3_choc.webp","نوتيلا":"images/f3_nut.webp"}, price:10, img:"images/f3.webp" },
   { id:"f4", cat:"featured", featured:true, name:"عسل الطاقة بالمكسرات", desc:"", price:13, img:"images/f4.webp" },
   // حلويات شرقية — السعر للكيلو، والوقية = الكيلو ÷ 4 مقرّبة لأعلى رقم صحيح
@@ -497,7 +497,7 @@ const ITEMS = [
   { id:"j2", cat:"jelly", name:"كاسة جلي",          desc:"", price:7,  img:"images/j2.webp" },
   { id:"j3", cat:"jelly", name:"علبة جلي هدية",     desc:"", price:15, img:"images/j3.webp" },
   { id:"j4", cat:"jelly", name:"جلي تركي",          desc:"", price:{uqiya:8},  img:"images/j4.webp" },
-  { id:"j5", cat:"jelly", name:"جلي إسباني",        desc:"", price:{uqiya:12}, img:"" },
+  { id:"j5", cat:"jelly", name:"جلي إسباني",        desc:"", price:{uqiya:12}, img:"images/j5.webp" },
   // مكسرات
   { id:"n1", cat:"nuts", name:"مكسرات فاخرة", desc:"", price:{uqiya:15}, img:"images/n1.webp" },
   { id:"n6", cat:"nuts", name:"لوز مقشّر", desc:"", price:{uqiya:15}, img:"images/n6.webp" },
@@ -639,9 +639,9 @@ function hueFor(it){ let h=0; for(const ch of it.id) h=(h*31+ch.charCodeAt(0))%3
 /* =========================================================
    Render pieces
    ========================================================= */
-const imgOf = (it,f=curFlavor(it)) => (it.flavorImgs && it.flavorImgs[f]) || it.img;   // صورة النكهة إذا موجودة، وإلا صورة الصنف
-function thumb(it, tag=false, f){
-  const src = imgOf(it, f===undefined ? curFlavor(it) : f);
+const imgOf = (it,f=curFlavor(it),u=curUnit(it)) => (it.flavorImgs && it.flavorImgs[f]) || (it.sizeImgs && it.sizeImgs[u]) || it.img;   // صورة النكهة أو الحجم إذا موجودة، وإلا صورة الصنف
+function thumb(it, tag=false, f, u){
+  const src = imgOf(it, f===undefined ? curFlavor(it) : f, u===undefined ? curUnit(it) : u);
   const inner = src
     ? `<img src="${src}" alt="${withFlavor(it.name, f===undefined ? curFlavor(it) : f, it)}" loading="lazy">`
     : `<div class="ph" style="--h:${hueFor(it)}">${SC}${art(catOf(it.cat).icon)}<em class="mono">photo soon</em></div>`;
@@ -711,7 +711,7 @@ function refreshItem(id){
     const p=card.querySelector("[data-price]"); if(p) p.innerHTML=priceHTML(it);
     card.querySelectorAll(".seg button").forEach(b=>b.classList.toggle("on",b.dataset.u===curUnit(it)));
     card.querySelectorAll(".flv button").forEach(b=>b.classList.toggle("on",b.dataset.f===curFlavor(it)));
-    const im=card.querySelector(".thumb img"), src=imgOf(it); if(it.flavorImgs && im && src && im.getAttribute("src")!==src){ im.src=src; im.alt=withFlavor(it.name,curFlavor(it),it); }
+    const im=card.querySelector(".thumb img"), src=imgOf(it); if((it.flavorImgs||it.sizeImgs) && im && src && im.getAttribute("src")!==src){ im.src=src; im.alt=withFlavor(it.name,curFlavor(it),it); }
   });
 }
 
@@ -764,7 +764,7 @@ function renderPane(p){
       return;
     }
     el.innerHTML=head("سلتك")+`<div class="sheet-body pane">${lines.map(l=>`
-      <div class="crow">${thumb(l.it,false,l.f)}<div class="meta"><h4>${l.name}</h4><small>${money(l.p)} / ${unitLabel(l.it,l.u)}</small><div class="lt">${money(l.p*l.q)}</div></div>
+      <div class="crow">${thumb(l.it,false,l.f,l.u)}<div class="meta"><h4>${l.name}</h4><small>${money(l.p)} / ${unitLabel(l.it,l.u)}</small><div class="lt">${money(l.p*l.q)}</div></div>
       <div class="step"><button data-a="cinc" data-k="${l.k}" aria-label="زيادة">${UI.plus}</button><b>${l.q}</b><button data-a="cdec" data-k="${l.k}" aria-label="تقليل">${l.q===1?UI.trash:UI.minus}</button></div></div>`).join("")}</div>
       <div class="sheet-foot"><div class="sum"><span>المجموع</span><b>${money(cartTotal())}</b></div><button class="btn" data-a="pane" data-p="checkout">متابعة الحجز ${UI.left}</button></div>`;
   }

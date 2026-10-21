@@ -47,7 +47,7 @@ with sync_playwright() as p:
         empty=pg.evaluate('[...document.querySelectorAll("#view-cat .item")].filter(e=>!e.querySelector(".price b")||e.querySelector(".price b").textContent.trim()===""||/NaN|undefined/.test(e.textContent)).length')
         chk(f'category "{c}" no NaN/undefined', empty==0, str(empty))
     # product photos: every img path exists, and a visible one actually loads
-    imgs=pg.evaluate('ITEMS.flatMap(i=>[i.img,...Object.values(i.flavorImgs||{})]).filter(Boolean)')
+    imgs=pg.evaluate('ITEMS.flatMap(i=>[i.img,...Object.values(i.flavorImgs||{}),...Object.values(i.sizeImgs||{})]).filter(Boolean)')
     missing=[x for x in imgs if not (ROOT/x).exists()]
     chk('all item photos exist on disk', imgs and not missing, str(missing[:5]))
     pg.evaluate('go("sharqi")'); pg.wait_for_timeout(800)
@@ -93,6 +93,9 @@ with sync_playwright() as p:
     fc.locator('[data-f="شوكولاتة"]').click(); pg.wait_for_timeout(100)
     chk('flavor switch changes photo', fc.locator('.thumb img').get_attribute('src')=='images/f3_choc.webp')
     fc.locator('[data-f="لوتس"]').click(); pg.wait_for_timeout(100)
+    bc=pg.locator('#view-cat [data-card="f2"]'); bc.locator('[data-u="l"]').click(); pg.wait_for_timeout(100)
+    chk('size switch changes photo', bc.locator('.thumb img').get_attribute('src')=='images/f2_l.webp')
+    bc.locator('[data-u="s"]').click(); pg.wait_for_timeout(100)
     chk('flavor without own photo falls back to item photo', fc.locator('.thumb img').get_attribute('src')=='images/f3.webp')
     fc.locator('[data-f="لوتس"]').click(); fc.locator('[data-a="add"]').click(); pg.wait_for_timeout(100)
     fc.locator('[data-f="مانجو"]').click(); pg.wait_for_timeout(100)
