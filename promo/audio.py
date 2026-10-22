@@ -36,7 +36,7 @@ def clap():
     x=rng.standard_normal(int(SR*.18)); x=lp(x,.5)-lp(x,.08); e=np.exp(-t_(.18)/.045)
     for o in (.0,.011,.022): e[int(o*SR):]+=0
     return x*e
-MEND=13.0  # الدرامز بتوقف عند الخاتمة وبيضل كورد طويل
+MEND=next((ms/1000 for n,ms in ev if n=="impact"),13.0)  # الدرامز بتوقف عند الخاتمة وبيضل كورد طويل
 bar=4*B; nb=int(np.ceil(DUR/bar))
 for b in range(nb):
     t0=b*bar; root,ch=prog[b%4]
@@ -52,8 +52,8 @@ for b in range(nb):
         else:
             if k%2==0: add(bass(root,B*.9),tt,.12)
 # كورد الخاتمة
-t=t_(2.0); fin=pad([60,64,67,72,76],2.0)*np.exp(-t/1.2); add(fin,MEND,.16)
-add(bass(36,2.0),MEND,.3)
+FD=DUR-MEND; t=t_(FD); fin=pad([60,64,67,72,76],FD)*np.exp(-t/1.6); add(fin,MEND,.16)
+add(bass(36,FD),MEND,.3)
 # ---------- SFX ----------
 def tapfx():
     t=t_(.06); return (np.sin(2*np.pi*1900*t)*.6+np.sin(2*np.pi*950*t))*np.exp(-t/.012)
