@@ -37,6 +37,12 @@ wrangler.jsonc       ← إعداد Cloudflare Worker: بينشر مجلد publi
 tests/qa.py          ← فحص شامل (129 فحص)
 ```
 
+## فيديو إعلاني (15 ثانية، 1080×1920)
+- `promo/stage.html`: مشهد فيه موك اب جوال، وجوّاه المنيو الحقيقي بـ iframe، ومعه عناوين الخطوات الأربعة ودائرة الضغط. التوقيتات كلها بدالة `run()`.
+- `promo/record.py`: بيسجّل المشهد بـ CDP screencast، وبيطلّع MP4 (H.264) بـ ffmpeg من `imageio-ffmpeg`.
+- **للتشغيل:** حط `stage.html` و`assets/logo_word.svg` و`assets/tile.webp` بمجلد، ومعهم نسخة من `public/` باسم `menu/`. بعدين: `python promo/record.py <المجلد> out.mp4`.
+- واتساب ما بينفتح بالفيديو (`openWA` بيتعطّل جوا المشهد).
+
 ## سير العمل (إلزامي بعد كل تعديل)
 1. عدّل `src/menu.html`.
 2. `python build.py`
