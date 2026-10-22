@@ -46,40 +46,42 @@ for b in range(nb):
         if tt>=MEND: break
         add(pluck(ch[[0,2,1,3,2,1,3,2][k]]+12,.3),tt,.07 if tt<2.6 else .11,pan=(-.4 if k%2 else .4))
         if tt>=2.6:   # الإيقاع بيدخل مع أول خطوة
-            if k%2==0: add(kick(),tt,.55); add(bass(root,B*.9),tt,.22)
-            else: add(hat(),tt,.10,pan=.2)
-            if k in (2,6): add(clap(),tt,.16)
+            if k%2==0: add(kick(),tt,.38); add(bass(root,B*.9),tt,.22)
+            else: add(hat(),tt,.05,pan=.2)
+            if k in (2,6): add(clap(),tt,.07)
         else:
             if k%2==0: add(bass(root,B*.9),tt,.12)
 # كورد الخاتمة
 FD=DUR-MEND; t=t_(FD); fin=pad([60,64,67,72,76],FD)*np.exp(-t/1.6); add(fin,MEND,.16)
 add(bass(36,FD),MEND,.3)
-# ---------- SFX ----------
-def tapfx():
-    t=t_(.06); return (np.sin(2*np.pi*1900*t)*.6+np.sin(2*np.pi*950*t))*np.exp(-t/.012)
-def keyfx():
-    x=rng.standard_normal(int(SR*.03)); x=x-lp(x,.3); t=t_(.03); return x*np.exp(-t/.006)*.7+np.sin(2*np.pi*rng.uniform(1100,1500)*t)*np.exp(-t/.008)*.4
-def popfx():
-    t=t_(.14); f=420+700*(t/.14)**.6; return np.sin(2*np.pi*np.cumsum(f)/SR)*np.exp(-t/.05)
-def whoosh(d=.55):
-    x=rng.standard_normal(int(SR*d)); t=t_(d); sh=np.sin(np.pi*t/d)**2
-    lo=lp(x,.02+.25*sh); return (lo-lp(lo,.01))*sh*2.2
-def bell(n,d=1.2):
-    t=t_(d); f=hz(n); return (np.sin(2*np.pi*f*t)+.4*np.sin(2*np.pi*f*2.76*t)*np.exp(-t/.15)+.25*np.sin(2*np.pi*f*5.4*t)*np.exp(-t/.06))*env(d,.002,.35)
-def riser(d=.6):
-    x=rng.standard_normal(int(SR*d)); t=t_(d); return (x-lp(x,.05))*(t/d)**2.5*.6
-def boom():
-    t=t_(1.4); f=38+50*np.exp(-t/.08); return np.sin(2*np.pi*np.cumsum(f)/SR)*np.exp(-t/.45)
+# ---------- SFX (ناعمة وخفيفة) ----------
+def soft(d,a,r): # إنفلوب بهجوم ناعم بدل الطقة الحادة
+    t=t_(d); return np.minimum(1,t/a)**2*np.exp(-t/r)
+def tapfx():   # "توك" خشبي ناعم
+    t=t_(.09); return (np.sin(2*np.pi*620*t)+.3*np.sin(2*np.pi*1240*t))*soft(.09,.004,.022)
+def keyfx():   # نقرة كيبورد خفيفة جداً
+    t=t_(.04); x=lp(rng.standard_normal(len(t)),.18); return (x*.5+np.sin(2*np.pi*rng.uniform(900,1100)*t)*.5)*soft(.04,.002,.008)
+def popfx():   # فقاعة ناعمة
+    t=t_(.16); f=380+320*(t/.16)**.5; return np.sin(2*np.pi*np.cumsum(f)/SR)*soft(.16,.008,.045)
+def whoosh(d=.75):  # نسمة هوا بدل الووش القوي
+    x=rng.standard_normal(int(SR*d)); t=t_(d); sh=np.sin(np.pi*t/d)**3
+    lo=lp(lp(x,.015+.06*sh),.05); return (lo-lp(lo,.004))*sh*3.0
+def bell(n,d=1.4):
+    t=t_(d); f=hz(n); return (np.sin(2*np.pi*f*t)+.18*np.sin(2*np.pi*f*2*t)*np.exp(-t/.25))*soft(d,.006,.45)
+def swell(d=.9):  # صعود ناعم قبل الخاتمة
+    x=lp(rng.standard_normal(int(SR*d)),.04); t=t_(d); return x*(t/d)**2*1.2
+def bloom():      # بدل البوم: نغمة دافية بتفتح
+    t=t_(2.2); return (np.sin(2*np.pi*hz(48)*t)*.6+np.sin(2*np.pi*hz(60)*t)*.4)*np.minimum(1,t/.08)*np.exp(-t/.9)
 for name,ms in ev:
     at=ms/1000
-    if name=='tap':    add(tapfx(),at,.45)
-    elif name=='key':  add(keyfx(),at,.35,pan=rng.uniform(-.2,.2))
-    elif name=='pop':  add(popfx(),at,.45); add(bell(84,.5),at+.06,.12)
-    elif name=='whoosh': add(whoosh(),at-.22,.30)
+    if name=='tap':    add(tapfx(),at,.16)
+    elif name=='key':  add(keyfx(),at,.07,pan=rng.uniform(-.2,.2))
+    elif name=='pop':  add(popfx(),at,.15); add(bell(88,.6),at+.05,.035)
+    elif name=='whoosh': add(whoosh(),at-.35,.10)
     elif name=='success':
-        for k,n in enumerate((76,79,84)): add(bell(n),at+k*.09,.20)
+        for k,n in enumerate((79,84,88)): add(bell(n),at+k*.11,.06)
     elif name=='impact':
-        add(riser(),at-.6,.5); add(boom(),at,.65); add(whoosh(.8),at-.2,.25)
+        add(swell(),at-.9,.12); add(bloom(),at,.22); add(bell(91,1.8),at+.05,.03)
 # ---------- reverb صغير + ماستر ----------
 def verb(x):
     y=x.copy()
@@ -94,6 +96,6 @@ L=verb(L); R=verb(R)
 m=np.stack([L,R],1)
 fade=np.ones(N); fl=int(.6*SR); fade[-fl:]=np.linspace(1,0,fl); fade[:int(.03*SR)]=np.linspace(0,1,int(.03*SR))
 m*=fade[:,None]
-m=np.tanh(m*1.2)/np.tanh(1.2); m/=np.abs(m).max()/0.89
+m=np.tanh(m*1.1)/np.tanh(1.1); m/=np.abs(m).max()/0.8
 w=wave.open(OUT,'wb'); w.setnchannels(2); w.setsampwidth(2); w.setframerate(SR); w.writeframes((m*32767).astype('<i2').tobytes()); w.close()
 print('audio ok', OUT)

@@ -16,16 +16,16 @@ html,body{width:1080px;height:1920px;overflow:hidden;font-family:"IBM Plex Sans 
 .r1{width:1300px;height:1300px;left:50%;top:1080px;transform:translate(-50%,-50%)}
 .r2{width:1700px;height:1700px;left:50%;top:1080px;transform:translate(-50%,-50%);border-color:rgba(157,178,255,.09)}
 .cap{position:absolute;top:150px;left:0;right:0;text-align:center;z-index:5;height:230px}
-.cap .step{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;gap:14px;opacity:0;transform:translateY(24px);transition:opacity .45s ease,transform .55s cubic-bezier(.2,.9,.3,1.2)}
-.cap .step.on{opacity:1;transform:none}
+.cap .step{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;gap:14px;opacity:0;transform:translateY(30px) scale(.98);filter:blur(6px);transition:opacity .7s cubic-bezier(.22,1,.36,1),transform .8s cubic-bezier(.22,1,.36,1),filter .7s cubic-bezier(.22,1,.36,1)}
+.cap .step.on{opacity:1;transform:none;filter:none}
 .num{width:88px;height:88px;border-radius:50%;background:#fff;color:var(--blue);display:grid;place-items:center;font-size:50px;font-weight:700;box-shadow:0 0 0 8px rgba(79,107,255,.35),0 10px 30px rgba(0,0,0,.35)}
 .t{font-size:66px;font-weight:700;line-height:1.15;text-shadow:0 4px 24px rgba(4,16,74,.5)}
 .sub{font-size:36px;color:var(--lb2)}
-.phone{position:absolute;left:50%;top:430px;transform:translateX(-50%);padding:18px;border-radius:92px;background:linear-gradient(145deg,#2a2d3a,#0b0d16);box-shadow:0 0 0 3px #3b4260,0 0 120px rgba(10,47,255,.55),0 40px 90px rgba(2,8,40,.7);z-index:2;transition:transform .9s cubic-bezier(.6,0,.2,1),opacity .6s}
+.phone{position:absolute;left:50%;top:430px;transform:translateX(-50%);padding:18px;border-radius:92px;background:linear-gradient(145deg,#2a2d3a,#0b0d16);box-shadow:0 0 0 3px #3b4260,0 0 120px rgba(10,47,255,.55),0 40px 90px rgba(2,8,40,.7);z-index:2;transition:transform 1s cubic-bezier(.65,0,.35,1),opacity .8s cubic-bezier(.65,0,.35,1)}
 .screen{position:relative;width:calc(390px*var(--s));height:calc(844px*var(--s));border-radius:76px;overflow:hidden;background:#000}
 .screen iframe{position:absolute;left:0;top:0;width:390px;height:844px;border:0;transform:scale(var(--s));transform-origin:0 0;display:block}
 .island{position:absolute;top:22px;left:50%;transform:translateX(-50%);width:190px;height:54px;border-radius:30px;background:#000;z-index:3}
-.tap{position:absolute;width:110px;height:110px;margin:-55px 0 0 -55px;border-radius:50%;background:rgba(10,47,255,.35);border:5px solid rgba(255,255,255,.95);z-index:6;opacity:0;transform:scale(.6);transition:left .55s cubic-bezier(.4,0,.2,1),top .55s cubic-bezier(.4,0,.2,1),opacity .25s,transform .25s;pointer-events:none;box-shadow:0 0 0 10px rgba(79,107,255,.25),0 6px 24px rgba(0,0,0,.35)}
+.tap{position:absolute;width:110px;height:110px;margin:-55px 0 0 -55px;border-radius:50%;background:rgba(10,47,255,.35);border:5px solid rgba(255,255,255,.95);z-index:6;opacity:0;transform:scale(.6);transition:left .52s cubic-bezier(.65,0,.35,1),top .52s cubic-bezier(.65,0,.35,1),opacity .35s ease,transform .3s cubic-bezier(.22,1,.36,1),background .3s;pointer-events:none;box-shadow:0 0 0 10px rgba(79,107,255,.25),0 6px 24px rgba(0,0,0,.35)}
 .tap.on{opacity:1;transform:scale(1)}
 .tap.press{transform:scale(.72);background:rgba(10,47,255,.6)}
 .av{flex:none;border-radius:50%;background:linear-gradient(145deg,#0A2FFF,#04104A);border:3px solid var(--ring);display:grid;place-items:center;color:#fff;font-weight:700}
@@ -34,12 +34,12 @@ html,body{width:1080px;height:1920px;overflow:hidden;font-family:"IBM Plex Sans 
 .credit .k{font-size:22px;color:var(--lb)}
 .credit .n{font-size:30px;font-weight:700;line-height:1.25}
 .credit .h{font-size:24px;color:var(--lb2);direction:ltr;padding-inline-start:18px;border-inline-start:1.5px solid rgba(157,178,255,.35);margin-inline-start:4px}
-.outro{position:absolute;inset:0;z-index:8;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0;opacity:0;pointer-events:none;transition:opacity .6s;background:radial-gradient(70% 45% at 50% 35%,rgba(10,47,255,.6),rgba(4,16,74,.98) 80%)}
+.outro{position:absolute;inset:0;z-index:8;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0;opacity:0;pointer-events:none;transition:opacity .8s cubic-bezier(.65,0,.35,1);background:radial-gradient(70% 45% at 50% 35%,rgba(10,47,255,.6),rgba(4,16,74,.98) 80%)}
 .outro.on{opacity:1}
-.outro>*{opacity:0;transform:translateY(40px);transition:opacity .5s,transform .7s cubic-bezier(.2,.9,.3,1.15)}
+.outro>*{opacity:0;transform:translateY(40px);transition:opacity .7s cubic-bezier(.22,1,.36,1),transform .9s cubic-bezier(.22,1,.36,1)}
 .outro.on>*{opacity:1;transform:none}
 .outro.on>:nth-child(2){transition-delay:.15s}.outro.on>:nth-child(3){transition-delay:.25s}.outro.on>:nth-child(4){transition-delay:.45s}.outro.on>:nth-child(5){transition-delay:.65s}.outro.on>:nth-child(6){transition-delay:.75s}
-.ph{width:440px;height:440px;border-radius:50%;padding:10px;background:conic-gradient(from 200deg,#0A2FFF,#9DB2FF,#4F6BFF,#0A2FFF);box-shadow:0 0 0 14px rgba(79,107,255,.18),0 0 140px rgba(10,47,255,.8);transform:scale(.7)!important}
+.ph{transition:opacity .7s cubic-bezier(.22,1,.36,1),transform 1.1s cubic-bezier(.22,1,.36,1)!important;width:440px;height:440px;border-radius:50%;padding:10px;background:conic-gradient(from 200deg,#0A2FFF,#9DB2FF,#4F6BFF,#0A2FFF);box-shadow:0 0 0 14px rgba(79,107,255,.18),0 0 140px rgba(10,47,255,.8);transform:scale(.7)!important}
 .outro.on .ph{transform:none!important}
 .ph img{width:100%;height:100%;border-radius:50%;object-fit:cover;object-position:50% 30%;display:block;border:6px solid #04104A}
 .nm{margin-top:50px;font-size:76px;font-weight:700;line-height:1.2}
@@ -53,7 +53,7 @@ html,body{width:1080px;height:1920px;overflow:hidden;font-family:"IBM Plex Sans 
 </style></head><body>
 <div class="bg"><div class="orb b1"></div><div class="orb b2"></div><div class="orb b3"></div><div class="ring r1"></div><div class="ring r2"></div></div>
 <div class="cap">
-  <div class="step" id="c0"><div class="t">منيو سينوفا الإلكتروني</div><div class="sub">اطلب حلوياتك من جوالك بخطوات بسيطة</div></div>
+  <div class="step" id="c0"><div class="t">صمّم منيو إلكتروني لمطعمك</div><div class="sub">منيو تفاعلي يستقبل طلبات زبائنك عبر واتساب</div></div>
   <div class="step" id="c1"><div class="num">١</div><div class="t">اختر القسم</div></div>
   <div class="step" id="c2"><div class="num">٢</div><div class="t">أضف الأصناف إلى السلة</div></div>
   <div class="step" id="c3"><div class="num">٣</div><div class="t">أكمل بيانات الحجز</div></div>
@@ -76,14 +76,17 @@ window.__ev=[]; const ev=n=>window.__start&&window.__ev.push([n,Date.now()-windo
 const F=()=>$('#f').contentWindow, D=()=>$('#f').contentDocument;
 function cap(i){ if(i>0) ev('whoosh');  document.querySelectorAll('.step').forEach((e,k)=>e.classList.toggle('on',k===i)); }
 function pos(el){ const r=el.getBoundingClientRect(), s=$('#screen').getBoundingClientRect(); return [s.left+(r.left+r.width/2)*S, s.top+(r.top+r.height/2)*S]; }
-async function moveTo(el){ const [x,y]=pos(el), t=$('#tap'); t.style.left=x+'px'; t.style.top=y+'px'; t.classList.add('on'); await sleep(560); }
-async function tap(sel,{hold=180}={}){ const el=typeof sel==='string'?D().querySelector(sel):sel; if(!el) throw new Error('missing '+sel); await moveTo(el); const t=$('#tap'); t.classList.add('press'); ev('tap'); await sleep(hold); el.click(); t.classList.remove('press'); await sleep(120); }
+async function moveTo(el){ const [x,y]=pos(el), t=$('#tap'); t.style.left=x+'px'; t.style.top=y+'px'; t.classList.add('on'); await sleep(520); }
+async function tap(sel,{hold=150}={}){ const el=typeof sel==='string'?D().querySelector(sel):sel; if(!el) throw new Error('missing '+sel); await moveTo(el); const t=$('#tap'); t.classList.add('press'); ev('tap'); await sleep(hold); el.click(); t.classList.remove('press'); await sleep(120); }
 function hideTap(){ $('#tap').classList.remove('on'); }
 async function scrollTo(y,ms=600){ const w=F(), y0=w.scrollY, t0=performance.now(); return new Promise(res=>{ (function step(){ const p=Math.min(1,(performance.now()-t0)/ms), e=p<.5?2*p*p:1-Math.pow(-2*p+2,2)/2; w.scrollTo(0,y0+(y-y0)*e); p<1?requestAnimationFrame(step):res(); })(); }); }
 async function typeInto(sel,text,dt=70){ const el=D().querySelector(sel); for(const ch of text){ el.value+=ch; ev('key'); el.dispatchEvent(new Event('input',{bubbles:true})); await sleep(dt); } }
+window.__vsync=()=>{ const t=performance.now(); for(const d of [document,$('#f').contentDocument]) for(const a of d.getAnimations()){ if(a.__t0===undefined){ a.__t0=t; a.pause(); } a.currentTime=Math.max(0,t-a.__t0); } };
+function setTime(){ const el=D().querySelector('#i-time'); if(!el||el.value) return; const d=new Date(Date.now()+26*3600e3); d.setHours(17,0,0,0); el.value=new Date(d.getTime()-d.getTimezoneOffset()*60000).toISOString().slice(0,16); el.dispatchEvent(new Event('input',{bubbles:true})); el.dispatchEvent(new Event('change',{bubbles:true})); }
 async function run(){
   await document.fonts.ready; await new Promise(r=>{ const f=$('#f'); if(f.contentDocument&&f.contentDocument.readyState==='complete') r(); else f.onload=r; });
   F().openWA=()=>{};                       // ما بنفتح واتساب فعلياً بالفيديو
+  window.__ready=true; while(!window.__go) await sleep(20);
   window.__start=Date.now(); const T=t=>sleep(Math.max(0,t-(Date.now()-window.__start)));
   cap(0);
   await T(1900); cap(1);
@@ -91,19 +94,20 @@ async function run(){
   await T(3000); cap(2);
   await scrollTo(260,600);
   await T(3600); await tap('#view-cat [data-card="s4"] [data-a="add"]'); ev('pop');
-  await T(4450); await tap('#view-cat [data-card="s2"] [data-a="add"]'); ev('pop');
-  await T(5300); await tap('#view-cat [data-card="s5"] [data-a="add"]'); ev('pop');
-  await T(6150); await tap('#view-cat [data-card="s4"] [data-a="inc"]',{hold:140});
-  await T(6950); cap(3);
-  await T(7000); await tap('#cartbar button');
-  await T(7850); await tap('#sheet [data-a="pane"][data-p="checkout"]');
-  await T(8700); await moveTo(D().querySelector('#i-name')); await typeInto('#i-name','أحمد',80);
+  await T(4400); await tap('#view-cat [data-card="s2"] [data-a="add"]'); ev('pop');
+  await T(5200); await tap('#view-cat [data-card="s5"] [data-a="add"]'); ev('pop');
+  await T(6000); await tap('#view-cat [data-card="s4"] [data-a="inc"]',{hold:130});
+  await T(6800); cap(3);
+  await T(6850); await tap('#cartbar button');
+  await T(7700); await tap('#sheet [data-a="pane"][data-p="checkout"]');
+  await T(8500); await moveTo(D().querySelector('#i-name')); await typeInto('#i-name','أحمد',80);
   await tap('[data-a="mode"][data-m="pickup"]',{hold:120});
-  { const d=new Date(Date.now()+26*3600e3); d.setHours(17,0,0,0); D().querySelector('#i-time').value=new Date(d.getTime()-d.getTimezoneOffset()*60000).toISOString().slice(0,16); }
-  await T(10400); cap(4);
-  await T(10450); await tap('#sheet [data-a="send"]'); ev('success');
-  await T(11400); hideTap();
-  await T(12000); cap(-1); ev('impact'); $('#credit').style.opacity=0; $('#phone').style.transform='translateX(-50%) scale(.82)'; $('#phone').style.opacity='.0'; $('#outro').classList.add('on');
+  await sleep(200);
+  setTime();
+  await T(10450); cap(4); setTime();
+  await T(10500); await tap('#sheet [data-a="send"]'); ev('success');
+  await T(11500); hideTap();
+  await T(12350); cap(-1); ev('impact'); $('#credit').style.opacity=0; $('#phone').style.transform='translateX(-50%) scale(.82)'; $('#phone').style.opacity='.0'; $('#outro').classList.add('on');
   await T(15000); window.__done=true;
 }
 run().catch(e=>{ window.__err=String(e); window.__done=true; });
