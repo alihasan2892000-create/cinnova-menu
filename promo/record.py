@@ -1,6 +1,6 @@
 import sys, os, base64, time, subprocess, threading, http.server, functools, shutil
 from playwright.sync_api import sync_playwright
-V=sys.argv[1]; OUT=sys.argv[2]; FR=os.path.join(V,'..','frames'); shutil.rmtree(FR,ignore_errors=True); os.makedirs(FR)
+V=os.path.abspath(sys.argv[1]); OUT=os.path.abspath(sys.argv[2]); FR=os.path.join(V,'..','frames'); shutil.rmtree(FR,ignore_errors=True); os.makedirs(FR)
 srv=http.server.ThreadingHTTPServer(('127.0.0.1',8765),functools.partial(http.server.SimpleHTTPRequestHandler,directory=V))
 threading.Thread(target=srv.serve_forever,daemon=True).start()
 frames=[]
@@ -15,6 +15,7 @@ with sync_playwright() as p:
     pg.goto('http://127.0.0.1:8765/stage.html')
     pg.wait_for_function('window.__done===true',timeout=60000)
     start=pg.evaluate('window.__start')/1000; err=pg.evaluate('window.__err||null')
+    import json; json.dump(pg.evaluate('window.__ev'),open(OUT+'.events.json','w'))
     cdp.send('Page.stopScreencast'); b.close()
 print('frames',len(frames),'err',err,'pageerrors',errs[:3])
 fr=[(t,d) for t,d in frames if t>=start-0.05]

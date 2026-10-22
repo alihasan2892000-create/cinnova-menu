@@ -37,10 +37,18 @@ wrangler.jsonc       ← إعداد Cloudflare Worker: بينشر مجلد publi
 tests/qa.py          ← فحص شامل (129 فحص)
 ```
 
-## فيديو إعلاني (15 ثانية، 1080×1920)
+## فيديو إعلاني (15 ثانية، 1080×1920، مع صوت)
 - `promo/stage.html`: مشهد فيه موك اب جوال، وجوّاه المنيو الحقيقي بـ iframe، ومعه عناوين الخطوات الأربعة ودائرة الضغط. التوقيتات كلها بدالة `run()`.
-- `promo/record.py`: بيسجّل المشهد بـ CDP screencast، وبيطلّع MP4 (H.264) بـ ffmpeg من `imageio-ffmpeg`.
-- **للتشغيل:** حط `stage.html` و`assets/logo_word.svg` و`assets/tile.webp` بمجلد، ومعهم نسخة من `public/` باسم `menu/`. بعدين: `python promo/record.py <المجلد> out.mp4`.
+  - **الخلفية بهوية حسن الزرقاء** (تدرّج `#052DE4` لـ `#04104A`، ونقاط وهالات زرقاء). المنيو جوّا الجوال بيضل بهوية سينوفا.
+  - شريط تحت طول الفيديو: "تصميم وتطوير · المهندس حسن أبو عيد · @hassan.design2022". وبالخاتمة بطاقة المصمم: الاسم، "مصمم جرافيك وصانع محتوى"، واتساب +970 566 702 710، والحساب.
+  - **مكان الصورة:** حالياً دائرة فيها حرف "ح" (`.av`)، لأنه ما في صورة لحسن. إذا بعت صورة، حطها بدل الحرف.
+  - المشهد بيسجّل الأحداث (`window.__ev`): tap، key، pop، whoosh، success، impact، مع وقت كل حدث بالملّي ثانية.
+- `promo/record.py`: بيسجّل المشهد بـ CDP screencast، وبيطلّع MP4 صامت، ومعه `<out>.events.json`.
+- `promo/audio.py`: بيولّد موسيقى (116 BPM) وساوند إفكت بـ numpy من ملف الأحداث، يعني بدون أي حقوق ملكية، وبيطلّع WAV.
+- **للتشغيل:** حط بمجلد واحد: `stage.html`، و`assets/logo_word.svg`، وملفات الخط `plex400.ttf` و`plex500.ttf` و`plex600.ttf` و`plex700.ttf` (من Google Fonts، IBM Plex Sans Arabic)، ونسخة من `public/` باسم `menu/`. بعدين:
+  1. `python promo/record.py <المجلد> silent.mp4`
+  2. `python promo/audio.py silent.mp4.events.json audio.wav`
+  3. دمج الصوت بـ ffmpeg (من `imageio-ffmpeg`): `-c:v copy -c:a aac -b:a 192k`.
 - واتساب ما بينفتح بالفيديو (`openWA` بيتعطّل جوا المشهد).
 
 ## سير العمل (إلزامي بعد كل تعديل)
