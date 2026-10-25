@@ -187,11 +187,24 @@ with sync_playwright() as p:
     chk('super special slab prices', pg.evaluate('[unitPrice(byId.kb2,"s"),unitPrice(byId.kb2,"l")]')==[170,340])
     chk('cake sub headers', pg.locator('.subhead').count()==4)
     pg.locator('.cake-banner').click(); pg.wait_for_timeout(500)
+    chk('cake gallery has 14 photos, no SVG drawing', pg.locator('.gal figure').count()==14 and pg.locator('#cake-prev svg').count()==0)
+    chk('cake banner shows a real photo', pg.locator('.cake-banner .mini img').count()==1)
+    pg.locator('.gal figure[data-g="2"] img').click(); pg.wait_for_timeout(400)
+    chk('gallery photo opens enlarged', pg.evaluate('document.querySelector("#lb").classList.contains("on") && document.querySelector("#lb").classList.contains("is-gal")') and pg.locator('#lb-count').inner_text()=='3 / 14')
+    pg.locator('#lb-next').click(); pg.wait_for_timeout(200)
+    chk('gallery next arrow keeps it open', pg.evaluate('document.querySelector("#lb").classList.contains("on")') and pg.locator('#lb-count').inner_text()=='4 / 14')
+    pg.locator('#lb-pick').click(); pg.wait_for_timeout(200)
+    chk('pick from enlarged photo marks tile', pg.locator('.gal figure.on').count()==1 and pg.locator('.gal figure[data-g="3"].on').count()==1)
+    pg.locator('#lb-x').click(); pg.wait_for_timeout(450)
+    chk('closing photo keeps cake sheet open', not pg.evaluate('document.querySelector("#lb").classList.contains("on")') and pg.evaluate('document.querySelector("#sheet").classList.contains("on")'))
+    pg.locator('.gal figure[data-g="0"] .pick').click(); pg.wait_for_timeout(200)
+    chk('picking another design replaces the first', pg.locator('.gal figure.on').count()==1 and pg.locator('.gal figure[data-g="0"].on').count()==1)
     pg.locator('[data-a="cake-step"][data-s="2"]').click(); pg.wait_for_timeout(200)
     chk('cake step1 validation', pg.locator('.field.bad').count()>=3)
     for k,v in [('occasion','bday'),('size','m'),('shape','num')]: pg.locator(f'[data-k="{k}"][data-v="{v}"]').click()
     pg.locator('[data-a="cake-step"][data-s="2"]').click(); pg.wait_for_timeout(200)
     chk('cake requires number when shape=num', pg.locator('#f-num.bad').count()==1)
+    pg.evaluate('document.querySelector("#sheet .sheet-body").scrollTop=0'); pg.wait_for_timeout(300)  # التحقق بيعمل scroll لأول خطأ، والمعرض أطول من الرسمة القديمة
     chk('cake bar hidden at top', not pg.evaluate('document.querySelector("#cake-bar").classList.contains("show")'))
     pg.evaluate('document.querySelector("#sheet .sheet-body").scrollTop=10000'); pg.wait_for_timeout(400)
     chk('cake bar shows on scroll + summary', pg.evaluate('document.querySelector("#cake-bar").classList.contains("show")') and 'رقم أو حرف' in pg.locator('#cake-bar p').inner_text())
@@ -214,7 +227,7 @@ with sync_playwright() as p:
     pg.fill('#i-time',later); pg.locator('[data-a="cake-send"]').click(); pg.wait_for_timeout(800)
     cm=urls[-1] if len(urls)>n0 else ''
     chk('cake WA message sent', bool(cm))
-    for s in ['كيكة خاصة','رقم أو حرف — 30','لوتس','فوندان','ذهبي','الكتابة: مبروك','بانتظار تأكيد السعر']:
+    for s in ['كيكة خاصة','رقم أو حرف — 30','التصميم المرجعي من أعمالكم: كيك طبقات بالورد (صورة رقم 1)','لوتس','فوندان','ذهبي','الكتابة: مبروك','بانتظار تأكيد السعر']:
         chk(f'cake msg has "{s}"', s in cm)
     chk('cake order did not touch cart', pg.evaluate('cartCount()')==0)
     pg.locator('#sheet [data-a="close"]').first.click(); pg.wait_for_timeout(300)

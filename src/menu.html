@@ -217,6 +217,16 @@ img{display:block;max-width:100%}
 .lb figcaption b{font-size:17px;font-weight:600}
 .lb figcaption .price{font-size:14px}
 .lb-x{position:absolute;top:calc(14px + env(safe-area-inset-top,0px));inset-inline-end:16px}
+/* وضع المعرض: صورة 4:5، أسهم تنقّل، وزر "أريد مثلها" */
+.lb-nav,.lb-pick,.lb-count{display:none}
+.lb.is-gal img{aspect-ratio:4/5;max-height:66dvh;width:auto;max-width:100%;margin:0 auto}
+.lb.is-gal figure{width:auto;max-width:min(92vw,520px)}
+.lb.is-gal .lb-nav{display:grid;position:absolute;top:50%;margin-top:-20px}
+.lb.is-gal .lb-count,.lb.is-gal .lb-pick{display:block}
+.lb-nav[data-lbn="-1"]{inset-inline-start:10px}.lb-nav[data-lbn="1"]{inset-inline-end:10px}
+.lb-count{font-size:12px;color:var(--muted);direction:ltr;unicode-bidi:isolate}
+.lb-pick{width:100%;margin-top:12px}
+.lb-pick.ghost{margin-top:12px}
 .scrim{position:fixed;inset:0;z-index:60;background:rgba(10,4,2,.6);opacity:0;pointer-events:none;transition:opacity .35s}
 .scrim.on{opacity:1;pointer-events:auto}
 .sheet{position:fixed;z-index:61;left:50%;bottom:0;width:min(480px,100%);max-height:92dvh;display:flex;flex-direction:column;background:var(--bg);border:1px solid var(--line-2);border-bottom:0;border-radius:26px 26px 0 0;transform:translate(-50%,105%);transition:transform .5s var(--ease)}
@@ -286,7 +296,8 @@ textarea.inp{min-height:80px;resize:vertical}
 .cake-banner::before{content:"";position:absolute;inset:0;background:linear-gradient(100deg,transparent 30%,rgba(255,255,255,.28) 50%,transparent 70%);transform:translateX(120%);animation:shine 3.2s ease-in-out 1s infinite}
 @keyframes shine{0%{transform:translateX(120%)}45%,100%{transform:translateX(-120%)}}
 .cake-banner .mini{flex:none;width:96px;height:80px;border-radius:14px;background:rgba(44,23,17,.92);display:grid;place-items:center}
-.cake-banner .mini svg{width:88px;height:70px}
+.cake-banner .mini{overflow:hidden}
+.cake-banner .mini img{width:100%;height:100%;object-fit:cover}
 .cake-banner h3{margin:0;font-size:17px;font-weight:700}
 .cake-banner p{margin:3px 0 8px;font-size:12.5px;color:rgba(44,23,17,.75);line-height:1.5}
 .cake-banner .cta{display:inline-flex;align-items:center;gap:5px;padding:6px 12px;border-radius:10px;background:var(--bg);color:var(--cream);font-size:12.5px;font-weight:600}
@@ -295,18 +306,31 @@ textarea.inp{min-height:80px;resize:vertical}
 .steps div{flex:1;text-align:center;font-size:11.5px;color:var(--muted)}
 .steps div::before{content:"";display:block;height:4px;border-radius:2px;background:var(--line-2);margin-bottom:6px;transition:background .4s}
 .steps div.on{color:var(--cream)}.steps div.on::before{background:var(--cream)}
-.cake-prev{margin:0 0 4px;padding:6px 0 10px;display:grid;place-items:center}
-.cake-prev svg{width:220px;height:150px;overflow:visible}
+.cake-prev{margin:0 0 4px;padding:2px 0 10px}
+.gal-head{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:baseline;gap:2px 10px;margin-bottom:10px}
+.gal-head b{font-size:15px;font-weight:700;color:var(--cream)}
+.gal-head small{font-size:11.5px;color:var(--muted)}
+.gal{display:flex;gap:10px;overflow-x:auto;scroll-snap-type:x mandatory;margin:0 -20px;padding:2px 20px 6px;scrollbar-width:none;overscroll-behavior-x:contain}
+.gal::-webkit-scrollbar{display:none}
+.gal figure{flex:none;width:128px;margin:0;scroll-snap-align:start;position:relative}
+.gal img{display:block;width:100%;aspect-ratio:4/5;object-fit:cover;border-radius:14px;background:var(--card);border:2px solid transparent;transition:border-color .25s}
+.gal figure.on img{border-color:var(--cream)}
+.gal figure.on::after{content:"✓";position:absolute;top:8px;inset-inline-start:8px;width:24px;height:24px;border-radius:50%;background:var(--cream);color:var(--bg);display:grid;place-items:center;font-weight:700;font-size:13px;animation:pop .35s var(--spring)}
+.gal figcaption{font-size:11.5px;color:var(--muted);margin:6px 2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pick{width:100%;padding:7px 4px;border-radius:10px;border:1px solid var(--line-2);background:var(--card);color:var(--cream);font-size:12px;font-weight:600;transition:.25s var(--ease)}
+.pick.on{background:var(--cream);color:var(--bg);border-color:var(--cream)}
+.ref-row{display:flex;align-items:center;gap:12px;padding:10px;border-radius:14px;background:var(--card);border:1px solid var(--line-2)}
+.ref-row img{flex:none;width:52px;height:65px;object-fit:cover;border-radius:10px}
+.ref-row p{flex:1;margin:0;font-size:13px;line-height:1.55}
+.ref-row p i{font-style:normal;color:var(--muted);font-size:12px}
+.ref-row button{flex:none;padding:7px 12px;border-radius:10px;border:1px solid var(--line-2);color:var(--cream);font-size:12px;font-weight:600}
 /* شريط صغير بيظهر فوق لما الزبون ينزل، بداله ما تضل الكيكة الكبيرة ثابتة وتغطي على الخيارات */
 .cake-bar{position:sticky;top:0;z-index:3;height:0;margin:0 -20px}
 .cake-bar>div{display:flex;align-items:center;gap:12px;padding:8px 20px;background:var(--bg);border-bottom:1px solid var(--line-2);box-shadow:0 12px 20px -14px rgba(0,0,0,.7);opacity:0;transform:translateY(-10px);pointer-events:none;transition:opacity .25s ease,transform .3s var(--ease)}
 .cake-bar.show>div{opacity:1;transform:none;pointer-events:auto}
-.cake-bar svg{flex:none;width:68px;height:52px;overflow:visible}
+.cake-bar img{flex:none;width:40px;height:50px;object-fit:cover;border-radius:8px}
 .cake-bar p{margin:0;font-size:12.5px;line-height:1.55;color:var(--cream);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
 .cake-bar p i{font-style:normal;color:var(--muted)}
-.cake-prev .flame,.cake-banner .flame{transform-box:fill-box;transform-origin:50% 100%;animation:flick .9s ease-in-out infinite alternate}
-@keyframes flick{to{transform:scale(.85,1.15) rotate(4deg)}}
-.cake-prev .tier{transition:fill .4s,transform .5s var(--spring)}
 .opts{display:grid;grid-template-columns:repeat(auto-fill,minmax(96px,1fr));gap:8px}
 .opt{padding:10px 8px;border-radius:13px;background:var(--card);border:1px solid var(--line-2);display:flex;flex-direction:column;align-items:center;gap:2px;font-size:13.5px;text-align:center;transition:.25s var(--ease)}
 .opt small{font-size:11px;color:var(--muted)}
@@ -395,7 +419,7 @@ textarea.inp{min-height:80px;resize:vertical}
 <div class="cartbar" id="cartbar"><button class="js-cart"><span class="cnt" id="cb-n">0</span><span class="lbl">عرض السلة</span><span class="tot" id="cb-t">0 ₪</span></button></div>
 
 <div class="scrim" id="scrim"></div>
-<div class="lb" id="lb" role="dialog" aria-modal="true" aria-label="صورة الصنف" aria-hidden="true"><button class="icon-btn lb-x" id="lb-x" aria-label="إغلاق"></button><figure><img id="lb-img" alt=""><figcaption><b id="lb-name"></b><span id="lb-price"></span></figcaption></figure></div>
+<div class="lb" id="lb" role="dialog" aria-modal="true" aria-label="صورة الصنف" aria-hidden="true"><button class="icon-btn lb-x" id="lb-x" aria-label="إغلاق"></button><figure><img id="lb-img" alt=""><figcaption><b id="lb-name"></b><span id="lb-price"></span><span class="lb-count" id="lb-count"></span></figcaption><button class="btn lb-pick" id="lb-pick"></button></figure><button class="icon-btn lb-nav" data-lbn="-1" id="lb-prev" aria-label="الصورة السابقة"></button><button class="icon-btn lb-nav" data-lbn="1" id="lb-next" aria-label="الصورة التالية"></button></div>
 <div class="sheet" id="sheet" role="dialog" aria-modal="true">
   <div class="grab"></div>
   <div id="sheet-inner" style="display:flex;flex-direction:column;min-height:0"></div>
@@ -571,6 +595,11 @@ const CAKE = {
   color: [{id:"white",name:"أبيض",c:"#F7EFE3"},{id:"pink",name:"وردي",c:"#F2B8C6"},{id:"blue",name:"أزرق فاتح",c:"#B9D7EE"},{id:"gold",name:"ذهبي",c:"#D9B36A"},{id:"lilac",name:"ليلكي",c:"#CDB8E6"},{id:"mint",name:"نعناعي",c:"#BFE3CF"},{id:"red",name:"أحمر",c:"#C8443F"},{id:"choc",name:"شوكولاتة",c:"#6B3A24"}],
   textMax: 30
 };
+// معرض "من أعمالنا" بأول صفحة "صمّم كيكتك": صور من شغل المحل (images/cakes). gNN.webp للتكبير، وgNNs.webp للشريط
+const GALLERY = [
+  "كيك طبقات بالورد","كيك على شكل قلب","كيك يونيكورن","كيك تخرّج","كيك كلاسيك بالكريمة","كيك سبايدرمان","كيك فينتج بالفيونكات",
+  "بلاطة بالشوكولاتة","كيك ميني ماوس","كيك تحديد جنس المولود","كيك طبقات أبيض","كيك فينتج أبيض","كيك شوكولاتة لعيد الميلاد","كيك استقبال مولود"
+].map((name,i)=>{ const n=String(i+1).padStart(2,"0"); return { name, img:`images/cakes/g${n}.webp`, thumb:`images/cakes/g${n}s.webp` }; });
 
 /* =========================================================
    Icons
@@ -842,46 +871,33 @@ function openWA(text){ const a=document.createElement("a"); a.href=waLink(text);
 /* =========================================================
    Custom cake builder
    ========================================================= */
-let cake = { occasion:"", size:"", shape:"", shapeText:"", flavor:"", filling:"", deco:"", color:"", text:"", ref:false, name:"", mode:"", time:"", address:"", notes:"" };
-let cakeStep = 1, prevAnim = true;
+let cake = { occasion:"", size:"", shape:"", shapeText:"", flavor:"", filling:"", deco:"", color:"", text:"", ref:false, pick:-1, name:"", mode:"", time:"", address:"", notes:"" };
+let cakeStep = 1;
 const opt = (k,id) => (CAKE[k].find(o=>o.id===id)||{});
+const picked = () => GALLERY[cake.pick] || null;
 
-function cakeSVG(st=cake, mini=false){
-  const size=opt("size",st.size); const tiers=size.tiers||1, wf=size.w||1;
-  const col=(opt("color",st.color).c)||"#F3E3C8";
-  const dark="rgba(44,23,17,.35)";
-  const deco=st.deco, shape=st.shape||"round";
-  let g=`<ellipse cx="100" cy="136" rx="${wf>1 ? 64*wf+10 : 78*wf+8}" ry="9" fill="rgba(243,210,117,.18)" stroke="#C29A54" stroke-width="1.5"/>`;
-  let y=132, w=128*wf, h=tiers>1?34:(size.flat?30:48); const layers=[];
-  for(let i=0;i<tiers;i++){ layers.push({y, w, h}); y-=h; w*=0.74; h*=0.92; }
-  layers.forEach((L,i)=>{
-    const x=100-L.w/2, top=L.y-L.h, ry=shape==="square"?0:Math.max(5,L.w*0.09);
-    g+=`<g class="tier" style="transform-origin:100px ${L.y}px;${prevAnim?`animation:pop .5s var(--spring) ${i*80}ms both`:""}">`;
-    g+=`<path d="M${x} ${top} V${L.y} ${ry?`A${L.w/2} ${ry} 0 0 0 ${x+L.w} ${L.y}`:`H${x+L.w}`} V${top}" fill="${col}" stroke="${dark}" stroke-width="1.2"/>`;
-    g+= ry? `<ellipse cx="100" cy="${top}" rx="${L.w/2}" ry="${ry}" fill="${col}" stroke="${dark}" stroke-width="1.2"/><ellipse cx="100" cy="${top}" rx="${L.w/2-3}" ry="${ry-2}" fill="rgba(255,255,255,.18)"/>`
-           : `<rect x="${x}" y="${top-6}" width="${L.w}" height="6" fill="${col}" stroke="${dark}" stroke-width="1.2"/><rect x="${x+2}" y="${top-5}" width="${L.w-4}" height="3" fill="rgba(255,255,255,.2)"/>`;
-    if(deco==="drip"){ let d=`M${x} ${top+2}`; const n=Math.round(L.w/12); for(let k=0;k<n;k++){ const sx=x+k*L.w/n, ex=x+(k+1)*L.w/n, len=6+((k*37)%11); d+=` L${sx+2} ${top+2} Q${sx+(ex-sx)/2} ${top+len+6} ${ex-1} ${top+2}`; } d+=` L${x+L.w} ${top-2} L${x} ${top-2}Z`; g+=`<path d="${d}" fill="#5A2E14"/>`; }
-    if(deco==="cream"){ const n=Math.round(L.w/11); for(let k=0;k<=n;k++) g+=`<circle cx="${x+k*L.w/n}" cy="${L.y-2}" r="3.6" fill="#FFF8EC" stroke="${dark}" stroke-width=".6"/>`; for(let k=0;k<=n;k++) g+=`<circle cx="${x+k*L.w/n}" cy="${top}" r="3" fill="#FFF8EC" stroke="${dark}" stroke-width=".6"/>`; }
-    if(deco==="fondant"){ g+=`<path d="M${x+4} ${top+L.h*.55} Q${x+L.w/4} ${top+L.h*.75} ${100} ${top+L.h*.55} T${x+L.w-4} ${top+L.h*.55}" fill="none" stroke="rgba(255,255,255,.55)" stroke-width="2.4" stroke-linecap="round"/>`; for(let k=1;k<5;k++) g+=`<circle cx="${x+k*L.w/5}" cy="${top+L.h*.3}" r="1.8" fill="rgba(255,255,255,.7)"/>`; }
-    if(deco==="flowers" && i===layers.length-1){ [[-.28,0],[0,-.04],[.28,0]].forEach(([fx,fy],j)=>{ const cx=100+fx*L.w, cy=top+fy*L.w-2; g+=`<g transform="translate(${cx} ${cy})">${[0,72,144,216,288].map(r=>`<ellipse rx="3.6" ry="6" cy="-5" fill="${["#E58BA0","#F6C3CF","#E58BA0"][j]}" transform="rotate(${r})"/>`).join("")}<circle r="2.6" fill="#F3D275"/></g>`; }); }
-    if(deco==="flowers" && i!==layers.length-1){ g+=`<circle cx="${x+10}" cy="${top+4}" r="4" fill="#E58BA0"/><circle cx="${x+L.w-10}" cy="${top+4}" r="4" fill="#F6C3CF"/>`; }
-    g+=`</g>`;
-  });
-  const T=layers[layers.length-1], tTop=T.y-T.h;
-  if(!mini && st.text){ const B=layers[0]; const t=esc(st.text).slice(0,24); g+=`<text x="100" y="${B.y-B.h*.32}" text-anchor="middle" font-size="${Math.max(7,Math.min(11,180/(t.length||1)))}" font-weight="700" fill="${st.color==="choc"||st.color==="red"?"#F3D275":"#5A2E14"}" font-family="IBM Plex Sans Arabic,system-ui">${t}</text>`; }
-  if(shape==="heart") g+=`<path transform="translate(100 ${tTop-24}) scale(1.1)" d="M0 14C-14 4-12-6-6-6c3 0 5 2 6 4 1-2 3-4 6-4 6 0 8 10-6 20z" fill="#C8443F" stroke="#F3D275" stroke-width="1"/><path d="M100 ${tTop-6}V${tTop}" stroke="#F3D275" stroke-width="1.5"/>`;
-  else if(shape==="num"){ const t=esc(st.shapeText||"1").slice(0,3); g+=`<text x="100" y="${tTop-6}" text-anchor="middle" font-size="30" font-weight="700" fill="#F3D275" stroke="#7B4003" stroke-width="1" font-family="IBM Plex Sans Arabic,system-ui">${t}</text>`; }
-  else if(st.occasion==="bday" || !st.occasion){ [-14,0,14].forEach((dx,j)=>{ const cx=100+dx, h2=j===1?22:17; g+=`<rect x="${cx-2}" y="${tTop-h2}" width="4" height="${h2}" rx="1.5" fill="${["#F2B8C6","#B9D7EE","#BFE3CF"][j]}"/><path class="flame" d="M${cx} ${tTop-h2-10}c-3 4-3 7 0 8 3-1 3-4 0-8z" fill="#F3D275"/>`; }); }
-  else g+=`<g transform="translate(100 ${tTop-14})"><path d="M0-10l2.6 5.4 6 .8-4.3 4.2 1 6L0 3.6-5.3 6.4l1-6-4.3-4.2 6-.8z" fill="#F3D275"/></g>`;
-  return `<svg viewBox="0 0 200 150" aria-hidden="true">${g}</svg>`;
+/* معرض أعمالنا: الزبون بيختار تصميم كمرجع، وبينضاف للرسالة مع رابط الصورة */
+function galleryHTML(){
+  return `<div class="gal-head"><b>من أعمالنا</b><small>اختر تصميماً يعجبك ليكون مرجعاً لكيكتك (اختياري)</small></div>
+  <div class="gal">${GALLERY.map((g,i)=>`<figure class="${cake.pick===i?"on":""}" data-g="${i}"><img src="${g.thumb}" alt="${g.name}" loading="lazy" data-a="gal-open" data-i="${i}"><figcaption>${g.name}</figcaption><button type="button" class="pick ${cake.pick===i?"on":""}" data-a="gal-pick" data-i="${i}">${cake.pick===i?"تم الاختيار":"أريد مثلها"}</button></figure>`).join("")}</div>`;
+}
+function refRowHTML(){
+  const g=picked();
+  return g ? `<div class="ref-row"><img src="${g.thumb}" alt=""><p>التصميم المرجعي<br><b style="font-weight:600">${g.name}</b></p><button type="button" data-a="cake-browse">تغيير</button></div>`
+           : `<div class="ref-row"><p><i>لم تختر تصميماً مرجعياً من أعمالنا</i></p><button type="button" data-a="cake-browse">تصفّح الأعمال</button></div>`;
+}
+function setPick(i){
+  cake.pick = cake.pick===i ? -1 : i;
+  document.querySelectorAll(".gal figure").forEach(f=>{ const on=+f.dataset.g===cake.pick; f.classList.toggle("on",on); const b=f.querySelector(".pick"); b.classList.toggle("on",on); b.textContent=on?"تم الاختيار":"أريد مثلها"; });
+  updatePrev();
 }
 function cakeSummary(){
-  const parts=["occasion","size","shape","flavor","filling","deco","color"].filter(k=>cake[k]).map(k=> k==="shape"&&cake.shape==="num"&&cake.shapeText ? `${opt(k,cake[k]).name}: ${esc(cake.shapeText)}` : opt(k,cake[k]).name);
-  return parts.length ? parts.join(" · ") : `<i>لم تختر شيئاً بعد، وستتشكّل كيكتك مع كل اختيار</i>`;
+  const parts=(picked()?[`مثل: ${picked().name}`]:[]).concat(["occasion","size","shape","flavor","filling","deco","color"].filter(k=>cake[k]).map(k=> k==="shape"&&cake.shape==="num"&&cake.shapeText ? `${opt(k,cake[k]).name}: ${esc(cake.shapeText)}` : opt(k,cake[k]).name));
+  return parts.length ? parts.join(" · ") : `<i>لم تختر شيئاً بعد، وسيظهر ملخص كيكتك هنا</i>`;
 }
+const barThumb = () => picked() ? `<img src="${picked().thumb}" alt="">` : "";
 function updatePrev(){
-  const p=$("#cake-prev"); if(p) p.innerHTML=cakeSVG();
-  const b=$("#cake-bar"); if(b){ const was=prevAnim; prevAnim=false; b.querySelector("span").innerHTML=cakeSVG(cake,true); prevAnim=was; b.querySelector("p").innerHTML=cakeSummary(); }
+  const b=$("#cake-bar"); if(b){ b.querySelector("span").innerHTML=barThumb(); b.querySelector("p").innerHTML=cakeSummary(); }
 }
 document.addEventListener("scroll",e=>{ if(e.target.classList&&e.target.classList.contains("sheet-body")) syncCakeBar(); },true);
 function syncCakeBar(){
@@ -890,10 +906,9 @@ function syncCakeBar(){
 }
 
 function cakeBanner(){
-  const demo={size:"l",shape:"round",deco:"drip",color:"pink",occasion:"bday"};
   return `<button class="cake-banner" data-a="cake-open">
-    <span class="mini">${cakeSVG(demo,true)}</span>
-    <span><h3>صمّم كيكتك حسب ذوقك</h3><p>اختر الحجم والنكهة والتزيين والكتابة، ونحن نصنعها لك</p><span class="cta">احجز كيكتك ${UI.left}</span></span>
+    <span class="mini"><img src="${GALLERY[1].thumb}" alt="" loading="lazy"></span>
+    <span><h3>صمّم كيكتك حسب ذوقك</h3><p>تصفّح أعمالنا واختر التصميم والحجم والنكهة، ونحن نصنعها لك</p><span class="cta">احجز كيكتك ${UI.left}</span></span>
   </button>`;
 }
 
@@ -907,7 +922,8 @@ function renderCake(p){
   const el=$("#sheet-inner");
   const steps=`<div class="steps">${["الشكل والحجم","النكهة والتزيين","الاستلام"].map((t,i)=>`<div class="${i<cakeStep?"on":""}">${t}</div>`).join("")}</div>`;
   const head=`<div class="sheet-head">${cakeStep>1?`<button class="icon-btn" data-a="cake-step" data-s="${cakeStep-1}" aria-label="رجوع">${UI.right}</button>`:""}<h2 style="flex:1;margin-inline-start:${cakeStep>1?12:0}px">كيكتك الخاصة</h2><button class="icon-btn" data-a="close" aria-label="إغلاق">${UI.close}</button></div>`+steps;
-  const prev=`<div class="cake-bar" id="cake-bar" aria-hidden="true"><div><span>${(()=>{const was=prevAnim; prevAnim=false; const m=cakeSVG(cake,true); prevAnim=was; return m;})()}</span><p>${cakeSummary()}</p></div></div><div class="cake-prev" id="cake-prev">${cakeSVG()}</div>`;
+  const bar=`<div class="cake-bar" id="cake-bar" aria-hidden="true"><div><span>${barThumb()}</span><p>${cakeSummary()}</p></div></div>`;
+  const prev=bar+`<div class="cake-prev" id="cake-prev">${cakeStep===1?galleryHTML():refRowHTML()}</div>`;
   let body="", foot="";
   if(cakeStep===1){
     body=prev+optGroup("occasion","المناسبة")+optGroup("size","الحجم")+optGroup("shape","الشكل",
@@ -935,8 +951,8 @@ function renderCake(p){
     foot=`<button class="btn" data-a="cake-send">${UI.wa}إرسال طلب الكيكة عبر واتساب</button>`;
   }
   el.innerHTML=head+`<div class="sheet-body pane">${body}</div><div class="sheet-foot">${foot}</div>`;
-  const ti=$("#i-text"); ti&&ti.addEventListener("input",()=>{ cake.text=ti.value; $("#t-count").textContent=`${ti.value.length}/${CAKE.textMax}`; prevAnim=false; updatePrev(); prevAnim=true; });
-  const ni=$("#i-num"); ni&&ni.addEventListener("input",()=>{ cake.shapeText=ni.value.trim(); prevAnim=false; updatePrev(); prevAnim=true; });
+  const ti=$("#i-text"); ti&&ti.addEventListener("input",()=>{ cake.text=ti.value; $("#t-count").textContent=`${ti.value.length}/${CAKE.textMax}`; });
+  const ni=$("#i-num"); ni&&ni.addEventListener("input",()=>{ cake.shapeText=ni.value.trim(); updatePrev(); });
 }
 function readCake(){
   const v=id=>{ const e=$(id); return e?e.value:null; };
@@ -963,6 +979,7 @@ function cakeMessage(){
     `✨ التزيين: ${n("deco")}`,
     `🎨 اللون: ${n("color")}`,
     ...(cake.text?[`✍️ الكتابة: ${cake.text}`]:[]),
+    ...(picked()?[`🖼️ التصميم المرجعي من أعمالكم: ${picked().name} (صورة رقم ${cake.pick+1})`, ...(/^https?:$/.test(location.protocol)?[new URL(picked().img,location.href).href]:[])]:[]),
     ...(cake.ref?["📷 لديّ صورة للتصميم وسأرسلها هنا"]:[]), "",
     `👤 الاسم: ${cake.name}`,
     `🚚 الاستلام: ${cake.mode==="delivery"?"توصيل":"استلام من المحل"}`,
@@ -978,12 +995,24 @@ function cakeMessage(){
    ========================================================= */
 /* تكبير الصورة: بالضغط على صورة الصنف. زر الرجوع بالجوال بيسكّرها */
 let lbPushed=false;
-function openLB(id){
-  const it=byId[id], src=imgOf(it); if(!src) return;
-  $("#lb-img").src=src; $("#lb-img").alt=withFlavor(it.name,curFlavor(it),it);
-  $("#lb-name").textContent=withFlavor(it.name,curFlavor(it),it); $("#lb-price").innerHTML=priceHTML(it);
+let galIdx=-1;
+function showLB(){
   $("#lb").classList.add("on"); $("#lb").setAttribute("aria-hidden","false"); document.body.style.overflow="hidden";
   try{ history.pushState(Object.assign({},history.state,{lb:1}),""); lbPushed=true; }catch(err){ lbPushed=false; }
+}
+function galLB(i){
+  galIdx=(i+GALLERY.length)%GALLERY.length; const g=GALLERY[galIdx];
+  $("#lb-img").src=g.img; $("#lb-img").alt=g.name; $("#lb-name").textContent=g.name; $("#lb-price").innerHTML="";
+  $("#lb-count").textContent=`${galIdx+1} / ${GALLERY.length}`;
+  const on=cake.pick===galIdx; $("#lb-pick").textContent=on?"✓ تم اختيار هذا التصميم":"أريد مثلها"; $("#lb-pick").classList.toggle("ghost",on);
+}
+function openGal(i){ $("#lb").classList.add("is-gal"); galLB(i); showLB(); }
+function openLB(id){
+  const it=byId[id], src=imgOf(it); if(!src) return;
+  $("#lb").classList.remove("is-gal"); galIdx=-1; $("#lb-count").textContent="";
+  $("#lb-img").src=src; $("#lb-img").alt=withFlavor(it.name,curFlavor(it),it);
+  $("#lb-name").textContent=withFlavor(it.name,curFlavor(it),it); $("#lb-price").innerHTML=priceHTML(it);
+  showLB();
 }
 function closeLB(fromPop){
   if(!$("#lb").classList.contains("on")) return;
@@ -992,7 +1021,12 @@ function closeLB(fromPop){
   if(lbPushed && !fromPop){ lbPushed=false; try{ history.back(); }catch(err){} } else lbPushed=false;
 }
 document.addEventListener("click",e=>{
-  if(e.target.closest("#lb")){ closeLB(); return; }
+  if(e.target.closest("#lb")){
+    if($("#lb").dataset.swiped) return;
+    const nav=e.target.closest("[data-lbn]"); if(nav){ galLB(galIdx+ +nav.dataset.lbn); return; }
+    if(e.target.closest("#lb-pick")){ setPick(galIdx); galLB(galIdx); return; }
+    closeLB(); return;
+  }
   const zoom=e.target.closest(".item .thumb img"); if(zoom){ openLB(zoom.closest("[data-card]").dataset.card); return; }
   const cartBtn=e.target.closest(".js-cart"); if(cartBtn){ openSheet("cart"); return; }
   const b=e.target.closest("[data-a]"); if(!b) return;
@@ -1011,6 +1045,7 @@ document.addEventListener("click",e=>{
   if(a==="send"){ readForm(); if(!validate()) return; lastOrder=buildMessage(); openWA(lastOrder); cart={}; updateCartUI(); $$("[data-card]").forEach(c=>refreshItem(c.dataset.card)); renderPane("success"); }
   if(a==="resend"&&lastOrder) openWA(lastOrder);
   if(a==="cake-open"){ if(!cake.name) cake.name=form.name; openSheet("cake1"); }
+  if(a==="cake-browse"){ readCake(); renderPane("cake1"); $("#sheet .sheet-body").scrollTop=0; return; }
   if(a==="cake-step"){ readCake(); const to=b.dataset.s; if(to>cakeStep && !validCake(cakeStep)) return; renderPane("cake"+to); $("#sheet .sheet-body").scrollTop=0; }
   if(a==="opt"){ const k=b.dataset.k; cake[k]=b.dataset.v; b.parentElement.querySelectorAll("[data-a=opt]").forEach(x=>x.classList.toggle("on",x===b));
     const f=b.closest(".field"); f&&f.classList.remove("bad");
@@ -1018,12 +1053,14 @@ document.addEventListener("click",e=>{
     if(k==="color"){ const n=$("#sw-name"); n&&(n.textContent=CAKE.color.find(c=>c.id===cake.color).name); }
     updatePrev(); }
   if(a==="cake-ref"){ cake.ref=!cake.ref; b.classList.toggle("on",cake.ref); }
+  if(a==="gal-open"){ openGal(+b.dataset.i); return; }
+  if(a==="gal-pick"){ setPick(+b.dataset.i); return; }
   if(a==="cake-mode"){ cake.mode=b.dataset.m; $$(".choice button").forEach(x=>x.classList.toggle("on",x===b)); $("#addr-wrap").classList.toggle("open",cake.mode==="delivery"); $("#f-mode").classList.remove("bad"); }
   if(a==="cake-send"){ readCake(); if(!validCake(3)) return; lastOrder=cakeMessage(); openWA(lastOrder); form.name=cake.name; renderPane("success"); }
 });
 document.addEventListener("input",e=>{ const f=e.target.closest(".field"); f&&f.classList.remove("bad"); });
 $("#scrim").addEventListener("click",closeSheet);
-document.addEventListener("keydown",e=>{ if(e.key==="Escape"){ if($("#lb").classList.contains("on")) closeLB(); else closeSheet(); } });
+document.addEventListener("keydown",e=>{ if(galIdx>=0 && $("#lb").classList.contains("on") && (e.key==="ArrowLeft"||e.key==="ArrowRight")){ galLB(galIdx+(e.key==="ArrowLeft"?1:-1)); return; } if(e.key==="Escape"){ if($("#lb").classList.contains("on")) closeLB(); else closeSheet(); } });
 
 let toastT; function toast(t){ const el=$("#toast"); el.textContent=t; el.classList.add("on"); clearTimeout(toastT); toastT=setTimeout(()=>el.classList.remove("on"),1600); }
 
@@ -1097,7 +1134,12 @@ addEventListener("scroll",()=>{ $("#bar-home").classList.toggle("scrolled",scrol
    Init
    ========================================================= */
 const LOGOS={badge:"__BADGE__",word:"__WORD__"};
-$("#lb-x").innerHTML=UI.close;
+$("#lb-x").innerHTML=UI.close; $("#lb-prev").innerHTML=UI.right; $("#lb-next").innerHTML=UI.left;
+// سحب بالإصبع بين صور المعرض (RTL: السحب لليمين = الصورة التالية)
+{ let x0=null; const lb=$("#lb");
+  lb.addEventListener("touchstart",e=>{ x0=galIdx>=0?e.touches[0].clientX:null; },{passive:true});
+  lb.addEventListener("touchend",e=>{ if(x0===null) return; const dx=e.changedTouches[0].clientX-x0; x0=null; if(Math.abs(dx)>45){ galLB(galIdx+(dx>0?1:-1)); lb.dataset.swiped="1"; setTimeout(()=>delete lb.dataset.swiped,350); } });
+}
 $$("[data-logo]").forEach(i=>i.src=LOGOS[i.dataset.logo]);
 $$(".ico-bag").forEach(e=>e.outerHTML=UI.bag);
 $$(".ico-left").forEach(e=>e.outerHTML=UI.left);
