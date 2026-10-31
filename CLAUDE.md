@@ -68,7 +68,8 @@ tests/qa.py          ← فحص شامل (137 فحص)
 - الكود على GitHub: `alihasan2892000-create/cinnova-menu`، عام (public)، والفرع `main`.
 - Cloudflare مربوط بالـ repo: أي push على `main` بيعمل `npx wrangler deploy` تلقائياً، وبينشر `public/` بس.
 - اسم الـ Worker `cinnova-menu`، ولازم يطابق `name` بـ `wrangler.jsonc`.
-- الرابط: https://cinnova-menu.alihasan2892000.workers.dev
+- الرابط: https://cinnova-menu.cinnova.workers.dev (القديم: cinnova-menu.alihasan2892000.workers.dev). رابط قسم معيّن: `/#/c/<id>`، مثلاً `/#/c/sharqi`.
+- **QR:** انعمل للرابط الجديد بنسختين: `#/c/sharqi` (اللي طلبه حسن)، والصفحة الرئيسية. كل وحدة بالهوية مع الشعار، وأسود وأبيض PNG وSVG. الملفات مش بالـ repo.
 - ما استخدمنا GitHub Pages ولا Vercel المجاني، لأن شروطهم بتمنع المواقع التجارية.
 - مجلد `brand/` مستثنى من الـ repo بـ `.gitignore` لأن الـ repo عام. الملف الأصلي محفوظ عند حسن. لا تحط بالـ repo أي إشي خاص.
 - سيرفر Claude Code السحابي ما بيوصل لـ Cloudflare، فالنشر بيصير بس عن طريق push.
