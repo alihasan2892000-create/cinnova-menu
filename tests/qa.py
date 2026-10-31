@@ -139,8 +139,10 @@ with sync_playwright() as p:
     pg.evaluate('cart={"s1|uqiya":2,"ks1|l":1,"j4|uqiya":3};updateCartUI();openSheet("checkout")'); pg.wait_for_timeout(500)
     pg.locator('[data-a="send"]').click(); pg.wait_for_timeout(300)
     bads=pg.evaluate('[...document.querySelectorAll(".field.bad")].map(e=>e.id)')
-    chk('checkout blocks empty form (name, mode, time)', set(['f-name','f-mode','f-time'])<=set(bads) and len(urls)==0, str(bads))
-    pg.fill('#i-name','تجربة'); pg.locator('[data-m="delivery"]').click(); pg.fill('#i-time','2026-10-20T16:00'); pg.wait_for_timeout(300)
+    chk('checkout blocks empty form (name, phone, mode, time)', set(['f-name','f-phone','f-mode','f-time'])<=set(bads) and len(urls)==0, str(bads))
+    pg.fill('#i-name','تجربة'); pg.fill('#i-phone','12'); pg.locator('[data-a="send"]').click(); pg.wait_for_timeout(200)
+    chk('short phone rejected', pg.locator('#f-phone.bad').count()==1 and len(urls)==0)
+    pg.fill('#i-phone','٠٥٩٩ ١٢٣ ٤٥٦'); pg.locator('[data-m="delivery"]').click(); pg.fill('#i-time','2026-10-20T16:00'); pg.wait_for_timeout(300)
     chk('address field appears for delivery', pg.evaluate('document.querySelector("#addr-wrap").classList.contains("open")'))
     pg.locator('[data-a="send"]').click(); pg.wait_for_timeout(300)
     chk('delivery requires address', 'f-addr' in pg.evaluate('[...document.querySelectorAll(".field.bad")].map(e=>e.id)') and len(urls)==0)
@@ -149,7 +151,7 @@ with sync_playwright() as p:
     chk('WhatsApp opens on valid order', len(urls)==1)
     msg=urls[-1] if urls else ''
     chk('WA number correct', msg.startswith('https://wa.me/972594870202?text='))
-    for s in ['أساور — 2 وقية × 12 = 24 ₪','كيك نوتيلا (كبير · 12 قطعة) — 1 × 120 = 120 ₪','جلي تركي — 3 وقية × 8 = 24 ₪','المجموع: 168 ₪','الاسم: تجربة','توصيل','العنوان: دير البلح','ملاحظات: بدون مكسرات']:
+    for s in ['أساور — 2 وقية × 12 = 24 ₪','كيك نوتيلا (كبير · 12 قطعة) — 1 × 120 = 120 ₪','جلي تركي — 3 وقية × 8 = 24 ₪','المجموع: 168 ₪','الاسم: تجربة','رقم التواصل: \u200e0599 123 456','توصيل','العنوان: دير البلح','ملاحظات: بدون مكسرات']:
         chk(f'WA msg contains "{s}"', s in msg)
     chk('success screen', pg.locator('.success').count()==1)
     chk('cart cleared after send', pg.evaluate('cartCount()')==0)
@@ -157,15 +159,15 @@ with sync_playwright() as p:
     chk('resend opens WA again', len(urls)==2 and urls[-1]==urls[-2])
     pg.locator('#sheet [data-a="close"]').first.click(); pg.wait_for_timeout(400)
     # pickup: no address in msg
-    pg.evaluate('cart={"c1|uqiya":1};updateCartUI();form={name:"",mode:"",time:"",address:"",notes:""};openSheet("checkout")'); pg.wait_for_timeout(400)
-    pg.fill('#i-name','ب'); pg.locator('[data-m="pickup"]').click(); pg.fill('#i-time','2026-10-20T16:00'); pg.locator('[data-a="send"]').click(); pg.wait_for_timeout(800)
+    pg.evaluate('cart={"c1|uqiya":1};updateCartUI();form={name:"",phone:"",mode:"",time:"",address:"",notes:""};openSheet("checkout")'); pg.wait_for_timeout(400)
+    pg.fill('#i-name','ب'); pg.fill('#i-phone','0591234567'); pg.locator('[data-m="pickup"]').click(); pg.fill('#i-time','2026-10-20T16:00'); pg.locator('[data-a="send"]').click(); pg.wait_for_timeout(800)
     chk('pickup order: no address line', 'العنوان' not in urls[-1] and 'استلام من المحل' in urls[-1])
     pg.locator('#sheet [data-a="close"]').first.click(); pg.wait_for_timeout(400)
     # slab cake needs booking a day ahead
     lt='h=>{const d=new Date(Date.now()+h*3600e3);return new Date(d.getTime()-d.getTimezoneOffset()*60000).toISOString().slice(0,16)}'
-    pg.evaluate('cart={"kb1|s":1};updateCartUI();form={name:"",mode:"",time:"",address:"",notes:""};openSheet("checkout")'); pg.wait_for_timeout(400)
+    pg.evaluate('cart={"kb1|s":1};updateCartUI();form={name:"",phone:"",mode:"",time:"",address:"",notes:""};openSheet("checkout")'); pg.wait_for_timeout(400)
     chk('slab: 24h hint shown', 'قبل 24 ساعة' in pg.locator('#f-time').inner_text())
-    pg.fill('#i-name','ب'); pg.locator('[data-m="pickup"]').click(); pg.fill('#i-time',pg.evaluate(f'({lt})(3)'))
+    pg.fill('#i-name','ب'); pg.fill('#i-phone','0591234567'); pg.locator('[data-m="pickup"]').click(); pg.fill('#i-time',pg.evaluate(f'({lt})(3)'))
     n0=len(urls); pg.locator('[data-a="send"]').click(); pg.wait_for_timeout(300)
     chk('slab: rejects time < 24h', len(urls)==n0 and pg.locator('#f-time.bad').count()==1)
     pg.fill('#i-time',pg.evaluate(f'({lt})(30)')); pg.locator('[data-a="send"]').click(); pg.wait_for_timeout(800)
@@ -220,7 +222,7 @@ with sync_playwright() as p:
     pg.locator('[data-a="cake-step"][data-s="2"]').click(); pg.wait_for_timeout(200)
     chk('cake step2 keeps text', pg.input_value('#i-text')=='مبروك')
     pg.locator('[data-a="cake-step"][data-s="3"]').click(); pg.wait_for_timeout(200)
-    pg.fill('#i-name','ك'); pg.locator('[data-a="cake-mode"][data-m="pickup"]').click()
+    pg.fill('#i-name','ك'); pg.fill('#i-phone','+970591234567'); pg.locator('[data-a="cake-mode"][data-m="pickup"]').click()
     from datetime import datetime, timedelta
     soon=(datetime.now()+timedelta(hours=3)).strftime('%Y-%m-%dT%H:%M')
     pg.fill('#i-time',soon); n0=len(urls); pg.locator('[data-a="cake-send"]').click(); pg.wait_for_timeout(300)
@@ -229,7 +231,7 @@ with sync_playwright() as p:
     pg.fill('#i-time',later); pg.locator('[data-a="cake-send"]').click(); pg.wait_for_timeout(800)
     cm=urls[-1] if len(urls)>n0 else ''
     chk('cake WA message sent', bool(cm))
-    for s in ['كيكة خاصة','رقم أو حرف — 30','التصميم المرجعي من أعمالكم: كيك طبقات بالورد (صورة رقم 1)','لوتس','فوندان','ذهبي','الكتابة: مبروك','بانتظار تأكيد السعر']:
+    for s in ['كيكة خاصة','رقم أو حرف — 30','التصميم المرجعي من أعمالكم: كيك طبقات بالورد (صورة رقم 1)','لوتس','فوندان','ذهبي','الكتابة: مبروك','رقم التواصل: \u200e+970591234567','بانتظار تأكيد السعر']:
         chk(f'cake msg has "{s}"', s in cm)
     chk('cake order did not touch cart', pg.evaluate('cartCount()')==0)
     pg.locator('#sheet [data-a="close"]').first.click(); pg.wait_for_timeout(300)

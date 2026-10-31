@@ -782,7 +782,11 @@ function flyFrom(el){
 /* =========================================================
    Sheet (cart → checkout → success)
    ========================================================= */
-let form = { name:"", mode:"", time:"", address:"", notes:"" };
+let form = { name:"", phone:"", mode:"", time:"", address:"", notes:"" };
+// رقم التواصل: بنحوّل الأرقام الهندية (٠-٩) للاتينية، ولازم يكون فيه 9 لـ 13 رقم
+const normPhone = v => (v||"").replace(/[٠-٩]/g,d=>"٠١٢٣٤٥٦٧٨٩".indexOf(d)).replace(/[۰-۹]/g,d=>"۰۱۲۳۴۵۶۷۸۹".indexOf(d)).trim();
+const validPhone = v => { const n=normPhone(v).replace(/[\s\-()]/g,""); return /^\+?\d{9,13}$/.test(n); };
+const phoneField = v => `<div class="field" id="f-phone"><label>رقم التواصل</label><input class="inp" id="i-phone" type="tel" inputmode="tel" autocomplete="tel" dir="ltr" style="text-align:right" placeholder="059 000 0000" value="${esc(v)}"><div class="err">يُرجى كتابة رقم تواصل صحيح</div></div>`;
 
 function openSheet(pane="cart"){ renderPane(pane); $("#scrim").classList.add("on"); $("#sheet").classList.add("on"); $("#cartbar").classList.remove("on"); document.body.style.overflow="hidden"; }
 function closeSheet(){ $("#scrim").classList.remove("on"); $("#sheet").classList.remove("on"); document.body.style.overflow=""; updateCartUI(); }
@@ -809,6 +813,7 @@ function renderPane(p){
     const minV=new Date(now.getTime()-now.getTimezoneOffset()*60000).toISOString().slice(0,16);
     el.innerHTML=head("بيانات الحجز","cart")+`<div class="sheet-body pane">
       <div class="field" id="f-name"><label>الاسم</label><input class="inp" id="i-name" autocomplete="name" placeholder="اسمك الكريم" value="${esc(form.name)}"><div class="err">يُرجى كتابة الاسم</div></div>
+      ${phoneField(form.phone)}
       <div class="field" id="f-mode"><label>طريقة الاستلام</label><div class="choice">
         <button type="button" data-a="mode" data-m="delivery" class="${form.mode==="delivery"?"on":""}">${UI.truck}توصيل</button>
         <button type="button" data-a="mode" data-m="pickup" class="${form.mode==="pickup"?"on":""}">${UI.store}استلام من المحل</button></div><div class="err">يُرجى اختيار طريقة الاستلام</div></div>
@@ -831,11 +836,11 @@ const cartLead = () => Math.max(0,...cartLines().map(l=>l.it.leadHours||0));
 const leadNames = () => [...new Set(cartLines().filter(l=>l.it.leadHours).map(l=>l.it.name))].join("، ");
 function readForm(){
   const v=id=>($(id)||{}).value||"";
-  form.name=v("#i-name").trim(); form.time=v("#i-time"); form.address=v("#i-addr").trim(); form.notes=v("#i-notes").trim();
+  form.name=v("#i-name").trim(); form.phone=normPhone(v("#i-phone")); form.time=v("#i-time"); form.address=v("#i-addr").trim(); form.notes=v("#i-notes").trim();
 }
 function validate(){
   let ok=true; const mark=(id,bad)=>{ $(id).classList.toggle("bad",bad); if(bad) ok=false; };
-  mark("#f-name",!form.name); mark("#f-mode",!form.mode); mark("#f-time",!form.time || (cartLead()>0 && new Date(form.time).getTime() < Date.now()+cartLead()*3600e3-15*60e3));
+  mark("#f-name",!form.name); mark("#f-phone",!validPhone(form.phone)); mark("#f-mode",!form.mode); mark("#f-time",!form.time || (cartLead()>0 && new Date(form.time).getTime() < Date.now()+cartLead()*3600e3-15*60e3));
   mark("#f-addr", form.mode==="delivery" && !form.address);
   if(!ok){ const f=$(".field.bad"); f && f.scrollIntoView({behavior:"smooth",block:"center"}); }
   return ok;
@@ -851,6 +856,7 @@ function buildMessage(){
     ...lines, "",
     `💰 المجموع: ${money(cartTotal())}`, "",
     `👤 الاسم: ${form.name}`,
+    `📞 رقم التواصل: \u200E${form.phone}`,
     `🚚 الاستلام: ${form.mode==="delivery"?"توصيل":"استلام من المحل"}`,
     `🕒 الوقت: ${timeText(form.time)}`,
     ...(form.mode==="delivery"?[`📍 العنوان: ${form.address}`]:[]),
@@ -865,7 +871,7 @@ function openWA(text){ const a=document.createElement("a"); a.href=waLink(text);
 /* =========================================================
    Custom cake builder
    ========================================================= */
-let cake = { occasion:"", size:"", shape:"", shapeText:"", flavor:"", filling:"", deco:"", color:"", text:"", ref:false, pick:-1, name:"", mode:"", time:"", address:"", notes:"" };
+let cake = { occasion:"", size:"", shape:"", shapeText:"", flavor:"", filling:"", deco:"", color:"", text:"", ref:false, pick:-1, name:"", phone:"", mode:"", time:"", address:"", notes:"" };
 let cakeStep = 1;
 const opt = (k,id) => (CAKE[k].find(o=>o.id===id)||{});
 const picked = () => GALLERY[cake.pick] || null;
@@ -934,6 +940,7 @@ function renderCake(p){
   }
   if(cakeStep===3){
     body=`<div class="field" id="f-name"><label>الاسم</label><input class="inp" id="i-name" autocomplete="name" placeholder="اسمك الكريم" value="${esc(cake.name)}"><div class="err">يُرجى كتابة الاسم</div></div>
+      ${phoneField(cake.phone)}
       <div class="field" id="f-mode"><label>طريقة الاستلام</label><div class="choice">
         <button type="button" data-a="cake-mode" data-m="delivery" class="${cake.mode==="delivery"?"on":""}">${UI.truck}توصيل</button>
         <button type="button" data-a="cake-mode" data-m="pickup" class="${cake.mode==="pickup"?"on":""}">${UI.store}استلام من المحل</button></div><div class="err">يُرجى اختيار طريقة الاستلام</div></div>
@@ -951,13 +958,13 @@ function renderCake(p){
 function readCake(){
   const v=id=>{ const e=$(id); return e?e.value:null; };
   const set=(k,id,trim=true)=>{ const x=v(id); if(x!==null) cake[k]=trim?x.trim():x; };
-  set("shapeText","#i-num"); set("text","#i-text"); set("name","#i-name"); set("time","#i-time"); set("address","#i-addr"); set("notes","#i-notes");
+  set("shapeText","#i-num"); set("text","#i-text"); set("name","#i-name"); set("phone","#i-phone"); cake.phone=normPhone(cake.phone); set("time","#i-time"); set("address","#i-addr"); set("notes","#i-notes");
 }
 function validCake(step){
   let ok=true; const mark=(id,bad)=>{ const e=$(id); if(!e) return; e.classList.toggle("bad",bad); if(bad) ok=false; };
   if(step===1){ ["occasion","size","shape"].forEach(k=>mark("#f-"+k,!cake[k])); if(cake.shape==="num") mark("#f-num",!cake.shapeText); }
   if(step===2){ ["flavor","filling","deco","color"].forEach(k=>mark("#f-"+k,!cake[k])); }
-  if(step===3){ mark("#f-name",!cake.name); mark("#f-mode",!cake.mode); mark("#f-time",!cake.time || new Date(cake.time).getTime() < Date.now()+SHOP.cakeLeadHours*3600e3-15*60e3); mark("#f-addr",cake.mode==="delivery"&&!cake.address); }
+  if(step===3){ mark("#f-name",!cake.name); mark("#f-phone",!validPhone(cake.phone)); mark("#f-mode",!cake.mode); mark("#f-time",!cake.time || new Date(cake.time).getTime() < Date.now()+SHOP.cakeLeadHours*3600e3-15*60e3); mark("#f-addr",cake.mode==="delivery"&&!cake.address); }
   if(!ok){ const f=$(".field.bad"); f&&f.scrollIntoView({behavior:"smooth",block:"center"}); navigator.vibrate&&navigator.vibrate([10,40,10]); }
   return ok;
 }
@@ -976,6 +983,7 @@ function cakeMessage(){
     ...(picked()?[`🖼️ التصميم المرجعي من أعمالكم: ${picked().name} (صورة رقم ${cake.pick+1})`, ...(/^https?:$/.test(location.protocol)?[new URL(picked().img,location.href).href]:[])]:[]),
     ...(cake.ref?["📷 لديّ صورة للتصميم وسأرسلها هنا"]:[]), "",
     `👤 الاسم: ${cake.name}`,
+    `📞 رقم التواصل: \u200E${cake.phone}`,
     `🚚 الاستلام: ${cake.mode==="delivery"?"توصيل":"استلام من المحل"}`,
     `🕒 الموعد: ${timeText(cake.time)}`,
     ...(cake.mode==="delivery"?[`📍 العنوان: ${cake.address}`]:[]),
@@ -1038,7 +1046,7 @@ document.addEventListener("click",e=>{
   if(a==="mode"){ form.mode=b.dataset.m; $$(".choice button").forEach(x=>x.classList.toggle("on",x===b)); $("#addr-wrap").classList.toggle("open",form.mode==="delivery"); $("#f-mode").classList.remove("bad"); }
   if(a==="send"){ readForm(); if(!validate()) return; lastOrder=buildMessage(); openWA(lastOrder); cart={}; updateCartUI(); $$("[data-card]").forEach(c=>refreshItem(c.dataset.card)); renderPane("success"); }
   if(a==="resend"&&lastOrder) openWA(lastOrder);
-  if(a==="cake-open"){ if(!cake.name) cake.name=form.name; openSheet("cake1"); }
+  if(a==="cake-open"){ if(!cake.name) cake.name=form.name; if(!cake.phone) cake.phone=form.phone; openSheet("cake1"); }
   if(a==="cake-browse"){ readCake(); renderPane("cake1"); $("#sheet .sheet-body").scrollTop=0; return; }
   if(a==="cake-step"){ readCake(); const to=b.dataset.s; if(to>cakeStep && !validCake(cakeStep)) return; renderPane("cake"+to); $("#sheet .sheet-body").scrollTop=0; }
   if(a==="opt"){ const k=b.dataset.k; cake[k]=b.dataset.v; b.parentElement.querySelectorAll("[data-a=opt]").forEach(x=>x.classList.toggle("on",x===b));
@@ -1050,7 +1058,7 @@ document.addEventListener("click",e=>{
   if(a==="gal-open"){ openGal(+b.dataset.i); return; }
   if(a==="gal-pick"){ setPick(+b.dataset.i); return; }
   if(a==="cake-mode"){ cake.mode=b.dataset.m; $$(".choice button").forEach(x=>x.classList.toggle("on",x===b)); $("#addr-wrap").classList.toggle("open",cake.mode==="delivery"); $("#f-mode").classList.remove("bad"); }
-  if(a==="cake-send"){ readCake(); if(!validCake(3)) return; lastOrder=cakeMessage(); openWA(lastOrder); form.name=cake.name; renderPane("success"); }
+  if(a==="cake-send"){ readCake(); if(!validCake(3)) return; lastOrder=cakeMessage(); openWA(lastOrder); form.name=cake.name; form.phone=cake.phone; renderPane("success"); }
 });
 document.addEventListener("input",e=>{ const f=e.target.closest(".field"); f&&f.classList.remove("bad"); });
 $("#scrim").addEventListener("click",closeSheet);

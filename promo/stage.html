@@ -100,7 +100,7 @@ async function run(){
   await T(6800); cap(3);
   await T(6850); await tap('#cartbar button');
   await T(7700); await tap('#sheet [data-a="pane"][data-p="checkout"]');
-  await T(8500); await moveTo(D().querySelector('#i-name')); await typeInto('#i-name','أحمد',80);
+  await T(8500); await moveTo(D().querySelector('#i-name')); await typeInto('#i-name','أحمد',80); D().querySelector('#i-phone').value='0599123456';
   await tap('[data-a="mode"][data-m="pickup"]',{hold:120});
   await sleep(200);
   setTime();
