@@ -1,0 +1,138 @@
+<!doctype html><html lang="ar" dir="rtl"><head><meta charset="utf-8">
+<style>
+@font-face{font-family:P;font-weight:400;src:url(plex400.ttf)}@font-face{font-family:P;font-weight:500;src:url(plex500.ttf)}
+@font-face{font-family:P;font-weight:600;src:url(plex600.ttf)}@font-face{font-family:P;font-weight:700;src:url(plex700.ttf)}
+:root{--s:1.4;--bg:#2C1711;--gold:#C29A54;--cream:#F3D275;--ease:cubic-bezier(.22,1,.36,1);--io:cubic-bezier(.65,0,.35,1)}
+*{box-sizing:border-box;margin:0}
+html,body{width:1080px;height:1920px;overflow:clip;background:var(--bg);font-family:P,sans-serif;color:var(--cream)}
+.deco{position:absolute;inset:0;overflow:hidden}
+.bg{position:absolute;inset:0;background:url(tile.webp) 0 0/360px auto repeat;opacity:.07}
+.glow{position:absolute;inset:0;background:radial-gradient(50% 30% at 50% 45%,rgba(194,154,84,.28),transparent 70%),radial-gradient(70% 18% at 50% 0%,rgba(194,154,84,.16),transparent 70%)}
+.orb{position:absolute;border-radius:50%;filter:blur(90px);opacity:.22;background:#C29A54}
+.o1{width:520px;height:520px;top:300px;left:-260px;animation:d1 16s ease-in-out infinite alternate}
+.o2{width:480px;height:480px;top:1100px;right:-240px;background:#7B4003;opacity:.35;animation:d2 16s ease-in-out infinite alternate}
+@keyframes d1{to{transform:translate(120px,160px)}}@keyframes d2{to{transform:translate(-120px,-180px)}}
+.frame{position:absolute;inset:30px;border:2px solid rgba(194,154,84,.28);border-radius:48px}
+.logo{position:absolute;top:78px;left:50%;width:330px;transform:translate(-50%,-30px);opacity:0;transition:opacity .9s var(--ease),transform 1s var(--ease)}
+.logo.on{opacity:1;transform:translate(-50%,0)}
+.phone{position:absolute;left:50%;top:282px;padding:16px;border-radius:84px;background:linear-gradient(145deg,#3a2a24,#120a07);box-shadow:0 0 0 3px #5a4436,0 0 110px rgba(194,154,84,.35),0 40px 90px rgba(0,0,0,.65);z-index:2;transform:translate(-50%,180px) scale(.9);opacity:0;transition:transform 1.2s var(--ease),opacity .8s var(--ease)}
+.phone.on{transform:translate(-50%,0);opacity:1}
+.phone.out{transform:translate(-50%,40px) scale(.84);opacity:0;transition:transform 1s var(--io),opacity .8s var(--io)}
+.screen{position:relative;width:calc(390px*var(--s));height:calc(844px*var(--s));border-radius:70px;overflow:hidden;background:#000}
+.screen iframe{position:absolute;left:0;top:0;width:390px;height:844px;border:0;transform:scale(var(--s));transform-origin:0 0}
+.island{position:absolute;top:20px;left:50%;transform:translateX(-50%);width:170px;height:48px;border-radius:26px;background:#000;z-index:3}
+.tap{position:absolute;width:104px;height:104px;margin:-52px 0 0 -52px;border-radius:50%;background:rgba(243,210,117,.32);border:5px solid rgba(255,255,255,.95);z-index:6;opacity:0;transform:scale(.6);transition:left .52s var(--io),top .52s var(--io),opacity .35s ease,transform .3s var(--ease),background .3s;pointer-events:none;box-shadow:0 0 0 10px rgba(243,210,117,.18),0 6px 24px rgba(0,0,0,.4)}
+.tap.on{opacity:1;transform:scale(1)}.tap.press{transform:scale(.72);background:rgba(243,210,117,.6)}
+/* كرت الـ QR بمشهد "امسح الرمز" */
+.qr{position:absolute;left:50%;top:560px;z-index:5;width:520px;padding:28px 28px 22px;border-radius:40px;background:#FFF8EC;box-shadow:0 0 0 10px rgba(194,154,84,.35),0 40px 90px rgba(0,0,0,.6);transform:translate(-50%,60px) scale(.9);opacity:0;transition:transform .8s var(--ease),opacity .6s var(--ease);text-align:center}
+.qr.on{transform:translate(-50%,0);opacity:1}
+.qr.out{transform:translate(-50%,-40px) scale(.92);opacity:0;transition:transform .6s var(--io),opacity .5s var(--io)}
+.qr .code{position:relative;overflow:hidden;border-radius:20px}
+.qr .code img{display:block;width:100%}
+.qr .beam{position:absolute;left:0;right:0;height:90px;top:-90px;background:linear-gradient(180deg,transparent,rgba(194,154,84,.55) 85%,#C29A54);mix-blend-mode:multiply}
+.qr.scan .beam{animation:beam 1.4s var(--io) 2 alternate}
+@keyframes beam{to{top:100%}}
+.qr .link{margin-top:18px;display:inline-flex;align-items:center;gap:10px;padding:14px 26px;border-radius:999px;background:#2C1711;color:#F3D275;font-size:27px;font-weight:600;direction:ltr}
+.qr .link svg{width:28px;height:28px}
+/* الكابشن */
+.cap{position:absolute;left:70px;right:70px;top:1590px;height:230px;z-index:4;display:flex;align-items:center;justify-content:center}
+.line{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;text-align:center;font-size:50px;font-weight:700;line-height:1.45;opacity:0;transform:translateY(24px);filter:blur(6px);transition:opacity .5s var(--ease),transform .6s var(--ease),filter .5s var(--ease)}
+.line.on{opacity:1;transform:none;filter:none}
+.line>div{max-width:100%}
+.line span{color:rgba(243,210,117,.38);transition:color .35s ease}
+.line span.on{color:#FFF3D6}
+.line span.on b{color:#F3D275}
+.line b{font-weight:700;color:rgba(243,210,117,.5)}
+/* الخاتمة */
+.outro{position:absolute;inset:0;z-index:8;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0;padding-bottom:120px;opacity:0;transition:opacity .8s var(--io)}
+.outro.on{opacity:1}
+.outro>*{opacity:0;transform:translateY(36px);transition:opacity .7s var(--ease),transform .9s var(--ease)}
+.outro.on>*{opacity:1;transform:none}
+.outro.on>:nth-child(2){transition-delay:.12s}.outro.on>:nth-child(3){transition-delay:.24s}.outro.on>:nth-child(4){transition-delay:.4s}
+.outro .badge{width:300px}
+.outro .t{margin-top:30px;font-size:74px;font-weight:700;background:linear-gradient(180deg,#F7DE8C,#C29A54);-webkit-background-clip:text;color:transparent;padding-bottom:10px}
+.outro .q{margin-top:26px;width:360px;padding:20px;border-radius:32px;background:#FFF8EC;box-shadow:0 0 0 8px rgba(194,154,84,.3)}
+.outro .q img{display:block;width:100%;border-radius:14px}
+.outro .u{margin-top:28px;font-size:32px;color:#D9C7A3;direction:ltr}
+</style></head><body>
+<div class="deco"><div class="bg"></div><div class="glow"></div><div class="orb o1"></div><div class="orb o2"></div></div><div class="frame"></div>
+<img class="logo" id="logo" src="logo_word.svg" alt="">
+<div class="phone" id="phone"><div class="screen" id="screen"><div class="island"></div><iframe id="f" src="menu/index.html"></iframe></div></div>
+<div class="qr" id="qr"><div class="code"><img src="qr.png" alt=""><div class="beam"></div></div><div class="link" id="qlink"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/></svg>cinnova-menu.cinnova.workers.dev</div></div>
+<div class="tap" id="tap"></div>
+<div class="cap" id="cap"></div>
+<div class="outro" id="outro"><img class="badge" src="badge.png" alt=""><div class="t">اطلب الآن بسهولة</div><div class="q"><img src="qr.png" alt=""></div><div class="u">cinnova-menu.cinnova.workers.dev</div></div>
+<script>
+const S=1.4, $=s=>document.querySelector(s), sleep=ms=>new Promise(r=>setTimeout(r,ms));
+window.__ev=[]; const ev=n=>window.__start&&window.__ev.push([n,Date.now()-window.__start]);
+const F=()=>$('#f').contentWindow, D=()=>$('#f').contentDocument;
+// الجمل ومقاطعها بتوقيت التعليق الصوتي (ms). «» بتنعرض بلون ذهبي
+const SENT=[
+ [[0,"أهلاً فيكم بسينوفا!"],[2020,"صار فيك تطلب حلوياتك من جوالك بسهولة."]],
+ [[4920,"امسح رمز الـ QR بكاميرا الجوال، أو اضغط على الرابط."]],
+ [[8560,"بدك كيك؟"],[9580,"ادخل على قسم الكيك،"],[11020,"اختار الحجم،"],[12100,"واضغط «أضف»."]],
+ [[13300,"وإذا بدك شرقي كمان،"],[14700,"اختار «حلويات شرقية»،"],[16200,"وحدد الكمية بالوقية أو الكيلو."]],
+ [[18940,"بعدها اضغط «عرض السلة»،"],[20700,"وبعدين «متابعة الحجز»."]],
+ [[22840,"اكتب اسمك ورقم التواصل،"],[24640,"واختار توصيل أو استلام،"],[26180,"والوقت اللي بناسبك."]],
+ [[27580,"وأخيراً اضغط «إرسال الحجز عبر واتساب»،"],[30300,"وطلبك بيوصلنا فوراً!"]]
+];
+const END=33600, OUTRO=31200;
+$('#cap').innerHTML=SENT.map((s,i)=>`<div class="line" id="l${i}"><div>${s.map(([t,x],j)=>`<span id="p${i}_${j}">${x.replace(/«([^»]+)»/g,'<b>«$1»</b>')}</span>`).join(' ')}</div></div>`).join('');
+function pos(el){ const r=el.getBoundingClientRect(), s=$('#screen').getBoundingClientRect(); return [s.left+(r.left+r.width/2)*S, s.top+(r.top+r.height/2)*S]; }
+async function moveToXY(x,y){ const t=$('#tap'); t.style.left=x+'px'; t.style.top=y+'px'; t.classList.add('on'); await sleep(520); }
+async function moveTo(el){ const [x,y]=pos(el); await moveToXY(x,y); }
+async function press(fn,hold=150){ const t=$('#tap'); t.classList.add('press'); ev('tap'); await sleep(hold); fn&&fn(); t.classList.remove('press'); await sleep(120); }
+async function tap(sel,o={}){ const el=typeof sel==='string'?D().querySelector(sel):sel; if(!el) throw new Error('missing '+sel); await moveTo(el); await press(()=>el.click(),o.hold); }
+function hideTap(){ $('#tap').classList.remove('on'); }
+async function scrollTo(y,ms=600){ const w=F(), y0=w.scrollY, t0=performance.now(); return new Promise(res=>{ (function step(){ const p=Math.min(1,(performance.now()-t0)/ms), e=p<.5?2*p*p:1-Math.pow(-2*p+2,2)/2; w.scrollTo(0,y0+(y-y0)*e); p<1?requestAnimationFrame(step):res(); })(); }); }
+const elY=(sel,off)=>{ const el=D().querySelector(sel); return el.getBoundingClientRect().top+F().scrollY-off; };
+async function typeInto(sel,text,dt=70){ const el=D().querySelector(sel); for(const ch of text){ el.value+=ch; ev('key'); el.dispatchEvent(new Event('input',{bubbles:true})); await sleep(dt); } }
+function setTime(){ const el=D().querySelector('#i-time'); if(!el||el.value) return; const d=new Date(Date.now()+26*3600e3); d.setHours(17,0,0,0); el.value=new Date(d.getTime()-d.getTimezoneOffset()*60000).toISOString().slice(0,16); el.dispatchEvent(new Event('input',{bubbles:true})); el.dispatchEvent(new Event('change',{bubbles:true})); }
+window.__vsync=()=>{ const t=performance.now(); for(const d of [document,$('#f').contentDocument]) for(const a of d.getAnimations()){ if(a.__t0===undefined){ a.__t0=t; a.pause(); } a.currentTime=Math.max(0,t-a.__t0); } };
+let T;
+async function captions(){
+  for(let i=0;i<SENT.length;i++){
+    await T(SENT[i][0][0]);
+    document.querySelectorAll('.line').forEach((e,k)=>e.classList.toggle('on',k===i)); if(i>0) ev('whoosh');
+    for(let j=0;j<SENT[i].length;j++){ await T(SENT[i][j][0]); $(`#p${i}_${j}`).classList.add('on'); }
+  }
+  await T(OUTRO-300); document.querySelectorAll('.line').forEach(e=>e.classList.remove('on'));
+}
+async function actions(){
+  $('#logo').classList.add('on'); await sleep(250); $('#phone').classList.add('on');
+  // امسح الرمز أو اضغط على الرابط
+  await T(4900); $('#qr').classList.add('on'); ev('pop');
+  await T(5300); $('#qr').classList.add('scan');
+  await T(6500); { const r=$('#qlink').getBoundingClientRect(); await moveToXY(r.left+r.width/2,r.top+r.height/2); await press(null); }
+  await T(7500); $('#qr').classList.replace('on','out'); hideTap(); ev('whoosh');
+  // الكيك
+  await T(9550); await tap('.cats [data-c="cake"]');
+  await T(10400); await scrollTo(elY('#view-cat [data-card="ks3"]',300),650);
+  await T(11050); await tap('#view-cat [data-card="ks3"] [data-a="unit"][data-u="l"]');
+  await T(12000); await tap('#view-cat [data-card="ks3"] [data-a="add"]'); ev('pop');
+  // الشرقي
+  await T(14650); await tap('#tabs [data-c="sharqi"]');
+  await T(15450); await scrollTo(elY('#view-cat [data-card="s4"]',330),650);
+  await T(16200); await tap('#view-cat [data-card="s4"] [data-a="unit"][data-u="uqiya"]');
+  await T(17400); await tap('#view-cat [data-card="s4"] [data-a="add"]'); ev('pop');
+  // السلة والحجز
+  await T(18950); await tap('#cartbar button');
+  await T(20750); await tap('#sheet [data-a="pane"][data-p="checkout"]');
+  await T(22800); await moveTo(D().querySelector('#i-name')); await typeInto('#i-name','أحمد',90);
+  await moveTo(D().querySelector('#i-phone')); await typeInto('#i-phone','0599123456',55);
+  await T(24650); await tap('[data-a="mode"][data-m="pickup"]',{hold:120});
+  await T(26150); await moveTo(D().querySelector('#i-time')); await press(()=>setTime());
+  await T(27650); setTime(); await tap('#sheet [data-a="send"]'); ev('success');
+  await T(29100); hideTap();
+  await T(OUTRO); ev('impact'); $('#phone').classList.add('out'); $('#logo').classList.remove('on'); $('#outro').classList.add('on');
+}
+async function run(){
+  await document.fonts.ready; await new Promise(r=>{ const f=$('#f'); if(f.contentDocument&&f.contentDocument.readyState==='complete') r(); else f.onload=r; });
+  F().openWA=()=>{};
+  window.__ready=true; while(!window.__go) await sleep(20);
+  window.__start=Date.now(); T=t=>sleep(Math.max(0,t-(Date.now()-window.__start)));
+  await Promise.all([captions(),actions()]);
+  await T(END); window.__done=true;
+}
+run().catch(e=>{ window.__err=String(e); window.__done=true; });
+</script></body></html>
