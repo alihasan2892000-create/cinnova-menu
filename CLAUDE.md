@@ -68,6 +68,11 @@ tests/qa.py          ← فحص شامل (142 فحص)
 - التشغيل: `DUR=33.6 python promo/render.py <المجلد> silent.mp4 60`، وبعدها `DUR=33.6 VO=voice.wav python promo/howto_audio.py silent.mp4.events.json audio.wav`. المجلد فيه `howto_stage.html` باسم `stage.html`، و`logo_word.svg` و`tile.webp`، وQR باسم `qr.png`، والشعار الدائري PNG باسم `badge.png`، وملفات الخط، و`menu/`.
 - `howto_audio.py`: الموسيقى بتوطى تلقائياً وقت الكلام (ducking)، والصوت بيتحوّل لـ 44.1kHz.
 
+## أوترو (5.5 ثانية) بينحط بآخر كل الفيديوهات
+- `promo/outro_stage.html`: الشعار الدائري بيطلع بنطّة مع أشعة ذهبية بتلف، وتحته "اطلب الآن من / المنيو الإلكتروني" (لمعة ذهبية)، و"تصفّح الأصناف والأسعار، وأرسل طلبك عبر واتساب"، وزر "↑ رابط المنيو في البايو"، والعنوان.
+- الأنيميشن بتبلّش لما ينعرض `#root` (لحظة `__go`). محاولة `cancel()/play()` للأنيميشن خلّت الفيديو فاضي.
+- التشغيل: `DUR=5.5 python promo/render.py <المجلد> silent.mp4 60`، وبعدها `DUR=5.5 python promo/howto_audio.py silent.mp4.events.json audio.wav` (بدون `VO`). المجلد فيه `badge.png` و`tile.webp` وملفات الخط.
+
 ## سير العمل (إلزامي بعد كل تعديل)
 1. عدّل `src/menu.html`.
 2. `python build.py`

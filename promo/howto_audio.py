@@ -8,7 +8,9 @@ L=np.zeros(N); R=np.zeros(N)
 def t_(d): return np.arange(int(SR*d))/SR
 G=[0.42]  # الموسيقى تحت صوت المعلّق
 def add(sig,at,g=1.0,pan=0.0):
-    g*=G[0]; i=int(at*SR); 
+    g*=G[0]; i=int(at*SR)
+    if i<0: sig=sig[-i:]; i=0   # صوت بيبلّش قبل الصفر
+    
     if i>=N: return
     sig=sig[:N-i]; L[i:i+len(sig)]+=sig*g*(1-pan)**.5*1.0; R[i:i+len(sig)]+=sig*g*(1+pan)**.5*1.0
 def lp(x,a):  # one-pole lowpass
