@@ -465,7 +465,7 @@ const CATS = [
   { id:"sharqi",   name:"حلويات شرقية",   en:"oriental", icon:"baklava",  type:"weight" },
   { id:"cake",     name:"كيك",            en:"cakes",    icon:"cake",     type:"piece",
     subs:[ {id:"super",name:"كيك سوبر سبيشل",short:"سوبر سبيشل",en:"super special"}, {id:"special",name:"كيك سبيشل",short:"سبيشل",en:"special"}, {id:"slab",name:"كيك بلاطات",short:"بلاطات",en:"sheet cakes"}, {id:"slice",name:"كيك قطع",short:"قطع",en:"slices"} ] },
-  { id:"gallery",  name:"معرض أعمالنا",   en:"our cakes", icon:"cake",    type:"gallery" },
+  { id:"gallery",  name:"معرض أعمالنا",   en:"our cakes", icon:"cake",    type:"gallery", hidden:true },  // بيفتح من قسم الكيك بس
   { id:"petit",    name:"بيتفور",         en:"petit four",icon:"cookie",  type:"weight" },
   { id:"pastry",   name:"معجنات",         en:"pastries", icon:"pizza",    type:"piece" },
   { id:"jelly",    name:"جلي",            en:"jelly",    icon:"jelly",    type:"piece" },
@@ -728,7 +728,7 @@ function itemCard(it,i){
 }
 
 function renderHome(){
-  $("#cats").innerHTML = CATS.map((c,i)=>{
+  $("#cats").innerHTML = CATS.filter(c=>!c.hidden).map((c,i)=>{
     const n=itemsIn(c.id).length;
     if(c.type==="gallery") return `<a class="cat gal-card reveal" style="--d:${i+6};text-decoration:none;color:inherit" role="button" data-a="go" data-c="${c.id}">
         <div class="gal-pics">${[0,2,5].map(k=>`<img src="${GALLERY[k].thumb}" alt="" loading="lazy">`).join("")}</div><div><h3>${c.name}</h3><small>${GALLERY.length} تصميماً بصور حقيقية</small></div><span class="go">${UI.left}</span></a>`;
@@ -752,7 +752,7 @@ function renderCat(cid){
   const hint = c.id==="featured" ? "الأصناف الأكثر طلباً لدينا" : list.some(i=>i.sizes) ? (list.some(isWeight) ? "الأسعار بالكيلو والوقية وحسب الحجم" : "الأسعار حسب الحجم") : (()=>{ const us=new Set(list.flatMap(unitsOf)); const w=us.has("kg")||us.has("uqiya"), pc=us.has("piece"); return w&&pc ? "الأسعار بالقطعة وبالوزن" : w ? "الأسعار بالكيلو والوقية" : "الأسعار بالقطعة"; })();
   $("#cat-head").innerHTML = `<div class="cat-hero"><div class="ring">${SC}${art(c.icon)}</div>
      <div><span class="mono" style="font-size:11px;color:var(--gold)">— ${c.en}</span><h1>${c.name}</h1><p>${hint} · ${nItems(list.length)}</p></div></div>`;
-  $("#tabs").innerHTML = CATS.map(t=>`<a class="tab ${t.id===c.id?"on":""}" role="button" data-a="go" data-c="${t.id}" style="text-decoration:none">${t.name}</a>`).join("");
+  $("#tabs").innerHTML = CATS.filter(t=>!t.hidden).map(t=>`<a class="tab ${t.id===(c.hidden?"cake":c.id)?"on":""}" role="button" data-a="go" data-c="${t.id}" style="text-decoration:none">${t.name}</a>`).join("");
   if(c.subs){
     let n=0;
     $("#list").innerHTML = (c.id==="cake"?cakeBanner()+`<a class="gal-link" role="button" data-a="go" data-c="gallery" style="text-decoration:none"><span class="gal-pics">${[0,2,5].map(k=>`<img src="${GALLERY[k].thumb}" alt="" loading="lazy">`).join("")}</span><span>شاهد معرض أعمالنا</span>${UI.left}</a>`:"")
@@ -769,7 +769,7 @@ function renderCat(cid){
 function renderGallery(c){
   $("#cat-head").innerHTML = `<div class="cat-hero"><div class="ring">${SC}${art(c.icon)}</div>
      <div><span class="mono" style="font-size:11px;color:var(--gold)">— ${c.en}</span><h1>${c.name}</h1><p>صور حقيقية لكيك من صنعنا · ${GALLERY.length} تصميماً</p></div></div>`;
-  $("#tabs").innerHTML = CATS.map(t=>`<a class="tab ${t.id===c.id?"on":""}" role="button" data-a="go" data-c="${t.id}" style="text-decoration:none">${t.name}</a>`).join("");
+  $("#tabs").innerHTML = CATS.filter(t=>!t.hidden).map(t=>`<a class="tab ${t.id===(c.hidden?"cake":c.id)?"on":""}" role="button" data-a="go" data-c="${t.id}" style="text-decoration:none">${t.name}</a>`).join("");
   $("#list").innerHTML = `<div class="gal-grid">${GALLERY.map((g,i)=>`<figure class="reveal" style="--d:${Math.min(i,8)}"><img src="${g.thumb}" alt="${g.name}" loading="lazy" data-a="gal-open" data-i="${i}"><figcaption>${g.name}</figcaption></figure>`).join("")}</div>
     <button class="gal-cta" data-a="cake-open"><span><h3>أعجبك تصميم؟</h3><p>اضغط على الصورة ثم «أريد مثلها»، أو صمّم كيكتك حسب ذوقك</p></span><span class="go">${UI.left}</span></button>`;
   requestAnimationFrame(()=>{ const on=$("#tabs .tab.on"); on && on.scrollIntoView({inline:"center",block:"nearest",behavior:"smooth"}); });
@@ -1017,7 +1017,7 @@ function cakeMessage(){
     `✨ التزيين: ${n("deco")}`,
     `🎨 اللون: ${n("color")}`,
     ...(cake.text?[`✍️ الكتابة: ${cake.text}`]:[]),
-    ...(picked()?[`🖼️ التصميم المرجعي من أعمالكم: ${picked().name} (صورة رقم ${cake.pick+1})`, ...(/^https?:$/.test(location.protocol)?[new URL(picked().img,location.href).href]:[])]:[]),
+    ...(picked()?[`🖼️ التصميم المرجعي من أعمالكم: ${picked().name} (صورة رقم ${cake.pick+1})`, ...(/^https?:$/.test(location.protocol)?[new URL(`d/g${String(cake.pick+1).padStart(2,"0")}.html`,location.href).href]:[])]:[]),
     ...(cake.ref?["📷 لديّ صورة للتصميم وسأرسلها هنا"]:[]), "",
     `👤 الاسم: ${cake.name}`,
     `📞 رقم التواصل: \u200E${cake.phone}`,

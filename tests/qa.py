@@ -34,12 +34,12 @@ with sync_playwright() as p:
     noprice=[i['id'] for i in data['items'] if not i['sizes'] and (i['price'] is None or (isinstance(i['price'],dict) and not i['price']))]
     chk('every item has a price', not noprice, str(noprice))
     # categories grid
-    cats=[c for c in data['cats']]
+    cats=[c for c in data['cats'] if c!='gallery']   # المعرض مخفي من الرئيسية
     chk('all category cards on home', pg.locator('.cats [data-a="go"]').count()==len(cats), f"{pg.locator('.cats [data-a=go]').count()} vs {len(cats)}")
     chk('no featured slider on home', pg.locator('#rail').count()==0 and pg.locator('#view-home .feat').count()==0)
     chk('categories come right after the hero', pg.evaluate('document.querySelector(".hero").nextElementSibling.contains(document.querySelector("#cats"))'))
     # visit each category
-    for c in [x for x in cats if x!='gallery']:
+    for c in cats:
         pg.evaluate(f'go("{c}")'); pg.wait_for_timeout(250)
         exp=sum(1 for i in data['items'] if (i['f'] if c=='featured' else i['cat']==c))
         n=pg.locator('#view-cat .item').count()
@@ -192,7 +192,10 @@ with sync_playwright() as p:
     chk('gallery page: "أريد مثلها" opens cake builder with design picked', pg.evaluate('document.querySelector("#sheet").classList.contains("on") && cake.pick===4') and pg.locator('.gal figure[data-g="4"].on').count()==1 and not pg.evaluate('document.querySelector("#lb").classList.contains("on")'))
     pg.evaluate('cake.pick=-1; closeSheet(); go("cake")'); pg.wait_for_timeout(400)
     chk('cake section links to gallery', pg.locator('#view-cat .gal-link[data-c="gallery"]').count()==1)
-    chk('home shows gallery card', pg.evaluate('!!document.querySelector("#cats .gal-card[data-c=gallery]")'))
+    chk('gallery hidden from home and tabs', pg.evaluate('!document.querySelector("#cats [data-c=gallery]") && !document.querySelector("#tabs [data-c=gallery]")'))
+    import pathlib, re as _re
+    sp=pathlib.Path(__file__).resolve().parent.parent/'public'/'d'/'g05.html'
+    chk('share page per design with og:image (WhatsApp preview)', sp.exists() and 'og:image" content="https://cinnova-menu.cinnova.workers.dev/images/cakes/og/g05.jpg' in sp.read_text(encoding='utf-8') and (sp.parent.parent/'images'/'cakes'/'og'/'g05.jpg').exists())
     chk('Cinnova biscuits: 40/kg, 10/uqiya, flavors in description', pg.evaluate('byId.p14.cat==="petit" && byId.p14.price.kg===40 && byId.p14.price.uqiya===10 && ["شوكولاتة","بلوبيري","برتقال","ليمون","ريد فيلفت"].every(f=>byId.p14.desc.includes(f))'))
     chk('no senioura / kol w oshkor items', pg.evaluate('ITEMS.every(i=>!/سنيورة|واشكر/.test(i.name)) && !byId.s5 && !byId.s8'))
     chk('super special: no Kinder/Bounty, lotus+nutella mix', pg.evaluate('!byId.ks4 && !byId.ks5 && byId.ks7.name==="مكس لوتس ونوتيلا" && ITEMS.filter(i=>i.sub==="super").length===6'))
