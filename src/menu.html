@@ -120,8 +120,8 @@ img{display:block;max-width:100%}
 .cat .ring svg.sc{position:absolute;inset:0;width:100%;height:100%;color:var(--gold);transition:transform .8s var(--ease)}
 .cat:hover .ring svg.sc{transform:rotate(30deg)}
 .cat .ring svg.ic{width:46px;height:46px;position:relative}
-.cats .cat:not(.wide):last-child:nth-child(even){grid-column:1/-1;flex-direction:row;justify-content:center;gap:16px;padding:14px}
-.cats .cat:not(.wide):last-child:nth-child(even) .ring{width:64px;height:64px}
+.cats .cat.full{grid-column:1/-1;flex-direction:row;justify-content:center;gap:16px;padding:14px}
+.cats .cat.full .ring{width:64px;height:64px}
 .cat h3{margin:0;font-size:15px;font-weight:600}
 .cat small{color:var(--muted);font-size:12px}
 .cat.wide{grid-column:1/-1;flex-direction:row;justify-content:flex-start;gap:16px;padding:16px 18px;text-align:right;background:linear-gradient(120deg,var(--gold),#D9B36A);color:var(--bg);border:0}
@@ -130,6 +130,24 @@ img{display:block;max-width:100%}
 .cat.wide small{color:rgba(44,23,17,.7)}
 .cat.wide .go{margin-inline-start:auto;width:36px;height:36px;border-radius:50%;background:var(--bg);color:var(--cream);display:grid;place-items:center}
 .cat.wide .go svg{width:16px;height:16px}
+.cat.gal-card{grid-column:1/-1;flex-direction:row;justify-content:flex-start;gap:16px;padding:14px 16px;text-align:right}
+.cat.gal-card .go{margin-inline-start:auto;width:36px;height:36px;border-radius:50%;background:var(--cream);color:var(--bg);display:grid;place-items:center;flex:none}
+.cat.gal-card .go svg{width:16px;height:16px}
+.gal-pics{display:flex;flex:none}
+.gal-pics img{width:46px;height:58px;object-fit:cover;border-radius:10px;border:2px solid var(--bg);box-shadow:0 4px 12px rgba(0,0,0,.35)}
+.gal-pics img+img{margin-inline-start:-16px}
+.gal-pics img:nth-child(2){transform:translateY(-5px) rotate(-4deg)}
+.gal-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:4px 20px 0}
+.gal-grid figure{position:relative;margin:0;border-radius:16px;overflow:hidden;background:var(--card);animation:fadeUp .6s var(--ease) both;animation-delay:calc(var(--d)*45ms)}
+.gal-grid img{display:block;width:100%;aspect-ratio:4/5;object-fit:cover}
+.gal-grid figcaption{position:absolute;inset:auto 0 0 0;padding:26px 10px 9px;font-size:12.5px;font-weight:600;color:#FFF3D6;background:linear-gradient(transparent,rgba(20,9,5,.85));pointer-events:none}
+.gal-cta{display:flex;align-items:center;gap:12px;width:calc(100% - 40px);margin:16px 20px 0;padding:16px;border-radius:var(--r);background:linear-gradient(120deg,var(--gold),#D9B36A);color:var(--bg);text-align:right}
+.gal-cta h3{margin:0;font-size:16px;font-weight:700}.gal-cta p{margin:3px 0 0;font-size:12.5px;color:rgba(44,23,17,.75)}
+.gal-cta .go{margin-inline-start:auto;flex:none;width:36px;height:36px;border-radius:50%;background:var(--bg);color:var(--cream);display:grid;place-items:center}.gal-cta .go svg{width:16px;height:16px}
+.gal-link{display:flex;align-items:center;gap:12px;margin:10px 0 0;padding:10px 14px;border-radius:14px;background:var(--card);border:1px solid var(--line-2);color:var(--cream);font-size:14px;font-weight:600}
+.gal-link>svg{width:16px;height:16px;margin-inline-start:auto}
+.gal-link .gal-pics img{width:34px;height:42px;border-radius:8px}
+.gal-all{font-size:12px;font-weight:600;color:var(--cream);text-decoration:underline;text-underline-offset:3px}
 
 /* ---------- Footer ---------- */
 .foot{margin:34px 20px 0;padding:20px;border-radius:var(--r);border:1px dashed var(--line-2);text-align:center}
@@ -447,6 +465,7 @@ const CATS = [
   { id:"sharqi",   name:"حلويات شرقية",   en:"oriental", icon:"baklava",  type:"weight" },
   { id:"cake",     name:"كيك",            en:"cakes",    icon:"cake",     type:"piece",
     subs:[ {id:"super",name:"كيك سوبر سبيشل",short:"سوبر سبيشل",en:"super special"}, {id:"special",name:"كيك سبيشل",short:"سبيشل",en:"special"}, {id:"slab",name:"كيك بلاطات",short:"بلاطات",en:"sheet cakes"}, {id:"slice",name:"كيك قطع",short:"قطع",en:"slices"} ] },
+  { id:"gallery",  name:"معرض أعمالنا",   en:"our cakes", icon:"cake",    type:"gallery" },
   { id:"petit",    name:"بيتفور",         en:"petit four",icon:"cookie",  type:"weight" },
   { id:"pastry",   name:"معجنات",         en:"pastries", icon:"pizza",    type:"piece" },
   { id:"jelly",    name:"جلي",            en:"jelly",    icon:"jelly",    type:"piece" },
@@ -593,7 +612,8 @@ const CAKE = {
 // معرض "من أعمالنا" بأول صفحة "صمّم كيكتك": صور من شغل المحل (images/cakes). gNN.webp للتكبير، وgNNs.webp للشريط
 const GALLERY = [
   "كيك طبقات بالورد","كيك على شكل قلب","كيك يونيكورن","كيك تخرّج","كيك كلاسيك بالكريمة","كيك سبايدرمان","كيك فينتج بالفيونكات",
-  "بلاطة بالشوكولاتة","كيك ميني ماوس","كيك تحديد جنس المولود","كيك طبقات أبيض","كيك فينتج أبيض","كيك شوكولاتة لعيد الميلاد","كيك استقبال مولود"
+  "بلاطة بالشوكولاتة","كيك ميني ماوس","كيك تحديد جنس المولود","كيك طبقات أبيض","كيك فينتج أبيض","كيك شوكولاتة لعيد الميلاد","كيك استقبال مولود",
+  "كيك كلاسيك بالورد","بلاطة بالفيونكات","كيك طبقات للمناسبات","كيك سبايدرمان بالتوبرز","بلاطة طويلة بالورد","كيك ولد أو بنت","كيك فينتج بشريطة حمراء","كيك أبيض بالقلوب","كيك Love"
 ].map((name,i)=>{ const n=String(i+1).padStart(2,"0"); return { name, img:`images/cakes/g${n}.webp`, thumb:`images/cakes/g${n}s.webp` }; });
 
 /* =========================================================
@@ -710,11 +730,16 @@ function itemCard(it,i){
 function renderHome(){
   $("#cats").innerHTML = CATS.map((c,i)=>{
     const n=itemsIn(c.id).length;
+    if(c.type==="gallery") return `<a class="cat gal-card reveal" style="--d:${i+6};text-decoration:none;color:inherit" role="button" data-a="go" data-c="${c.id}">
+        <div class="gal-pics">${[0,2,5].map(k=>`<img src="${GALLERY[k].thumb}" alt="" loading="lazy">`).join("")}</div><div><h3>${c.name}</h3><small>${GALLERY.length} تصميماً بصور حقيقية</small></div><span class="go">${UI.left}</span></a>`;
     if(c.id==="featured") return `<a class="cat wide reveal" style="--d:${i+6};text-decoration:none" role="button" data-a="go" data-c="${c.id}">
         <div class="ring">${SC}${art(c.icon)}</div><div><h3>${c.name}</h3><small>${nItems(n)} ${n===1?"مختار":n===2?"مختاران":n<=10?"مختارة":"مختاراً"} بعناية</small></div><span class="go">${UI.left}</span></a>`;
     return `<a class="cat reveal" style="--d:${i+6};text-decoration:none;color:inherit" role="button" data-a="go" data-c="${c.id}">
         <div class="ring">${SC}${art(c.icon)}</div><h3>${c.name}</h3><small>${nItems(n)}</small></a>`;
   }).join("");
+  // إذا عدد البطاقات العادية فردي، آخر وحدة بتاخذ العرض كامل
+  const plain=[...$("#cats").children].filter(e=>!e.classList.contains("wide")&&!e.classList.contains("gal-card"));
+  if(plain.length%2) plain[plain.length-1].classList.add("full");
 }
 
 function noteCard(n){
@@ -723,19 +748,30 @@ function noteCard(n){
 }
 function renderCat(cid){
   const c=catOf(cid)||CATS[0]; const list=itemsIn(c.id);
+  if(c.type==="gallery") return renderGallery(c);
   const hint = c.id==="featured" ? "الأصناف الأكثر طلباً لدينا" : list.some(i=>i.sizes) ? (list.some(isWeight) ? "الأسعار بالكيلو والوقية وحسب الحجم" : "الأسعار حسب الحجم") : (()=>{ const us=new Set(list.flatMap(unitsOf)); const w=us.has("kg")||us.has("uqiya"), pc=us.has("piece"); return w&&pc ? "الأسعار بالقطعة وبالوزن" : w ? "الأسعار بالكيلو والوقية" : "الأسعار بالقطعة"; })();
   $("#cat-head").innerHTML = `<div class="cat-hero"><div class="ring">${SC}${art(c.icon)}</div>
      <div><span class="mono" style="font-size:11px;color:var(--gold)">— ${c.en}</span><h1>${c.name}</h1><p>${hint} · ${nItems(list.length)}</p></div></div>`;
   $("#tabs").innerHTML = CATS.map(t=>`<a class="tab ${t.id===c.id?"on":""}" role="button" data-a="go" data-c="${t.id}" style="text-decoration:none">${t.name}</a>`).join("");
   if(c.subs){
     let n=0;
-    $("#list").innerHTML = (c.id==="cake"?cakeBanner():"")
+    $("#list").innerHTML = (c.id==="cake"?cakeBanner()+`<a class="gal-link" role="button" data-a="go" data-c="gallery" style="text-decoration:none"><span class="gal-pics">${[0,2,5].map(k=>`<img src="${GALLERY[k].thumb}" alt="" loading="lazy">`).join("")}</span><span>شاهد معرض أعمالنا</span>${UI.left}</a>`:"")
       + `<div class="subnav">${c.subs.map(s=>`<button data-a="sub" data-s="${s.id}">${s.short||s.name}</button>`).join("")}</div>`
       + c.subs.map(s=>{ const its=list.filter(i=>i.sub===s.id); if(!its.length) return "";
           return `<div class="subhead" id="sub-${s.id}"><span class="mono">— ${s.en}</span><h2>${s.name}</h2><small>${nItems(its.length)}</small></div>` + its.map(i=>itemCard(i,n++)).join(""); }).join("");
   } else {
     $("#list").innerHTML = (c.id==="cake"?cakeBanner():"") + list.map(itemCard).join("") + (NOTES[c.id]?noteCard(NOTES[c.id]):"");
   }
+  requestAnimationFrame(()=>{ const on=$("#tabs .tab.on"); on && on.scrollIntoView({inline:"center",block:"nearest",behavior:"smooth"}); });
+}
+
+/* معرض أعمالنا: كل صور الكيك بشبكة عمودين. الضغط بيكبّر، و"أريد مثلها" بتفتح صمّم كيكتك والتصميم مختار */
+function renderGallery(c){
+  $("#cat-head").innerHTML = `<div class="cat-hero"><div class="ring">${SC}${art(c.icon)}</div>
+     <div><span class="mono" style="font-size:11px;color:var(--gold)">— ${c.en}</span><h1>${c.name}</h1><p>صور حقيقية لكيك من صنعنا · ${GALLERY.length} تصميماً</p></div></div>`;
+  $("#tabs").innerHTML = CATS.map(t=>`<a class="tab ${t.id===c.id?"on":""}" role="button" data-a="go" data-c="${t.id}" style="text-decoration:none">${t.name}</a>`).join("");
+  $("#list").innerHTML = `<div class="gal-grid">${GALLERY.map((g,i)=>`<figure class="reveal" style="--d:${Math.min(i,8)}"><img src="${g.thumb}" alt="${g.name}" loading="lazy" data-a="gal-open" data-i="${i}"><figcaption>${g.name}</figcaption></figure>`).join("")}</div>
+    <button class="gal-cta" data-a="cake-open"><span><h3>أعجبك تصميم؟</h3><p>اضغط على الصورة ثم «أريد مثلها»، أو صمّم كيكتك حسب ذوقك</p></span><span class="go">${UI.left}</span></button>`;
   requestAnimationFrame(()=>{ const on=$("#tabs .tab.on"); on && on.scrollIntoView({inline:"center",block:"nearest",behavior:"smooth"}); });
 }
 
@@ -879,7 +915,7 @@ const picked = () => GALLERY[cake.pick] || null;
 
 /* معرض أعمالنا: الزبون بيختار تصميم كمرجع، وبينضاف للرسالة مع رابط الصورة */
 function galleryHTML(){
-  return `<div class="gal-head"><b>من أعمالنا</b><small>اختر تصميماً يعجبك ليكون مرجعاً لكيكتك (اختياري)</small></div>
+  return `<div class="gal-head"><b>من أعمالنا</b><button type="button" class="gal-all" data-a="gal-all">عرض الكل</button><small style="flex-basis:100%">اختر تصميماً يعجبك ليكون مرجعاً لكيكتك (اختياري)</small></div>
   <div class="gal">${GALLERY.map((g,i)=>`<figure class="${cake.pick===i?"on":""}" data-g="${i}"><img src="${g.thumb}" alt="${g.name}" loading="lazy" data-a="gal-open" data-i="${i}"><figcaption>${g.name}</figcaption><button type="button" class="pick ${cake.pick===i?"on":""}" data-a="gal-pick" data-i="${i}">${cake.pick===i?"تم الاختيار":"أريد مثلها"}</button></figure>`).join("")}</div>`;
 }
 function refRowHTML(){
@@ -1027,7 +1063,9 @@ document.addEventListener("click",e=>{
   if(e.target.closest("#lb")){
     if($("#lb").dataset.swiped) return;
     const nav=e.target.closest("[data-lbn]"); if(nav){ galLB(galIdx+ +nav.dataset.lbn); return; }
-    if(e.target.closest("#lb-pick")){ setPick(galIdx); galLB(galIdx); return; }
+    if(e.target.closest("#lb-pick")){
+      if(!$("#sheet").classList.contains("on")){ const i=galIdx; cake.pick=i; closeLB(); if(!cake.name) cake.name=form.name; if(!cake.phone) cake.phone=form.phone; openSheet("cake1"); requestAnimationFrame(()=>{ const f=$(`.gal figure[data-g="${i}"]`); f&&f.scrollIntoView({inline:"center",block:"nearest"}); }); return; }
+      setPick(galIdx); galLB(galIdx); return; }
     closeLB(); return;
   }
   const zoom=e.target.closest(".item .thumb img"); if(zoom){ openLB(zoom.closest("[data-card]").dataset.card); return; }
@@ -1057,6 +1095,7 @@ document.addEventListener("click",e=>{
     updatePrev(); }
   if(a==="cake-ref"){ cake.ref=!cake.ref; b.classList.toggle("on",cake.ref); }
   if(a==="gal-open"){ openGal(+b.dataset.i); return; }
+  if(a==="gal-all"){ readCake(); closeSheet(); go("gallery"); return; }
   if(a==="gal-pick"){ setPick(+b.dataset.i); return; }
   if(a==="cake-mode"){ cake.mode=b.dataset.m; $$(".choice button").forEach(x=>x.classList.toggle("on",x===b)); $("#addr-wrap").classList.toggle("open",cake.mode==="delivery"); $("#f-mode").classList.remove("bad"); }
   if(a==="cake-send"){ readCake(); if(!validCake(3)) return; lastOrder=cakeMessage(); openWA(lastOrder); form.name=cake.name; form.phone=cake.phone; renderPane("success"); }
