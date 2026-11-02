@@ -18,7 +18,10 @@ html = (html.replace("__BADGE__", svguri("logo_badge.svg"))
             .replace("__TILE__",  tile)
             .replace("__HERO__",  (A / "hero.svg").read_text(encoding="utf-8")))
 out = ROOT / "cinnova-menu.html"
-out.write_text(html, encoding="utf-8")
+# الملف المستقل (برّا public) ما معه مجلد icons: بنضمّن الأيقونة جوّاه وبنشيل رابط الـ manifest
+_ico = "data:image/png;base64," + base64.b64encode((A / "icons" / "icon-192.png").read_bytes()).decode()
+standalone_html = re.sub(r'<link rel="manifest"[^>]*>\n?', '', html).replace("icons/apple-touch-icon.png", _ico).replace("icons/icon-192.png", _ico)
+out.write_text(standalone_html, encoding="utf-8")
 (ROOT / "public").mkdir(exist_ok=True)
 (ROOT / "public" / "index.html").write_text(html, encoding="utf-8")   # published copy (Cloudflare)
 # product photos: images/*.webp -> public/images/
