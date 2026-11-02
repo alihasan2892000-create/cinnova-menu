@@ -639,6 +639,13 @@ const GALLERY = [
    Icons
    ========================================================= */
 const S = (p,vb="0 0 24 24",cls="") => `<svg class="${cls}" viewBox="${vb}" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${p}</svg>`;
+/* إحصائيات (Google Analytics 4). بيشتغل بس على https، فالفحص والفيديو ما بيأثروا على الأرقام */
+const GA_ID = "G-ZZZG7715XP";
+window.dataLayer = window.dataLayer || [];
+function gtag(){ dataLayer.push(arguments); }
+if(location.protocol==="https:"){ const sc=document.createElement("script"); sc.async=true; sc.src="https://www.googletagmanager.com/gtag/js?id="+GA_ID; document.head.appendChild(sc); gtag("js",new Date()); gtag("config",GA_ID); }
+const track = (name,params={}) => { try{ if(location.protocol==="https:") gtag("event",name,params); }catch(e){} };
+
 const UI = {
   bag:   S('<path d="M5 8h14l-1.2 11.2a2 2 0 0 1-2 1.8H8.2a2 2 0 0 1-2-1.8z"/><path d="M9 8V6.5a3 3 0 0 1 6 0V8"/>'),
   plus:  S('<path d="M12 5v14M5 12h14"/>'),
@@ -1091,14 +1098,14 @@ document.addEventListener("click",e=>{
   if(a==="home"){ e.preventDefault(); goHome(); return; }
   if(a==="sub"){ const t=$("#sub-"+b.dataset.s); t&&t.scrollIntoView({behavior:"smooth",block:"start"}); return; }
   if(a==="unit"){ unitPick[id]=b.dataset.u; refreshItem(id); }
-  if(a==="add"){ const it=byId[id]; setQty(keyOf(it),1); save(); flyFrom(b); refreshItem(id); navigator.vibrate&&navigator.vibrate(12); toast(`تمت إضافة ${withFlavor(it.name,curFlavor(it),it)} إلى السلة`); }
+  if(a==="add"){ const it=byId[id]; track("add_to_cart",{currency:"ILS",value:unitPrice(it,curUnit(it)),items:[{item_id:it.id,item_name:withFlavor(it.name,curFlavor(it),it),item_category:it.cat}]}); setQty(keyOf(it),1); save(); flyFrom(b); refreshItem(id); navigator.vibrate&&navigator.vibrate(12); toast(`تمت إضافة ${withFlavor(it.name,curFlavor(it),it)} إلى السلة`); }
   if(a==="flavor"){ flavorPick[id]=b.dataset.f; refreshItem(id); }
   if(a==="inc"||a==="dec"){ const it=byId[id], k=keyOf(it); setQty(k,(cart[k]||0)+(a==="inc"?1:-1)); refreshItem(id); updateCartUI(a==="inc"); }
   if(a==="cinc"||a==="cdec"){ const k=b.dataset.k; setQty(k,(cart[k]||0)+(a==="cinc"?1:-1)); renderPane("cart"); refreshItem(k.split("|")[0]); updateCartUI(); }
   if(a==="close") closeSheet();
   if(a==="pane"){ if($("#i-name")) readForm(); renderPane(b.dataset.p); }
   if(a==="mode"){ form.mode=b.dataset.m; $$(".choice button").forEach(x=>x.classList.toggle("on",x===b)); $("#addr-wrap").classList.toggle("open",form.mode==="delivery"); $("#f-mode").classList.remove("bad"); }
-  if(a==="send"){ readForm(); if(!validate()) return; lastOrder=buildMessage(); openWA(lastOrder); cart={}; updateCartUI(); $$("[data-card]").forEach(c=>refreshItem(c.dataset.card)); renderPane("success"); }
+  if(a==="send"){ readForm(); if(!validate()) return; track("send_order",{currency:"ILS",value:cartTotal(),items_count:cartCount(),delivery:form.mode}); lastOrder=buildMessage(); openWA(lastOrder); cart={}; updateCartUI(); $$("[data-card]").forEach(c=>refreshItem(c.dataset.card)); renderPane("success"); }
   if(a==="resend"&&lastOrder) openWA(lastOrder);
   if(a==="cake-open"){ if(!cake.name) cake.name=form.name; if(!cake.phone) cake.phone=form.phone; openSheet("cake1"); }
   if(a==="cake-browse"){ readCake(); renderPane("cake1"); $("#sheet .sheet-body").scrollTop=0; return; }
@@ -1113,7 +1120,7 @@ document.addEventListener("click",e=>{
   if(a==="gal-all"){ readCake(); closeSheet(); go("gallery"); return; }
   if(a==="gal-pick"){ setPick(+b.dataset.i); return; }
   if(a==="cake-mode"){ cake.mode=b.dataset.m; $$(".choice button").forEach(x=>x.classList.toggle("on",x===b)); $("#addr-wrap").classList.toggle("open",cake.mode==="delivery"); $("#f-mode").classList.remove("bad"); }
-  if(a==="cake-send"){ readCake(); if(!validCake(3)) return; lastOrder=cakeMessage(); openWA(lastOrder); form.name=cake.name; form.phone=cake.phone; renderPane("success"); }
+  if(a==="cake-send"){ readCake(); if(!validCake(3)) return; track("send_cake_order",{size:cake.size,flavor:cake.flavor,filling:cake.filling,reference_design:cake.pick>=0?cake.pick+1:0,delivery:cake.mode}); lastOrder=cakeMessage(); openWA(lastOrder); form.name=cake.name; form.phone=cake.phone; renderPane("success"); }
 });
 document.addEventListener("input",e=>{ const f=e.target.closest(".field"); f&&f.classList.remove("bad"); });
 $("#scrim").addEventListener("click",closeSheet);
@@ -1157,7 +1164,7 @@ function show(cid){
   const home=$("#view-home"), cat=$("#view-cat");
   if(cid && catOf(cid)){
     if(prevRoute==="home") homeScroll=scrollY;
-    renderCat(cid);
+    renderCat(cid); track("view_category",{category:cid});
     home.classList.remove("active"); cat.classList.remove("back","active"); void cat.offsetWidth; cat.classList.add("active");
     scrollTo(0,0); prevRoute="cat";
   } else {
@@ -1204,7 +1211,7 @@ $$(".ico-right").forEach(e=>e.outerHTML=UI.right);
 $$(".ico-pin").forEach(e=>e.innerHTML=UI.pin);
 $$(".ico-truck").forEach(e=>e.outerHTML=UI.truck);
 $$(".ico-phone").forEach(e=>e.outerHTML=UI.phone);
-["#wa-top","#wa-foot"].forEach(s=>{ const a=$(s); a.innerHTML=UI.wa; a.href=waLink(""); });
+["#wa-top","#wa-foot"].forEach(s=>{ const a=$(s); a.innerHTML=UI.wa; a.href=waLink(""); a.addEventListener("click",()=>track("whatsapp_click",{place:s.slice(4)})); });
 $("#call-btn").href="tel:"+SHOP.phone;
 /* تطبيق على الجوال (PWA): service worker للعمل بدون نت وتحميل أسرع، وزر "ثبّت المنيو" */
 if("serviceWorker" in navigator && (location.protocol==="https:" || location.hostname==="localhost" || location.hostname==="127.0.0.1")) navigator.serviceWorker.register("sw.js").catch(()=>{});
@@ -1214,7 +1221,7 @@ if("serviceWorker" in navigator && (location.protocol==="https:" || location.hos
   if(!standalone){
     if(ios) btn.hidden=false;
     addEventListener("beforeinstallprompt",e=>{ e.preventDefault(); deferred=e; btn.hidden=false; });
-    addEventListener("appinstalled",()=>{ btn.hidden=true; deferred=null; });
+    addEventListener("appinstalled",()=>{ btn.hidden=true; deferred=null; track("app_installed"); });
     btn.addEventListener("click",async()=>{ if(deferred){ deferred.prompt(); try{ await deferred.userChoice; }catch(e){} deferred=null; btn.hidden=true; } else if(ios){ $("#ios-tip").hidden=false; } });
   }
 }
