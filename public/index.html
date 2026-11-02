@@ -603,10 +603,8 @@ const CAKE = {
   occasion: [{id:"bday",name:"عيد ميلاد"},{id:"engage",name:"خطوبة / زواج"},{id:"grad",name:"تخرّج"},{id:"baby",name:"مولود جديد"},{id:"other",name:"مناسبة أخرى"}],
   size: [{id:"s",name:"صغيرة",sub:"6 - 8 أشخاص",tiers:1,w:.8},{id:"m",name:"وسط",sub:"10 - 12 شخصاً",tiers:1,w:1},{id:"hs",name:"نصف بلاطة",sub:"25 - 30 قطعة",tiers:1,w:1.12,flat:1},{id:"fs",name:"بلاطة",sub:"60 - 70 قطعة",tiers:1,w:1.3,flat:1}],
   shape: [{id:"round",name:"دائري"},{id:"square",name:"مربع"},{id:"heart",name:"قلب"},{id:"num",name:"رقم أو حرف"}],
-  flavor: [{id:"vanilla",name:"فانيلا"},{id:"choco",name:"شوكولاتة"},{id:"red",name:"ريد فيلفت"},{id:"lotus",name:"لوتس"},{id:"carrot",name:"جزر وقرفة"}],
-  filling: [{id:"cream",name:"كريمة"},{id:"nutella",name:"نوتيلا"},{id:"fruit",name:"فواكه"},{id:"lotusf",name:"صوص لوتس"},{id:"pist",name:"فستق"}],
-  deco: [{id:"cream",name:"كريمة"},{id:"fondant",name:"فوندان"},{id:"drip",name:"درب شوكولاتة"},{id:"flowers",name:"ورد"}],
-  color: [{id:"white",name:"أبيض",c:"#F7EFE3"},{id:"pink",name:"وردي",c:"#F2B8C6"},{id:"blue",name:"أزرق فاتح",c:"#B9D7EE"},{id:"gold",name:"ذهبي",c:"#D9B36A"},{id:"lilac",name:"ليلكي",c:"#CDB8E6"},{id:"mint",name:"نعناعي",c:"#BFE3CF"},{id:"red",name:"أحمر",c:"#C8443F"},{id:"choc",name:"شوكولاتة",c:"#6B3A24"}],
+  flavor: [{id:"vanilla",name:"فانيلا"},{id:"choco",name:"شوكولاتة"},{id:"red",name:"ريد فيلفت"},{id:"lotus",name:"لوتس"}],
+  filling: [{id:"nutella",name:"نوتيلا"},{id:"cream",name:"كريمة"},{id:"lotusf",name:"لوتس"},{id:"pist",name:"بيستاشيو"}],
   textMax: 30
 };
 // معرض "من أعمالنا" بأول صفحة "صمّم كيكتك": صور من شغل المحل (images/cakes). gNN.webp للتكبير، وgNNs.webp للشريط
@@ -908,7 +906,7 @@ function openWA(text){ const a=document.createElement("a"); a.href=waLink(text);
 /* =========================================================
    Custom cake builder
    ========================================================= */
-let cake = { occasion:"", size:"", shape:"", shapeText:"", flavor:"", filling:"", deco:"", color:"", text:"", ref:false, pick:-1, name:"", phone:"", mode:"", time:"", address:"", notes:"" };
+let cake = { occasion:"", size:"", shape:"", shapeText:"", flavor:"", filling:"", text:"", ref:false, pick:-1, name:"", phone:"", mode:"", time:"", address:"", notes:"" };
 let cakeStep = 1;
 const opt = (k,id) => (CAKE[k].find(o=>o.id===id)||{});
 const picked = () => GALLERY[cake.pick] || null;
@@ -929,7 +927,7 @@ function setPick(i){
   updatePrev();
 }
 function cakeSummary(){
-  const parts=(picked()?[`مثل: ${picked().name}`]:[]).concat(["occasion","size","shape","flavor","filling","deco","color"].filter(k=>cake[k]).map(k=> k==="shape"&&cake.shape==="num"&&cake.shapeText ? `${opt(k,cake[k]).name}: ${esc(cake.shapeText)}` : opt(k,cake[k]).name));
+  const parts=(picked()?[`مثل: ${picked().name}`]:[]).concat(["occasion","size","shape","flavor","filling"].filter(k=>cake[k]).map(k=> k==="shape"&&cake.shape==="num"&&cake.shapeText ? `${opt(k,cake[k]).name}: ${esc(cake.shapeText)}` : opt(k,cake[k]).name));
   return parts.length ? parts.join(" · ") : `<i>لم تختر شيئاً بعد، وسيظهر ملخص كيكتك هنا</i>`;
 }
 const barThumb = () => picked() ? `<img src="${picked().thumb}" alt="">` : "";
@@ -957,7 +955,7 @@ function minCakeTime(){ const d=new Date(Date.now()+SHOP.cakeLeadHours*3600e3); 
 function renderCake(p){
   cakeStep=+p.slice(4);
   const el=$("#sheet-inner");
-  const steps=`<div class="steps">${["الشكل والحجم","النكهة والتزيين","الاستلام"].map((t,i)=>`<div class="${i<cakeStep?"on":""}">${t}</div>`).join("")}</div>`;
+  const steps=`<div class="steps">${["الشكل والحجم","النكهة والحشوة","الاستلام"].map((t,i)=>`<div class="${i<cakeStep?"on":""}">${t}</div>`).join("")}</div>`;
   const head=`<div class="sheet-head">${cakeStep>1?`<button class="icon-btn" data-a="cake-step" data-s="${cakeStep-1}" aria-label="رجوع">${UI.right}</button>`:""}<h2 style="flex:1;margin-inline-start:${cakeStep>1?12:0}px">كيكتك الخاصة</h2><button class="icon-btn" data-a="close" aria-label="إغلاق">${UI.close}</button></div>`+steps;
   const bar=`<div class="cake-bar" id="cake-bar" aria-hidden="true"><div><span>${barThumb()}</span><p>${cakeSummary()}</p></div></div>`;
   const prev=bar+`<div class="cake-prev" id="cake-prev">${cakeStep===1?galleryHTML():refRowHTML()}</div>`;
@@ -968,10 +966,8 @@ function renderCake(p){
     foot=`<button class="btn" data-a="cake-step" data-s="2">التالي ${UI.left}</button>`;
   }
   if(cakeStep===2){
-    const cn=cake.color?opt("color",cake.color).name:"اختر لوناً";
-    body=prev+optGroup("flavor","نكهة الكيك")+optGroup("filling","الحشوة")+optGroup("deco","التزيين")+
-      `<div class="field" id="f-color"><label>اللون الأساسي</label><div class="swatches">${CAKE.color.map(c=>`<button type="button" class="sw ${cake.color===c.id?"on":""}" style="background:${c.c}" data-a="opt" data-k="color" data-v="${c.id}" aria-label="${c.name}"></button>`).join("")}</div><div class="sw-name" id="sw-name">${cn}</div><div class="err">يُرجى اختيار لون</div></div>
-      <div class="field"><label>الكتابة على الكيكة <i>(اختياري)</i><span class="counter" id="t-count">${cake.text.length}/${CAKE.textMax}</span></label><input class="inp" id="i-text" maxlength="${CAKE.textMax}" placeholder="مثلاً: كل عام وأنتِ بخير يا سارة" value="${esc(cake.text)}"></div>
+    body=prev+optGroup("flavor","نكهة الكيك")+optGroup("filling","الحشوة")+
+      `<div class="field"><label>الكتابة على الكيكة <i>(اختياري)</i><span class="counter" id="t-count">${cake.text.length}/${CAKE.textMax}</span></label><input class="inp" id="i-text" maxlength="${CAKE.textMax}" placeholder="مثلاً: كل عام وأنتِ بخير يا سارة" value="${esc(cake.text)}"></div>
       <div class="field"><button type="button" class="check ${cake.ref?"on":""}" data-a="cake-ref"><span class="box">${UI.check}</span>لديّ صورة أو فكرة للتصميم، وسأرسلها عبر واتساب</button></div>`;
     foot=`<button class="btn" data-a="cake-step" data-s="3">التالي ${UI.left}</button>`;
   }
@@ -1000,7 +996,7 @@ function readCake(){
 function validCake(step){
   let ok=true; const mark=(id,bad)=>{ const e=$(id); if(!e) return; e.classList.toggle("bad",bad); if(bad) ok=false; };
   if(step===1){ ["occasion","size","shape"].forEach(k=>mark("#f-"+k,!cake[k])); if(cake.shape==="num") mark("#f-num",!cake.shapeText); }
-  if(step===2){ ["flavor","filling","deco","color"].forEach(k=>mark("#f-"+k,!cake[k])); }
+  if(step===2){ ["flavor","filling"].forEach(k=>mark("#f-"+k,!cake[k])); }
   if(step===3){ mark("#f-name",!cake.name); mark("#f-phone",!validPhone(cake.phone)); mark("#f-mode",!cake.mode); mark("#f-time",!cake.time || new Date(cake.time).getTime() < Date.now()+SHOP.cakeLeadHours*3600e3-15*60e3); mark("#f-addr",cake.mode==="delivery"&&!cake.address); }
   if(!ok){ const f=$(".field.bad"); f&&f.scrollIntoView({behavior:"smooth",block:"center"}); navigator.vibrate&&navigator.vibrate([10,40,10]); }
   return ok;
@@ -1014,8 +1010,6 @@ function cakeMessage(){
     `🔷 الشكل: ${n("shape")}${cake.shape==="num"?` — ${cake.shapeText}`:""}`,
     `🍰 النكهة: ${n("flavor")}`,
     `🍫 الحشوة: ${n("filling")}`,
-    `✨ التزيين: ${n("deco")}`,
-    `🎨 اللون: ${n("color")}`,
     ...(cake.text?[`✍️ الكتابة: ${cake.text}`]:[]),
     ...(picked()?[`🖼️ التصميم المرجعي من أعمالكم: ${picked().name} (صورة رقم ${cake.pick+1})`, ...(/^https?:$/.test(location.protocol)?[new URL(`d/g${String(cake.pick+1).padStart(2,"0")}.html`,location.href).href]:[])]:[]),
     ...(cake.ref?["📷 لديّ صورة للتصميم وسأرسلها هنا"]:[]), "",
@@ -1091,7 +1085,6 @@ document.addEventListener("click",e=>{
   if(a==="opt"){ const k=b.dataset.k; cake[k]=b.dataset.v; b.parentElement.querySelectorAll("[data-a=opt]").forEach(x=>x.classList.toggle("on",x===b));
     const f=b.closest(".field"); f&&f.classList.remove("bad");
     if(k==="shape") $("#num-wrap").classList.toggle("open",cake.shape==="num");
-    if(k==="color"){ const n=$("#sw-name"); n&&(n.textContent=CAKE.color.find(c=>c.id===cake.color).name); }
     updatePrev(); }
   if(a==="cake-ref"){ cake.ref=!cake.ref; b.classList.toggle("on",cake.ref); }
   if(a==="gal-open"){ openGal(+b.dataset.i); return; }

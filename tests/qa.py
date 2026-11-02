@@ -196,6 +196,7 @@ with sync_playwright() as p:
     import pathlib, re as _re
     sp=pathlib.Path(__file__).resolve().parent.parent/'public'/'d'/'g05.html'
     chk('share page per design with og:image (WhatsApp preview)', sp.exists() and 'og:image" content="https://cinnova-menu.cinnova.workers.dev/images/cakes/og/g05.jpg' in sp.read_text(encoding='utf-8') and (sp.parent.parent/'images'/'cakes'/'og'/'g05.jpg').exists())
+    chk('custom cake: no carrot flavor, fillings = نوتيلا/كريمة/لوتس/بيستاشيو', pg.evaluate('!CAKE.flavor.some(f=>f.id==="carrot") && JSON.stringify(CAKE.filling.map(f=>f.name))===JSON.stringify(["نوتيلا","كريمة","لوتس","بيستاشيو"]) && !CAKE.deco && !CAKE.color'))
     chk('Cinnova biscuits: 40/kg, 10/uqiya, flavors in description', pg.evaluate('byId.p14.cat==="petit" && byId.p14.price.kg===40 && byId.p14.price.uqiya===10 && ["شوكولاتة","بلوبيري","برتقال","ليمون","ريد فيلفت"].every(f=>byId.p14.desc.includes(f))'))
     chk('no senioura / kol w oshkor items', pg.evaluate('ITEMS.every(i=>!/سنيورة|واشكر/.test(i.name)) && !byId.s5 && !byId.s8'))
     chk('super special: no Kinder/Bounty, lotus+nutella mix', pg.evaluate('!byId.ks4 && !byId.ks5 && byId.ks7.name==="مكس لوتس ونوتيلا" && ITEMS.filter(i=>i.sub==="super").length===6'))
@@ -228,8 +229,8 @@ with sync_playwright() as p:
     pg.fill('#i-num','30'); pg.locator('[data-a="cake-step"][data-s="2"]').click(); pg.wait_for_timeout(300)
     chk('cake goes to step 2', pg.locator('#f-flavor').count()==1)
     pg.locator('[data-a="cake-step"][data-s="3"]').click(); pg.wait_for_timeout(200)
-    chk('cake step2 validation', pg.locator('.field.bad').count()>=4)
-    for k,v in [('flavor','lotus'),('filling','cream'),('deco','fondant'),('color','gold')]: pg.locator(f'[data-k="{k}"][data-v="{v}"]').click()
+    chk('cake step2 validation (flavor + filling only)', pg.locator('.field.bad').count()==2 and pg.locator('#f-deco, #f-color').count()==0)
+    for k,v in [('flavor','lotus'),('filling','pist')]: pg.locator(f'[data-k="{k}"][data-v="{v}"]').click()
     pg.fill('#i-text','مبروك'); pg.locator('[data-a="cake-step"][data-s="1"]').click(); pg.wait_for_timeout(200)
     chk('cake back to step1 keeps choices', pg.locator('[data-k="size"][data-v="m"].on').count()==1 and pg.input_value('#i-num')=='30')
     pg.locator('[data-a="cake-step"][data-s="2"]').click(); pg.wait_for_timeout(200)
@@ -244,7 +245,7 @@ with sync_playwright() as p:
     pg.fill('#i-time',later); pg.locator('[data-a="cake-send"]').click(); pg.wait_for_timeout(800)
     cm=urls[-1] if len(urls)>n0 else ''
     chk('cake WA message sent', bool(cm))
-    for s in ['كيكة خاصة','رقم أو حرف — 30','التصميم المرجعي من أعمالكم: كيك طبقات بالورد (صورة رقم 1)','لوتس','فوندان','ذهبي','الكتابة: مبروك','رقم التواصل: \u200e+970591234567','بانتظار تأكيد السعر']:
+    for s in ['كيكة خاصة','رقم أو حرف — 30','التصميم المرجعي من أعمالكم: كيك طبقات بالورد (صورة رقم 1)','لوتس','الحشوة: بيستاشيو','الكتابة: مبروك','رقم التواصل: \u200e+970591234567','بانتظار تأكيد السعر']:
         chk(f'cake msg has "{s}"', s in cm)
     chk('cake order did not touch cart', pg.evaluate('cartCount()')==0)
     pg.locator('#sheet [data-a="close"]').first.click(); pg.wait_for_timeout(300)
