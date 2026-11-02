@@ -48,10 +48,11 @@ html,body{width:1080px;height:1920px;overflow:clip;background:#2C1711;font-famil
 <script>
 const sleep=ms=>new Promise(r=>setTimeout(r,ms));
 window.__ev=[];
-window.__vsync=()=>{ const t=performance.now(); for(const a of document.getAnimations()){ if(a.__t0===undefined){ a.__t0=t; a.pause(); } const ct=Math.max(0,t-a.__t0), end=a.effect&&a.effect.getComputedTiming().endTime; if(isFinite(end)&&ct>=end) a.finish(); else a.currentTime=ct; } };
+const K=5.5/4;   // تسريع: نفس الحركة بـ 4 ثواني بدل 5.5
+window.__vsync=()=>{ const t=performance.now(); for(const a of document.getAnimations()){ if(a.__t0===undefined){ a.__t0=t; a.pause(); } const ct=Math.max(0,t-a.__t0)*K, end=a.effect&&a.effect.getComputedTiming().endTime; if(isFinite(end)&&ct>=end) a.finish(); else a.currentTime=ct; } };
 // الأنيميشن بتبلّش بس لما يجي __go (عشان التسجيل يبلّش من أول لقطة)
 (async()=>{ await document.fonts.ready; window.__ready=true; while(!window.__go) await sleep(20);
   document.getElementById('root').style.display='block';   // الأنيميشن بتنخلق هون، أول لقطة
-  window.__start=Date.now(); window.__ev=[["whoosh",250],["impact",550],["pop",2300],["success",2700]];
-  await sleep(5500); window.__done=true; })();
+  window.__start=Date.now(); window.__ev=[["whoosh",250],["impact",550],["pop",2300],["success",2700]].map(([n,t])=>[n,Math.round(t/K)]);
+  await sleep(4000); window.__done=true; })();
 </script></body></html>
