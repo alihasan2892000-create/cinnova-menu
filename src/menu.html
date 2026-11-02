@@ -5,6 +5,13 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#2C1711">
 <title>سينوفا | المنيو</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="سينوفا">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -153,6 +160,17 @@ img{display:block;max-width:100%}
 .foot{margin:34px 20px 0;padding:20px;border-radius:var(--r);border:1px dashed var(--line-2);text-align:center}
 .foot p{margin:6px 0;color:var(--muted);font-size:13.5px;line-height:1.7}
 .foot a{color:var(--cream);text-decoration:none}
+.install{display:flex;align-items:center;gap:12px;width:100%;max-width:340px;margin:16px auto 0;padding:10px 14px;border-radius:16px;background:var(--card);border:1px solid var(--gold);color:var(--cream);text-align:right}
+.install[hidden]{display:none}
+.install img{width:44px;height:44px;border-radius:11px;flex:none}
+.install b{display:block;font-size:14px;font-weight:700}.install small{font-size:12px;color:var(--muted)}
+.ios-tip{position:fixed;inset:0;z-index:95;display:grid;place-items:end center;padding:16px;background:rgba(14,6,3,.75)}
+.ios-tip[hidden]{display:none}
+.ios-tip .box{width:min(420px,100%);padding:22px 20px 18px;border-radius:24px;background:var(--bg);border:1px solid var(--line-2);text-align:center;animation:fadeUp .4s var(--ease)}
+.ios-tip img{width:64px;height:64px;border-radius:16px}
+.ios-tip h3{margin:10px 0 8px;font-size:17px}
+.ios-tip ol{margin:0 0 16px;padding:0 20px 0 0;text-align:right;font-size:14px;line-height:2;color:var(--cream)}
+.ios-tip .share-ic{display:inline-grid;place-items:center;width:22px;height:22px;border-radius:6px;border:1px solid var(--gold);font-size:12px}
 .foot .row{display:flex;justify-content:center;gap:10px;margin-top:12px}
 
 /* ---------- Category page ---------- */
@@ -418,6 +436,7 @@ textarea.inp{min-height:80px;resize:vertical}
         <a class="icon-btn" id="call-btn" aria-label="اتصال"><span class="ico-phone"></span></a>
         <a class="icon-btn" id="wa-foot" aria-label="واتساب" target="_blank" rel="noopener"></a>
       </div>
+      <button class="install" id="install-btn" hidden><img src="icons/icon-192.png" alt=""><span><b>ثبّت المنيو على جوالك</b><small>افتحه كتطبيق من الشاشة الرئيسية</small></span></button>
     </div>
   </section>
 
@@ -437,6 +456,7 @@ textarea.inp{min-height:80px;resize:vertical}
 <div class="cartbar" id="cartbar"><button class="js-cart"><span class="cnt" id="cb-n">0</span><span class="lbl">عرض السلة</span><span class="tot" id="cb-t">0 ₪</span></button></div>
 
 <div class="scrim" id="scrim"></div>
+<div class="ios-tip" id="ios-tip" role="dialog" aria-modal="true" aria-label="تثبيت المنيو" hidden><div class="box"><img src="icons/icon-192.png" alt=""><h3>ثبّت منيو سينوفا على جوالك</h3><ol><li>اضغط زر المشاركة <span class="share-ic">⬆︎</span> أسفل الشاشة</li><li>اختر «إضافة إلى الشاشة الرئيسية»</li><li>اضغط «إضافة»</li></ol><button class="btn" data-a="ios-tip-x">حسناً</button></div></div>
 <div class="lb" id="lb" role="dialog" aria-modal="true" aria-label="صورة الصنف" aria-hidden="true"><button class="icon-btn lb-x" id="lb-x" aria-label="إغلاق"></button><figure><img id="lb-img" alt=""><figcaption><b id="lb-name"></b><span id="lb-price"></span><span class="lb-count" id="lb-count"></span></figcaption><button class="btn lb-pick" id="lb-pick"></button></figure><button class="icon-btn lb-nav" data-lbn="-1" id="lb-prev" aria-label="الصورة السابقة"></button><button class="icon-btn lb-nav" data-lbn="1" id="lb-next" aria-label="الصورة التالية"></button></div>
 <div class="sheet" id="sheet" role="dialog" aria-modal="true">
   <div class="grab"></div>
@@ -1090,6 +1110,7 @@ document.addEventListener("click",e=>{
     updatePrev(); }
   if(a==="cake-ref"){ cake.ref=!cake.ref; b.classList.toggle("on",cake.ref); }
   if(a==="gal-open"){ openGal(+b.dataset.i); return; }
+  if(a==="ios-tip-x"){ $("#ios-tip").hidden=true; return; }
   if(a==="gal-all"){ readCake(); closeSheet(); go("gallery"); return; }
   if(a==="gal-pick"){ setPick(+b.dataset.i); return; }
   if(a==="cake-mode"){ cake.mode=b.dataset.m; $$(".choice button").forEach(x=>x.classList.toggle("on",x===b)); $("#addr-wrap").classList.toggle("open",cake.mode==="delivery"); $("#f-mode").classList.remove("bad"); }
@@ -1186,6 +1207,18 @@ $$(".ico-truck").forEach(e=>e.outerHTML=UI.truck);
 $$(".ico-phone").forEach(e=>e.outerHTML=UI.phone);
 ["#wa-top","#wa-foot"].forEach(s=>{ const a=$(s); a.innerHTML=UI.wa; a.href=waLink(""); });
 $("#call-btn").href="tel:"+SHOP.phone;
+/* تطبيق على الجوال (PWA): service worker للعمل بدون نت وتحميل أسرع، وزر "ثبّت المنيو" */
+if("serviceWorker" in navigator && (location.protocol==="https:" || location.hostname==="localhost" || location.hostname==="127.0.0.1")) navigator.serviceWorker.register("sw.js").catch(()=>{});
+{ const btn=$("#install-btn"); let deferred=null;
+  const standalone = matchMedia("(display-mode: standalone)").matches || navigator.standalone===true;
+  const ios = /iphone|ipad|ipod/i.test(navigator.userAgent) || (navigator.platform==="MacIntel" && navigator.maxTouchPoints>1);
+  if(!standalone){
+    if(ios) btn.hidden=false;
+    addEventListener("beforeinstallprompt",e=>{ e.preventDefault(); deferred=e; btn.hidden=false; });
+    addEventListener("appinstalled",()=>{ btn.hidden=true; deferred=null; });
+    btn.addEventListener("click",async()=>{ if(deferred){ deferred.prompt(); try{ await deferred.userChoice; }catch(e){} deferred=null; btn.hidden=true; } else if(ios){ $("#ios-tip").hidden=false; } });
+  }
+}
 (()=>{ let cid=null; try{ const m=location.hash.match(/^#\/c\/([\w-]+)/); cid=m&&m[1]; if(cid) history.replaceState({c:cid},"",location.hash); }catch(e){} show(cid); })();
 updateCartUI();
 
