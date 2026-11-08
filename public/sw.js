@@ -1,5 +1,5 @@
 // service worker: الصفحة من النت أولاً (عشان التحديثات توصل)، والصور من الكاش أولاً
-const V="cinnova-a77f6c1760", CORE=["./","icons/icon-192.png","icons/icon-512.png","manifest.webmanifest"];
+const V="cinnova-1b528cf73e", CORE=["./","icons/icon-192.png","icons/icon-512.png","manifest.webmanifest"];
 self.addEventListener("install",e=>{ self.skipWaiting(); e.waitUntil(caches.open(V).then(c=>c.addAll(CORE)).catch(()=>{})); });
 self.addEventListener("activate",e=>{ e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k!==V).map(k=>caches.delete(k)))).then(()=>self.clients.claim())); });
 self.addEventListener("fetch",e=>{
